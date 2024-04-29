@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Mode extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'mode_code',
+        'mode_type',
+    ];
 }
