@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Building extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'building_code',
+        'building_name',
+    ];
 }
