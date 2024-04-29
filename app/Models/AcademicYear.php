@@ -14,4 +14,5 @@ class AcademicYear extends Model
         'date_end',
         'date_start',
     ];
+
 }
