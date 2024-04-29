@@ -10,7 +10,6 @@ class InstructorProfile extends Model
     use HasFactory;
 
     protected $fillable = [
-        'employee_id',
         'last_name',
         'first_name',
         'middle_name',
