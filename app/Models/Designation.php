@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Designation extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'title',
+        'eq_units',
+        'plm_email_address',
+        'type_load',
+    ];
 }
