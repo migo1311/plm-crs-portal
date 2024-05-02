@@ -15,4 +15,9 @@ class AcademicYear extends Model
         'date_start',
     ];
 
+    public function aysem()
+    {
+        return $this->hasMany(Aysem::class, 'academic_year_id', 'academic_year_id');
+    }
+
 }

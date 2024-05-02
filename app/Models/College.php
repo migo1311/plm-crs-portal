@@ -13,4 +13,9 @@ class College extends Model
         'college_code',
         'college_name',
     ];
+
+    public function programs()
+    {
+        return $this->hasMany(Program::class, 'college_id', 'college_id');
+    }
 }

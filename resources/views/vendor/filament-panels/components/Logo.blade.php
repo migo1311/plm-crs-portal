@@ -1,0 +1,1 @@
+<img src="{{ asset('images/plm-with-header.png') }}" alt="Log" class="h-15">

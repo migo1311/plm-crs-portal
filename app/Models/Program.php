@@ -10,6 +10,7 @@ class Program extends Model
     use HasFactory;
 
     protected $fillable = [
+        'college_id',
         'program_title',
         'program_code',
         'major',
@@ -17,4 +18,14 @@ class Program extends Model
         'degree_level',
         'num_credits',
     ];
+
+    public function college()
+    {
+        return $this->belongsTo(College::class, 'college_id', 'college_id');
+    }
+
+    public function blocks()
+    {
+        return $this->hasMany(Block::class, 'program_id', 'program_id');
+    }
 }

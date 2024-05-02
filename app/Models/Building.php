@@ -13,4 +13,9 @@ class Building extends Model
         'building_code',
         'building_name',
     ];
+
+    public function rooms()
+    {
+        return $this->hasMany(Room::class, 'building_id', 'building_id');
+    }
 }

@@ -17,4 +17,14 @@ class Aysem extends Model
         'date_end',
         'date_start',
     ];
+
+    public function academicYear()
+    {
+        return $this->belongsTo(AcademicYear::class, 'academic_year_id', 'academic_year_id');
+    }
+
+    public function blocks()
+    {
+        return $this->hasMany(Block::class, 'aysem_id', 'aysem_id');
+    }
 }
