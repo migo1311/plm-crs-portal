@@ -32,4 +32,19 @@ class Assessment extends Model
         'units',
         'aysem_id',
     ];
+
+    public function student()
+    {
+        return $this->belongsTo(Student::class, 'student_id', 'student_id');
+    }
+
+    public function aysem()
+    {
+        return $this->belongsTo(Aysem::class, 'aysem_id', 'aysem_id');
+    }
+
+    public function refundForm()
+    {
+        return $this->hasOne(RefundForm::class, 'assessment_id', 'assessment_id');
+    }
 }
