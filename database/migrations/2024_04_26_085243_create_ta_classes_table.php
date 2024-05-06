@@ -17,7 +17,7 @@ return new class extends Migration
                      ->nullable()
                      ->constrained('courses', 'course_id');
             $table->integer('section');
-            $table->integer('students_qty');
+            $table->integer('students_qty')->nullable();
             $table->integer('credited_units');
             $table->integer('slots');
             $table->foreignId('instructor_id')
@@ -27,12 +27,17 @@ return new class extends Migration
             $table->foreignId('aysem_id')
                      ->nullable()
                      ->constrained('aysems', 'aysem_id');
-            $table->string('nstp_activity');
-            $table->string('parent_class_code');
-            $table->string('link_type');
+            $table->string('nstp_activity')
+                    ->nullable();
+            $table->string('parent_class_code')
+                    ->nullable();
+            $table->string('link_type')
+                    ->nullable();
             $table->string('instruction_language');
-            $table->text('teams_assigned_link');
-            $table->date('effectivity_dateSL');
+            $table->text('teams_assigned_link')
+                    ->nullable();
+            $table->date('effectivity_dateSL')
+                    ->nullable();
             $table->timestamps();
          });
     }
