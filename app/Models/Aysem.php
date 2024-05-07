@@ -39,4 +39,34 @@ class Aysem extends Model
     {
         return $this->hasMany(Course::class, 'aysem_id', 'aysem_id');
     }
+
+    public function assessments(): HasMany
+    {
+        return $this->hasMany(Assessment::class, 'aysem_id', 'aysem_id');
+    }
+
+    public function taSummary(): HasMany
+    {
+        return $this->hasMany(TaSummary::class, 'aysem_id', 'aysem_id');
+    }
+
+    public function taConsultation(): HasMany
+    {
+        return $this->hasMany(TaConsultation::class, 'aysem_id', 'aysem_id');
+    }
+
+    public function studyLoad(): HasMany
+    {
+        return $this->hasMany(StudyLoad::class, 'aysem_id', 'aysem_id');
+    }
+
+    public function gwa(): HasMany
+    {
+        return $this->hasMany(Gwa::class, 'aysem_id', 'aysem_id');
+    }
+
+    public function student(): HasMany
+    {
+        return $this->hasMany(Student::class, 'aysem_id', 'aysem_id');
+    }
 }

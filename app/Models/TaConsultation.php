@@ -17,4 +17,14 @@ class TaConsultation extends Model
         'num_hours',
         'aysem_id',
     ];
+
+    public function aysem()
+    {
+        return $this->belongsTo(Aysem::class, 'aysem_id', 'aysem_id');
+    }
+
+    public function instructor()
+    {
+        return $this->belongsTo(InstructorProfile::class, 'instructor_id', 'instructor_id');
+    }
 }
