@@ -146,33 +146,33 @@ class Schedules extends Page implements HasForms, HasTable
                                 })
                                 ,
                         Step::make('Schedule Information')
-                            ->model(ClassSchedule::class)
-                            ->columns(4)
-                            ->schema([
-                                Components\TextInput::make('class_id')
-                                    ->hidden(),
-                                Components\Select::make('day')
-                                    ->options([
-                                        'Monday' => 'Monday',
-                                        'Tuesday' => 'Tuesday',
-                                        'Wednesday' => 'Wednesday',
-                                        'Thursday' => 'Thursday',
-                                        'Friday' => 'Friday',
-                                        'Saturday' => 'Saturday',
-                                        'Sunday' => 'Sunday',
-                                    ]),
-                                Components\TextInput::make('start_time')
-                                    ->label('Start Time')
-                                    ->type('time')
-                                    ->required(),
-                                Components\TextInput::make('end_time')
-                                    ->label('End Time')
-                                    ->type('time')
-                                    ->required(),
-                                Components\Select::make('mode_id')
-                                    ->relationship('mode', 'mode_type')
-                                    ->label('Meeting Type')
-                            ])  
+                            // ->model(ClassSchedule::class)
+                            // ->columns(4)
+                            // ->schema([
+                            //     Components\TextInput::make('class_id')
+                            //         ->hidden(),
+                            //     Components\Select::make('day')
+                            //         ->options([
+                            //             'Monday' => 'Monday',
+                            //             'Tuesday' => 'Tuesday',
+                            //             'Wednesday' => 'Wednesday',
+                            //             'Thursday' => 'Thursday',
+                            //             'Friday' => 'Friday',
+                            //             'Saturday' => 'Saturday',
+                            //             'Sunday' => 'Sunday',
+                            //         ]),
+                            //     Components\TextInput::make('start_time')
+                            //         ->label('Start Time')
+                            //         ->type('time')
+                            //         ->required(),
+                            //     Components\TextInput::make('end_time')
+                            //         ->label('End Time')
+                            //         ->type('time')
+                            //         ->required(),
+                            //     Components\Select::make('mode_id')
+                            //         ->relationship('mode', 'mode_type')
+                            //         ->label('Meeting Type')
+                            // ])  
                     ])
             ])
             ->bulkActions([

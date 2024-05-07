@@ -38,8 +38,8 @@ class UserSeeder extends Seeder
             'role_id' => '2',
         ]);
         User::create([
-            'name' => 'JHILPERT28',
-            'email' => 'ihickle@example.com',
+            'name' => 'GCONNELLY38',
+            'email' => 'vmcdermott@example.org',
             'password' => 'password',
             'role_id' => '2',
         ]);

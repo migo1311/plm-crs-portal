@@ -4,10 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Student extends Model
 {
     use HasFactory;
+
+    protected $primaryKey = 'student_id';
 
     protected $fillable = [
         'lastname',
@@ -46,4 +51,54 @@ class Student extends Model
         'q2b_answer',
         'q3_answer',
     ];
+
+    public function gwa(): HasMany
+    {
+        return $this->hasMany(Gwa::class, 'student_id', 'student_id');
+    }
+
+    public function aysem(): BelongsTo
+    {
+        return $this->belongsTo(Aysem::class, 'aysem_id', 'aysem_id');
+    }
+
+    public function program(): BelongsTo
+    {
+        return $this->belongsTo(Program::class, 'program_id', 'program_id');
+    }
+
+    public function block(): BelongsTo
+    {
+        return $this->belongsTo(Block::class, 'block_id', 'block_id');
+    }
+
+    public function college(): BelongsTo
+    {
+        return $this->belongsTo(College::class, 'college_id', 'college_id');
+    }
+
+    public function grade(): HasMany
+    {
+        return $this->hasMany(Grade::class, 'student_id', 'student_id');
+    }
+
+    public function assessment(): HasMany
+    {
+        return $this->hasMany(Assessment::class, 'student_id', 'student_id');
+    }
+
+    public function studentAddress(): HasMany
+    {
+        return $this->hasMany(StudentAddress::class, 'student_id', 'student_id');
+    }
+
+    public function studentFamily(): HasMany
+    {
+        return $this->hasMany(StudentFamily::class, 'student_id', 'student_id');
+    }
+
+    public function studentEducation(): HasMany
+    {
+        return $this->hasMany(StudentEducation::class, 'student_id', 'student_id');
+    }
 }
