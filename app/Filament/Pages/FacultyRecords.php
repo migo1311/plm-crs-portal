@@ -20,57 +20,79 @@ class FacultyRecords extends Page implements HasForms
 
     protected static ?string $navigationGroup = 'Utilities';
 
+    public ?array $data = [];
+    public InstructorProfile $instructorProfile;
+    
+    public function mount(): void
+    {
+        $this->form->fill();
+    }
+
     public function form(Form $form): Form
     {
         return $form
             ->columns(4)
+            ->model(InstructorProfile::class)
             ->schema([
-                Components\Select::make('Employee Number')
-                    ->required(),
-                Components\TextInput::make('Last Name')
-                    ->required(),
-                Components\TextInput::make('First Name')
-                    ->required(),
-                Components\TextInput::make('Middle Name'),
-                Components\TextInput::make('Maiden Name')
-                    ->columnSpan(2),
-                Components\Select::make('Birth Place (Province-City)'),
-                Components\DatePicker::make('Birth Date')
-                    ->required(),
-                Components\Select::make('Pedigree')
-                    ->required(),
-                Components\Select::make('Gender')
-                    ->options([
-                        'male' => 'Male',
-                        'female' => 'Female',
-                        'other' => 'Other',
+               Components\Section::make('Personal Details')
+                    ->schema([
+                        Components\Select::make('instructor_id')
+                            ->label('Employee Number')
+                            ->options(InstructorProfile::all()->pluck('instructor_id', 'instructor_id')->toArray())
+                            ->searchable()
+                            ->required(),
+                        Components\TextInput::make('last_name')
+                            ->label('Last Name')
+                            ->required(),
+                        Components\TextInput::make('first_name')
+                            ->label('First Name')
+                            ->required(),
+                        Components\TextInput::make('middle_name')
+                            ->label('Middle Name'),
+                        Components\TextInput::make('maiden_name')
+                            ->label('Maiden Name')
+                            ->columnSpan(2),
+                        Components\TextInput::make('birth_place')
+                            ->label('Birth Place (Province-City)')
+                            ->required()
+                            ->columnSpan(2),
+                        Components\DatePicker::make('birth_date')
+                            ->required(),
+                        Components\Select::make('pedigree')
+                            ->required(),
+                        Components\Select::make('gender')
+                            ->options([
+                                'male' => 'Male',
+                                'female' => 'Female',
+                                'other' => 'Other',
+                            ])
+                            ->required(),
+                        Components\Select::make('civil_status')
+                            ->required(),
+                        Components\Select::make('citizenship')
+                            ->required(),
+                        Components\TextInput::make('mobile_phone')
+                            ->required()
+                            ->columnSpan(2),
+                        Components\TextInput::make('email_address')
+                            ->required()
+                            ->columnSpan(2)
+                    ]),
+                Components\Section::make('Employment Details')
+                    ->schema([
+                        Components\Select::make('tin_number')
+                            ->required(),
+                        Components\TextInput::make('gsis_number')
+                            ->required(),
+                        Components\TextInput::make('instructor_code')
+                            ->required()
+                            ->columnSpanFull()
                     ])
-                    ->required(),
-                Components\Select::make('Civil Status')
-                    ->required(),
-                Components\Select::make('Citizenship')
-                    ->required(),
-                Components\TextInput::make('Mobile Phone')
-                    ->required()
-                    ->columnSpan(2),
-                Components\TextInput::make('Email Address')
-                    ->required()
-                    ->columnSpan(2)
-            ]);
-
-            
-            return $form
-                ->columns(2)
-                ->schema([
-                    Components\Select::make('Tin Number')
-                        ->required(),
-                    Components\TextInput::make('GSIS Number')
-                        ->required(),
-                    Components\TextInput::make('Instructor Code')
-                        ->required()
-                        ->columnSpanFull()
-                ]);
+            ])
+            ->statePath('data');
     }
 
     
+
+ 
 }
