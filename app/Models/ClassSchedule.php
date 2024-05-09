@@ -24,4 +24,14 @@ class ClassSchedule extends Model
     {
         return $this->belongsTo(TaClass::class, 'classes_id', 'class_id');
     }
+
+    public function mode(): BelongsTo
+    {
+        return $this->belongsTo(Mode::class, 'mode_id', 'mode_id');
+    }
+
+    public function room(): BelongsTo
+    {
+        return $this->belongsTo(Room::class, 'room_id', 'room_id');
+    }
 }

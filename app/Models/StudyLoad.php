@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class StudyLoad extends Model
 {
@@ -16,4 +17,14 @@ class StudyLoad extends Model
         'entered_by',
         'entered_on'
     ];
+
+    public function aysem(): BelongsTo
+    {
+        return $this->belongsTo(Aysem::class, 'aysem_id', 'aysem_id');
+    }
+
+    public function instructor(): BelongsTo
+    {
+        return $this->belongsTo(InstructorProfile::class, 'instructor_id', 'instructor_id');
+    }
 }
