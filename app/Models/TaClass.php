@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class TaClass extends Model
@@ -50,5 +51,10 @@ class TaClass extends Model
     public function classSchedules(): HasMany
     {
         return $this->hasMany(ClassSchedule::class, 'classes_id', 'class_id');
+    }
+
+    public function grade(): HasMany
+    {
+        return $this->hasMany(Grade::class, 'class_id', 'class_id');
     }
 }

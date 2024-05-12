@@ -44,5 +44,20 @@ class InstructorProfile extends Model
     {
         return $this->hasMany(TaClass::class, 'instructor_id', 'instructor_id');
     }
+
+    public function taSummary(): HasMany
+    {
+        return $this->hasMany(TaSummary::class, 'instructor_id', 'instructor_id');
+    }
+
+    public function taConsultation(): HasMany
+    {
+        return $this->hasMany(TaConsultation::class, 'instructor_id', 'instructor_id');
+    }
+
+    public function facultyDesignation(): HasMany
+    {
+        return $this->hasMany(FacultyDesignation::class, 'instructor_id', 'instructor_id');
+    }
     
 }
