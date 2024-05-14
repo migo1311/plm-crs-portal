@@ -4,6 +4,8 @@ namespace App\Filament\Pages;
 
 use App\Models\ClassSchedule;
 use App\Models\Course;
+use App\Models\Mode;
+use App\Models\Room;
 use App\Models\TaClass;
 use Filament\Tables\Actions\CreateAction;
 use Filament\Forms\Components;
@@ -59,7 +61,7 @@ class Schedules extends Page implements HasForms, HasTable
                     ->label('Add Class')
                     ->steps([
                         Step::make('Class Information')
-                        ->model(TaClass::class)
+                            ->model(TaClass::class)
                             ->columns(4)
                             ->schema([
                                 Components\TextInput::make('class_id')
@@ -95,7 +97,7 @@ class Schedules extends Page implements HasForms, HasTable
                                     ->helperText('To be filled ONLY when class to be Added is an NSTP subject')
                                     ->columnSpan(3),
                                 Components\TextInput::make('credited_units')
-                                    ->disabled()
+                                    ->readOnly()
                                     ->label('Credits')
                                     ->numeric()
                                     ->columnSpan(1),
@@ -111,12 +113,13 @@ class Schedules extends Page implements HasForms, HasTable
                                     ->columnSpan(1),
                                 Components\Select::make('minimum_year_level')
                                     ->options([
-                                        '1st Year' => '1st Year',
-                                        '2nd Year' => '2nd Year',
-                                        '3rd Year' => '3rd Year',
-                                        '4th Year' => '4th Year',
-                                        '5th Year' => '5th Year',
-                                        '6th Year' => '6th Year',
+                                        1 => '1st Year',
+                                        2 => '2nd Year',
+                                        3 => '3rd Year',
+                                        4 => '4th Year',
+                                        5 => '5th Year',
+                                        6 => '6th Year',
+                                        7 => '7th Year',
                                     ])
                                     ->columnSpan(2),
                                 Components\Select::make('instruction_language')
@@ -140,44 +143,111 @@ class Schedules extends Page implements HasForms, HasTable
                                     ])
                                     ->columnSpan(1),
                                 ])
-                                ->afterValidation(function ($state) {
-                                    TaClass::create($state);
+                                ->afterValidation(function ($get) {
+                                    
+                                    $fields = TaClass::create([
+                                        'course_id' => $get('course_id'),
+                                        'instructor_id' => $get('instructor_id'),
+                                        'section' => $get('section'),
+                                        'nstp_activity' => $get('nstp_activity'),
+                                        'credited_units' => $get('credited_units'),
+                                        'actual_units' => $get('actual_units'),
+                                        'slots' => $get('slots'),
+                                        'minimum_year_level' => $get('minimum_year_level'),
+                                        'instruction_language' => $get('instruction_language'),
+                                        'parent_class_code' => $get('parent_class_code'),
+                                        'link_type' => $get('link_type'),
+                                    ]);
+
+                                    // dd($fields->class_id);
+
+                                    session()->put('class_id', $fields->class_id);
+
+                                    // return redirect()->route('step2');
         
                                 })
                                 ,
                         Step::make('Schedule Information')
-                            // ->model(ClassSchedule::class)
-                            // ->columns(4)
-                            // ->schema([
-                            //     Components\TextInput::make('class_id')
-                            //         ->hidden(),
-                            //     Components\Select::make('day')
-                            //         ->options([
-                            //             'Monday' => 'Monday',
-                            //             'Tuesday' => 'Tuesday',
-                            //             'Wednesday' => 'Wednesday',
-                            //             'Thursday' => 'Thursday',
-                            //             'Friday' => 'Friday',
-                            //             'Saturday' => 'Saturday',
-                            //             'Sunday' => 'Sunday',
-                            //         ]),
-                            //     Components\TextInput::make('start_time')
-                            //         ->label('Start Time')
-                            //         ->type('time')
-                            //         ->required(),
-                            //     Components\TextInput::make('end_time')
-                            //         ->label('End Time')
-                            //         ->type('time')
-                            //         ->required(),
-                            //     Components\Select::make('mode_id')
-                            //         ->relationship('mode', 'mode_type')
-                            //         ->label('Meeting Type')
-                            // ])  
+                            ->model(ClassSchedule::class)
+                            ->columns(4)
+                            ->schema([
+                                Components\Select::make('day')
+                                    ->options([
+                                        'Monday' => 'Monday',
+                                        'Tuesday' => 'Tuesday',
+                                        'Wednesday' => 'Wednesday',
+                                        'Thursday' => 'Thursday',
+                                        'Friday' => 'Friday',
+                                        'Saturday' => 'Saturday',
+                                        'Sunday' => 'Sunday',
+                                    ])
+                                    ->live()
+                                    ->required(),
+                                Components\TimePicker::make('start_time')
+                                    ->label('Start Time')
+                                    ->live()
+                                    ->seconds(false)
+                                    ->required(),
+                                Components\TimePicker::make('end_time')
+                                    ->label('End Time')
+                                    ->live()
+                                    ->seconds(false)
+                                    ->required(),
+                                Components\Select::make('mode_id')
+                                    ->relationship('mode', 'mode_type')
+                                    ->label('Meeting Type')
+                                    ->live()
+                                    ->required(),
+                                Components\Select::make('room_id')
+                                    ->relationship('room', 'room_name')
+                                    ->searchable()
+                                    ->label('Room')
+                                    ->live()
+                                    ->options(Room::all()->pluck('room_name', 'room_id')->toArray())
+                                    ->required(),
+                                Components\TextInput::make('schedule_name')
+                                    ->label('Schedule Name')
+                                    ->live()
+                                    ->helperText('click me')
+                                    ->afterStateUpdated(function ($get, $set){
+                                        $day = $get('day');
+                                        $start = $get('start_time');
+                                        $end = $get('end_time');
+                                        $mode = Mode::query()->where('mode_id', '=', $get('mode_id'))->value('mode_code');
+                                        $room = Room::query()->where('room_id', '=', $get('room_id'))->value('room_name');
+
+                                        $name = $day[0] . ' ' . $start . ' - ' . $end . ' ' . $mode . ' ' . $room;
+                                        
+                                        $set('schedule_name', $name);
+                                    }),
+                                
+                            ])
                     ])
+                    ->using(function (array $data): ClassSchedule{
+
+                        $data = [
+                                    'classes_id' => session()->get('class_id'),
+                                    'day' => $data['day'],
+                                    'start_time' => $data['start_time'],
+                                    'end_time' => $data['end_time'],
+                                    'mode_id' => $data['mode_id'],
+                                    'room_id' => $data['room_id'],
+                                    'schedule_name' => $data['schedule_name'],
+                        ];
+                        
+                        return ClassSchedule::create($data);
+                    })
             ])
             ->bulkActions([
                 // ...
             ]);
+    }
+
+    public static function getPages(): array
+    {
+        return [
+            'index' => Schedules::route('/'),
+        ];
     }
     
 }
