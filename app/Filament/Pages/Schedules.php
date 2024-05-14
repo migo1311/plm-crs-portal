@@ -113,13 +113,13 @@ class Schedules extends Page implements HasForms, HasTable
                                     ->columnSpan(1),
                                 Components\Select::make('minimum_year_level')
                                     ->options([
-                                        '1st Year' => 1,
-                                        '2nd Year' => 2,
-                                        '3rd Year' => 3,
-                                        '4th Year' => 4,
-                                        '5th Year' => 5,
-                                        '6th Year' => 6,
-                                        '7th Year' => 7,
+                                        1 => '1st Year',
+                                        2 => '2nd Year',
+                                        3 => '3rd Year',
+                                        4 => '4th Year',
+                                        5 => '5th Year',
+                                        6 => '6th Year',
+                                        7 => '7th Year',
                                     ])
                                     ->columnSpan(2),
                                 Components\Select::make('instruction_language')
