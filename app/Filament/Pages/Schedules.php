@@ -171,9 +171,6 @@ class Schedules extends Page implements HasForms, HasTable
                             ->model(ClassSchedule::class)
                             ->columns(4)
                             ->schema([
-                                Components\TextInput::make('class_id')
-                                    ->default(session()->get('class_id'))
-                                    ->readOnly(),
                                 Components\Select::make('day')
                                     ->options([
                                         'Monday' => 'Monday',
@@ -186,15 +183,15 @@ class Schedules extends Page implements HasForms, HasTable
                                     ])
                                     ->live()
                                     ->required(),
-                                Components\TextInput::make('start_time')
+                                Components\TimePicker::make('start_time')
                                     ->label('Start Time')
-                                    ->type('time')
                                     ->live()
+                                    ->seconds(false)
                                     ->required(),
-                                Components\TextInput::make('end_time')
+                                Components\TimePicker::make('end_time')
                                     ->label('End Time')
-                                    ->type('time')
                                     ->live()
+                                    ->seconds(false)
                                     ->required(),
                                 Components\Select::make('mode_id')
                                     ->relationship('mode', 'mode_type')
@@ -206,6 +203,7 @@ class Schedules extends Page implements HasForms, HasTable
                                     ->searchable()
                                     ->label('Room')
                                     ->live()
+                                    ->options(Room::all()->pluck('room_name', 'room_id')->toArray())
                                     ->required(),
                                 Components\TextInput::make('schedule_name')
                                     ->label('Schedule Name')
@@ -229,7 +227,7 @@ class Schedules extends Page implements HasForms, HasTable
 
                         $data = [
                                     'classes_id' => session()->get('class_id'),
-                                    'day' => 'day',
+                                    'day' => $data['day'],
                                     'start_time' => $data['start_time'],
                                     'end_time' => $data['end_time'],
                                     'mode_id' => $data['mode_id'],
