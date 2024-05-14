@@ -14,7 +14,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-<<<<<<<<< Temporary merge branch 1
         // $this->call([AcademicYearSeeder::class]);
         // $this->call([AysemSeeder::class]);
         // $this->call([CollegeSeeder::class]);
@@ -29,7 +28,7 @@ class DatabaseSeeder extends Seeder
         // $this->call([InstructorProfileSeeder::class]);
         // $this->call([DesignationSeeder::class]);
         // $this->call([UserSeeder::class]);
-=========
+        
         $this->call([AcademicYearSeeder::class]);
         $this->call([AysemSeeder::class]);
         $this->call([CollegeSeeder::class]);

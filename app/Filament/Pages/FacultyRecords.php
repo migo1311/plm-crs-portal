@@ -80,19 +80,39 @@ class FacultyRecords extends Page implements HasForms
                     ]),
                 Components\Section::make('Employment Details')
                     ->schema([
-                        Components\Select::make('tin_number')
-                            ->required(),
-                        Components\TextInput::make('gsis_number')
-                            ->required(),
+                        Components\Grid::make(2) // Define a 2-column grid
+                            ->schema([
+                                Components\TextInput::make('tin_number')
+                                    ->required()
+                                    ->columnSpan(1), // Span 1 out of 2 columns
+                
+                                Components\TextInput::make('gsis_number')
+                                    ->required()
+                                    ->columnSpan(1), // Span 1 out of 2 columns
+                            ]),
                         Components\TextInput::make('instructor_code')
                             ->required()
                             ->columnSpanFull()
+                    ]),
+                Components\Section::make('Current Address')
+                    ->schema([
+                        Components\Select::make('street_address')
+                            ->required(),
+                        Components\Grid::make(2) // Define a 2-column grid
+                            ->schema([
+                                Components\TextInput::make('zip_code')
+                                    ->required()
+                                    ->columnSpan(1), // Span 1 out of 2 columns
+                
+                                Components\TextInput::make('phone_number')
+                                    ->required()
+                                    ->columnSpan(1), // Span 1 out of 2 columns
+                            ]),
+                        Components\TextInput::make('province_city')
+                            ->required()
+                            ->columnSpanFull(),
                     ])
             ])
             ->statePath('data');
     }
-
-    
-
- 
 }
