@@ -1,7 +1,7 @@
 <x-filament-panels::page>
-<div class="bg-white p-6 rounded-md shadow-sm">
+<div class=" p-6 rounded-md shadow-sm">
     <forms wire:submit="create">
-    <h1 class="text-2xl pb-4 font-semibold text-blue-500">20231 CET</h1>
+        <h1 class="text-2xl pb-4 font-semibold text-blue-500">20231 CET</h1>
     
     {{ $this->form }}
 

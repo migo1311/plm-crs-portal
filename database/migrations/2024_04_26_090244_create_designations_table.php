@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('designation_id');
             $table->string('title');
             $table->integer('eq_units')->unsigned();
-            $table->string('plm_email_address');
+            $table->string('plm_email_address')->nullable();
             $table->enum('type_load', ['RL', 'EL', 'AL', 'SL', 'OCL', 'StL', 'OTL', 'SLW'])
                     ->default('RL');
             $table->timestamps();

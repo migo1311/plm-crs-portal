@@ -4,6 +4,7 @@ namespace App\Filament\Pages;
 
 use App\Models\InstructorProfile;
 use App\Models\Course;
+use App\Models\Designation;
 use App\Models\TaClass;
 use Filament\Forms\Components;
 use Filament\Forms\Form;
@@ -25,17 +26,19 @@ class FacultyDesignation extends Page implements HasForms
     {
         return $form
             ->columns(1)
+            ->model(FacultyDesignation::class)
             ->schema([
                 Components\Select::make('Select Faculty Name')
                     ->placeholder('Select Option')
-                    ->options(InstructorProfile::pluck('faculty_name')) // Assuming Faculty model has 'name' and 'id' fields
+                    ->options(InstructorProfile::pluck('faculty_name'))
+                    ->searchable() 
                     ->required(),
                 Components\Select::make('Select New Designation')
                     ->placeholder('Select Option')
-                    ->options(Course::pluck('subject_title'))
+                    ->options(Designation::pluck('title'))
+                    ->searchable()
                     ->required(),
                 Components\TextInput::make('Enter New Schedule')
-                    ->placeholder('')
                     ->required(),
             ]);
     }
