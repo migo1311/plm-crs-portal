@@ -4,7 +4,6 @@ namespace App\Filament\Pages;
 
 use App\Models\ClassSchedule;
 use App\Models\Course;
-use App\Models\InstructorProfile;
 use App\Models\Mode;
 use App\Models\Room;
 use App\Models\TaClass;
@@ -17,7 +16,6 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
-use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Wizard\Step;
 
 class Schedules extends Page implements HasForms, HasTable
@@ -25,7 +23,7 @@ class Schedules extends Page implements HasForms, HasTable
     use InteractsWithTable;
     use InteractsWithForms;
 
-    protected static ?string $navigationIcon = 'heroicon-o-document-text';
+    protected static ?string $navigationIcon = 'heroicon-o-calendar';
 
     protected static string $view = 'filament.pages.schedules';
 
@@ -192,11 +190,13 @@ class Schedules extends Page implements HasForms, HasTable
                                             ->label('Start Time')
                                             ->live()
                                             ->seconds(false)
+                                            ->minutesStep(15)
                                             ->required(),
                                         Components\TimePicker::make('end_time')
                                             ->label('End Time')
                                             ->live()
                                             ->seconds(false)
+                                            ->minutesStep(15)
                                             ->required(),
                                         Components\Select::make('mode_id')
                                             ->relationship('mode', 'mode_type')
@@ -265,7 +265,7 @@ class Schedules extends Page implements HasForms, HasTable
                         Step::make('Class Restrictions')
                             ->model()
                             ->schema([
-                                Components\Repeater::make('')
+                                // Components\Repeater::make('')
                             ]),
                     ])
                     ->using(function (array $data): ClassSchedule{
