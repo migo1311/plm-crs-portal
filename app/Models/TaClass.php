@@ -27,7 +27,6 @@ class TaClass extends Model
         'parent_class_code',
         'link_type',
         'instruction_language',
-        'class_restriction_id',
         'minimum_year_level',
         'teams_assigned_link',
         'effectivity_dateSL'
@@ -56,5 +55,16 @@ class TaClass extends Model
     public function grade(): HasMany
     {
         return $this->hasMany(Grade::class, 'class_id', 'class_id');
+    }
+
+    public function students(): BelongsToMany
+    {
+        return $this->belongsToMany(Student::class, 'class_student', 'class_id', 'student_id')->withTimestamps();
+    }
+
+    public function updateStudentsQuantity()
+    {
+        $this->students_qty = $this->students()->count();
+        $this->save();
     }
 }

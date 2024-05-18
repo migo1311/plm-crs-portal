@@ -28,6 +28,8 @@ class DatabaseSeeder extends Seeder
         // $this->call([InstructorProfileSeeder::class]);
         // $this->call([DesignationSeeder::class]);
         // $this->call([UserSeeder::class]);
-        $this->call([DesignationSeeder::class]);
+        // $this->call([DesignationSeeder::class]);
+        // $this->call([TaClassSeeder::class]);
+        // $this->call([ClassStudentSeeder::class]);
     }
 }

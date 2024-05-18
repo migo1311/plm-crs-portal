@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages;
 
+use App\Models\AcademicYear;
 use App\Models\ClassSchedule;
 use App\Models\Course;
 use App\Models\Mode;
@@ -137,13 +138,28 @@ class Schedules extends Page implements HasForms, HasTable
                                     ])
                                     ->columnSpan(1),
                                 ])
-                                ->afterValidation(function ($get) {
+                                ->afterValidation(function ($get, $set) {
                                     
                                     $exists = TaClass::query()
                                     ->where('course_id', '=', $get('course_id'))
                                     ->where('instructor_id', '=', $get('instructor_id'))
                                     ->where('section', '=', $get('section'))
                                     ->first();
+
+                                    if ($get('actual_units') == null){
+                                        $set('actual_units', $get('credited_units'));
+                                    }
+
+                                    if ($get('aysem_id') == null){
+                                        $currentDate = now();
+                                        $ayear = AcademicYear::where('date_start', '<=', $currentDate)
+                                            ->where('date_end', '>=', $currentDate)
+                                            ->value('academic_year_id');
+                                        $aysem = AcademicYear::where('academic_year_id', '=', $ayear)
+                                            ->value('aysem_id');
+
+                                        $set('aysem_id', $aysem);
+                                    }
 
                                     if (!$exists){
                                         $fields = TaClass::create([
@@ -172,7 +188,7 @@ class Schedules extends Page implements HasForms, HasTable
                             ->model(ClassSchedule::class)
                             ->schema([
                                 Components\Repeater::make('schedules')
-                                    ->columns(4)
+                                    ->columns(5)
                                     ->schema([
                                         Components\Select::make('day')
                                             ->options([
@@ -184,49 +200,28 @@ class Schedules extends Page implements HasForms, HasTable
                                                 'Saturday' => 'Saturday',
                                                 'Sunday' => 'Sunday',
                                             ])
-                                            ->live()
                                             ->required(),
                                         Components\TimePicker::make('start_time')
                                             ->label('Start Time')
-                                            ->live()
                                             ->seconds(false)
                                             ->minutesStep(15)
                                             ->required(),
                                         Components\TimePicker::make('end_time')
                                             ->label('End Time')
-                                            ->live()
                                             ->seconds(false)
                                             ->minutesStep(15)
                                             ->required(),
                                         Components\Select::make('mode_id')
                                             ->relationship('mode', 'mode_type')
                                             ->label('Meeting Type')
-                                            ->live()
                                             ->required(),
                                         Components\Select::make('room_id')
                                             ->relationship('room', 'room_name')
                                             ->searchable()
                                             ->label('Room')
-                                            ->live()
                                             ->options(Room::all()->pluck('room_name', 'room_id')->toArray())
                                             ->required(),
-                                        Components\TextInput::make('schedule_name')
-                                            ->label('Schedule Name')
-                                            ->live()
-                                            ->helperText('click me')
-                                            ->afterStateUpdated(function ($get, $set){
-                                                $day = $get('day');
-                                                $start = $get('start_time');
-                                                $end = $get('end_time');
-                                                $mode = Mode::query()->where('mode_id', '=', $get('mode_id'))->value('mode_code');
-                                                $room = Room::query()->where('room_id', '=', $get('room_id'))->value('room_name');
-                                            
-                                                $name = $day[0] . ' ' . $start . ' - ' . $end . ' ' . $mode . ' ' . $room;
-
-                                                $set('schedule_name', $name);
-                                            }),
                                     ])
-                                
                             ])
                             ->afterValidation(function ($get) {
 
@@ -240,14 +235,21 @@ class Schedules extends Page implements HasForms, HasTable
                                 // Create each schedule
                                 foreach ($schedules as $schedule) {
 
+                                    $day = $schedule['day'];
+                                    $start = $schedule['start_time'];
+                                    $end = $schedule['end_time'];
+                                    $mode = Mode::query()->where('mode_id', '=', $schedule['mode_id'])->value('mode_code');
+                                    $room = Room::query()->where('room_id', '=', $schedule['room_id'])->value('room_name');
+                                    $name = $day[0] . ' ' . $start . ' - ' . $end . ' ' . $mode . ' ' . $room;
+
                                     $data = [
                                         'classes_id' => $classId,
-                                        'day' => $schedule['day'],
-                                        'start_time' => $schedule['start_time'],
-                                        'end_time' => $schedule['end_time'],
+                                        'day' => $day,
+                                        'start_time' => $start,
+                                        'end_time' => $end,
                                         'mode_id' => $schedule['mode_id'],
                                         'room_id' => $schedule['room_id'],
-                                        'schedule_name' => $schedule['schedule_name']
+                                        'schedule_name' => $name
                                     ];
 
                                     $exists = ClassSchedule::query()
