@@ -10,6 +10,8 @@ class Mode extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'mode_id';
+
     protected $fillable = [
         'mode_code',
         'mode_type',

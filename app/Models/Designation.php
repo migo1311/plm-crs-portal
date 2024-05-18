@@ -10,6 +10,8 @@ class Designation extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'designation_id';
+
     protected $fillable = [
         'title',
         'eq_units',

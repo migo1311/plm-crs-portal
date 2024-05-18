@@ -10,6 +10,8 @@ class FacultyDesignation extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'faculty_designation_id';
+
     protected $fillable = [
         'instructor_id',
         'designation_id',

@@ -11,6 +11,8 @@ class InstructorProfile extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'instructor_id';
+
     protected $fillable = [
         'last_name',
         'first_name',
