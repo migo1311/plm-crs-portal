@@ -20,15 +20,6 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('block_student', function (Blueprint $table) {
-            $table->id('block_student_id');
-            $table->foreignIdFor(\App\Models\Block::class, 'block_id')
-                    ->cascadeOnDelete();
-            $table->foreignIdFor(\App\Models\Student::class, 'student_id')
-                    ->cascadeOnDelete();
-            $table->timestamps();
-        });
-
         Schema::create('class_student', function (Blueprint $table) {
             $table->id('class_student_id');
             $table->foreignIdFor(\App\Models\TaClass::class, 'class_id')
@@ -45,7 +36,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('block_class');
-        Schema::dropIfExists('block_student');
         Schema::dropIfExists('class_student');
     }
 };
