@@ -67,4 +67,9 @@ class TaClass extends Model
         $this->students_qty = $this->students()->count();
         $this->save();
     }
+
+    public function blocks(): BelongsToMany
+    {
+        return $this->belongsToMany(Block::class, 'block_class', 'class_id', 'block_id')->withTimestamps();
+    }
 }
