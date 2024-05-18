@@ -72,4 +72,9 @@ class TaClass extends Model
     {
         return $this->belongsToMany(Block::class, 'block_class', 'class_id', 'block_id')->withTimestamps();
     }
+
+    public function classRestrictions(): HasMany
+    {
+        return $this->hasMany(ClassRestriction::class, 'class_id', 'class_id');
+    }
 }
