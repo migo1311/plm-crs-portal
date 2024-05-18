@@ -10,6 +10,13 @@ class ClassSchedule extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'class_schedule_id';
+
+    protected $casts = [
+        'start_time' => 'datetime',
+        'end_time' => 'datetime'
+    ];
+
     protected $fillable = [
         'classes_id',
         'day',

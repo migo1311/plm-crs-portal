@@ -10,6 +10,8 @@ class Gwa extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'gwa_id';
+
     protected $fillable = [
         'student_id',
         'gwa',

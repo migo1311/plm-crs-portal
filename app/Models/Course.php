@@ -11,6 +11,8 @@ class Course extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'course_id';
+
     protected $fillable = [
         'subject_code',
         'subject_title',

@@ -11,6 +11,8 @@ class Program extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'program_id';
+
     protected $fillable = [
         'college_id',
         'program_title',

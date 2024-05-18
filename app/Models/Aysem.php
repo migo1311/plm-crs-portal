@@ -11,6 +11,8 @@ class Aysem extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'aysem_id';
+
     protected $fillable = [
         'academic_year_id',
         'year',

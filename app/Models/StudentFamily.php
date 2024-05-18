@@ -10,6 +10,8 @@ class StudentFamily extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'student_family_id';
+
     protected   $fillable = [
         'student_id',
         'father_last_name',

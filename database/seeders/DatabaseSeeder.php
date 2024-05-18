@@ -14,36 +14,23 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-<<<<<<< HEAD
-        //$this->call([AcademicYearSeeder::class]);
-        //$this->call([AysemSeeder::class]);
-        //$this->call([CollegeSeeder::class]);
-        //$this->call([ProgramSeeder::class]);
-        //$this->call([ModeSeeder::class]);
-        //$this->call([BuildingSeeder::class]);
-        //$this->call([RoomSeeder::class]);
-        //$this->call([CourseSeeder::class]);
-        //$this->call([RemarkSeeder::class]);
-        //$this->call([BlockSeeder::class]);
-        //$this->call([StudentSeeder::class]);
-        //$this->call([InstructorProfileSeeder::class]);
-        //$this->call([DesignationSeeder::class]);
-        //$this->call([UserSeeder::class]);
-=======
-        $this->call([AcademicYearSeeder::class]);
-        $this->call([AysemSeeder::class]);
-        $this->call([CollegeSeeder::class]);
-        $this->call([ProgramSeeder::class]);
-        $this->call([ModeSeeder::class]);
-        $this->call([BuildingSeeder::class]);
-        $this->call([RoomSeeder::class]);
-        $this->call([CourseSeeder::class]);
-        $this->call([RemarkSeeder::class]);
-        $this->call([BlockSeeder::class]);
-        $this->call([StudentSeeder::class]);
-        $this->call([InstructorProfileSeeder::class]);
-        $this->call([DesignationSeeder::class]);
-        $this->call([UserSeeder::class]);
->>>>>>> 77b09c7125d9902fcde134e075e1a0f59e3407d7
+        // $this->call([AcademicYearSeeder::class]);
+        // $this->call([AysemSeeder::class]);
+        // $this->call([CollegeSeeder::class]);
+        // $this->call([ProgramSeeder::class]);
+        // $this->call([ModeSeeder::class]);
+        // $this->call([BuildingSeeder::class]);
+        // $this->call([RoomSeeder::class]);
+        // $this->call([CourseSeeder::class]);
+        // $this->call([RemarkSeeder::class]);
+        // $this->call([BlockSeeder::class]);
+        // $this->call([StudentSeeder::class]);
+        // $this->call([InstructorProfileSeeder::class]);
+        // $this->call([DesignationSeeder::class]);
+        // $this->call([UserSeeder::class]);
+        // $this->call([DesignationSeeder::class]);
+        // $this->call([TaClassSeeder::class]);
+        // $this->call([ClassStudentSeeder::class]);
+        // $this->call([BlockClassSeeder::class]);
     }
 }
