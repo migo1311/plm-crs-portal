@@ -4,23 +4,14 @@ namespace App\Filament\Pages;
 
 use App\Models\Aysem;
 use App\Models\TaClass;
-use App\Models\Course;
-use Filament\Forms\Components;
-use Filament\Forms\Form;
+use Filament\Forms;
 use Filament\Pages\Page;
-use Filament\Forms\Concerns\InteractsWithForms;
-use Filament\Forms\Contracts\HasForms;
-use Filament\Tables; // Add this line
-use Filament\Tables\Table;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Concerns\InteractsWithTable;
-use Filament\Tables\Contracts\HasTable;
-use Filament\Tables\Actions\CreateAction;
+use Filament\Tables;
 
-class FacultyLoading extends Page implements HasForms, HasTable
+class FacultyLoading extends Page implements Forms\Contracts\HasForms, Tables\Contracts\HasTable
 {
-    use InteractsWithTable;
-    use InteractsWithForms;
+    use Tables\Concerns\InteractsWithTable;
+    use Forms\Concerns\InteractsWithForms;
 
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
 
@@ -28,38 +19,62 @@ class FacultyLoading extends Page implements HasForms, HasTable
 
     protected static ?string $navigationGroup = 'Print Forms';
 
-    public function form(Form $form): Form
+    public $selectedAysem;
+
+    public function mount()
     {
-        return $form->columns()->schema([
-            Components\Select::make('Select')
-                ->placeholder('AYSEM')
-                ->options(Aysem::pluck('year')) 
-                ->required(),
-        ]);
+        $this->selectedAysem = null; // Initialize with null or a default value
     }
 
-    public function table(Table $table): table
+    protected function getFormSchema(): array
     {
-        return $table
-            ->query(TaClass::query())
-            ->columns([
-                TextColumn::make('course.subject_code'),
-                TextColumn::make('section'),
-                TextColumn::make('course.subject_title'),
-                TextColumn::make('classSchedules.schedule_name'),
-                TextColumn::make('instructor.instructor_code'),
-                TextColumn::make('slots'),
-                TextColumn::make('students_qty'),
-            ])
-            ->headerActions([
-                Tables\Actions\CreateAction::make()
-                    ->model(TaClass::class)
-                    ->label('Print')
+        $aysems = Aysem::pluck('year', 'aysem_id')->toArray();
 
-            ]);
-            
-
+        return [
+            Forms\Components\Select::make('selectedAysem')
+                ->options($aysems)
+                ->label('Select AYSEM')
+                ->required()
+                ->reactive()
+                ->afterStateUpdated(fn ($state) => $this->selectedAysem = $state),
+        ];
     }
 
+    protected function getTableQuery()
+    {
+        $query = TaClass::with(['course', 'classSchedules', 'instructor']);
 
+        if ($this->selectedAysem) {
+            $query->where('aysem_id', $this->selectedAysem);
+        }
+
+        return $query;
+    }
+
+    protected function getTableColumns(): array
+    {
+        return [
+            Tables\Columns\TextColumn::make('course.subject_code')
+                ->label('Subject Code')
+                ->sortable(),
+            Tables\Columns\TextColumn::make('section')
+                ->label('Section')
+                ->sortable(),
+            Tables\Columns\TextColumn::make('course.subject_title')
+                ->label('Subject Title')
+                ->sortable(),
+            Tables\Columns\TextColumn::make('classSchedules.schedule_name')
+                ->label('Schedule Name')
+                ->sortable(),
+            Tables\Columns\TextColumn::make('instructor.instructor_code')
+                ->label('Instructor Code')
+                ->sortable(),
+            Tables\Columns\TextColumn::make('slots')
+                ->label('Slots')
+                ->sortable(),
+            Tables\Columns\TextColumn::make('students_qty')
+                ->label('Students Quantity')
+                ->sortable(),
+        ];
+    }
 }
