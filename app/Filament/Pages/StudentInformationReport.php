@@ -3,6 +3,7 @@
 namespace App\Filament\Pages;
 
 use App\Models\Student;
+use App\Models\Aysem;
 use Filament\Pages\Page;
 use Filament\Forms\Components;
 use Filament\Forms\Form;
@@ -35,9 +36,10 @@ class StudentInformationReport extends Page implements HasForms, HasTable
                     ->options(Student::all()->pluck('student_id', 'student_id')->toArray())
                     ->searchable()
                     ->required(),
-                Components\TextInput::make('ay_sem')
+                Components\Select::make('aysem_id')
                     ->label('Ay-Sem')
                     ->placeholder('Ay-Sem')
+                    ->options(Aysem::all()->pluck('aysem_id')->toArray())
                     ->required(),
             ]);
     }

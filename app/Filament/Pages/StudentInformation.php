@@ -3,6 +3,7 @@
 namespace App\Filament\Pages;
 
 use App\Models\Student;
+use App\Models\Aysem;
 use Filament\Pages\Page;
 use Filament\Forms\Components;
 use Filament\Forms\Form;
@@ -31,8 +32,10 @@ class StudentInformation extends Page implements HasForms, HasTable
         return $form
             ->columns(1)
             ->schema([
-                Components\TextInput::make('ay_sem')
-                    ->label('Select Ay-Sem')
+                Components\Select::make('aysem_id')
+                    ->label('Ay-Sem')
+                    ->placeholder('Ay-Sem')
+                    ->options(Aysem::all()->pluck('aysem_id')->toArray())
                     ->required(),
                 Components\Section::make('Fields to be Included')
                     ->schema([
@@ -83,7 +86,7 @@ class StudentInformation extends Page implements HasForms, HasTable
 
     public function printReport()
     {
-    $this->selectedFields = $this->getOldFormState('data.field_selection', []);
+    $this->selectedFields = $this->getOldFormState('data.field_selection');
 
     $this->showTable = true;
     }

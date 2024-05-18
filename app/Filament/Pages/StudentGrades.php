@@ -2,6 +2,8 @@
 
 namespace App\Filament\Pages;
 
+use App\Models\Aysem;
+use App\Models\TaClass;
 use App\Models\Student;
 use Filament\Pages\Page;
 use Filament\Forms\Components;
@@ -28,31 +30,35 @@ class StudentGrades extends Page implements HasForms, HasTable
         return $form
             ->columns(2)
             ->schema([
-                Components\Select::make('student_number')
+                Components\Select::make('student_id')
                     ->label('Student Number')
                     ->placeholder('Select Student Number')
                     ->options(Student::all()->pluck('student_id', 'student_id')->toArray())
                     ->searchable()
                     ->required(),
-                Components\TextInput::make('ay_sem')
+                Components\Select::make('aysem_id')
                     ->label('Ay-Sem')
                     ->placeholder('Ay-Sem')
+                    ->options(Aysem::all()->pluck('aysem_id')->toArray())
                     ->required(),
             ]);
     }
 
-    public function table(Table $table): Table
+    public static function table(Table $table): Table
     {
         return $table
-            ->query(Student::query())
+            ->query(TaClass::query()) // Adjust the query to fetch data from the Course model
             ->columns([
-                TextColumn::make('subject_code_section')
-                    ->label('Subject Code-Section'),
-                TextColumn::make('subject_title')
+                TextColumn::make('course.subject_code')
+                    ->formatStateUsing(function ($state, $record) {
+                    return $state . '-' . $record->section;
+                    })
+                    ->label('Subject Code'),
+                TextColumn::make('course.subject_title')
                     ->label('Subject Title'),
-                TextColumn::make('units')
+                TextColumn::make('course.units')
                     ->label('Units'),
-                TextColumn::make('grades')
+                TextColumn::make('grade.final_grade')
                     ->label('Grades'),
             ]);
     }
