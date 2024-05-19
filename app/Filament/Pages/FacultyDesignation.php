@@ -16,7 +16,7 @@ class FacultyDesignation extends Page implements HasForms
 {
     use InteractsWithForms;
 
-    protected static ?string $navigationIcon = 'heroicon-o-document-text';
+    protected static ?string $navigationIcon = 'heroicon-o-user-group';
     protected static string $view = 'filament.pages.faculty-designation';
     protected static ?string $navigationGroup = 'Utilities';
 
