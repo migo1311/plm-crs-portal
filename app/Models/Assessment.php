@@ -9,6 +9,8 @@ class Assessment extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'assessment_id';
+
     protected $fillable = [
         'student_id',
         'assess_amount',

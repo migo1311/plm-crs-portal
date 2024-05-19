@@ -10,6 +10,8 @@ class RefundForm extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'refund_form_id';
+
     protected $fillable = [
         'assessment_id',
         'type_of_refund',

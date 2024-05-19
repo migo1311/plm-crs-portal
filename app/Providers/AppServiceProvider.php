@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Observers\ClassStudentObserver;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -19,6 +21,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Pivot::observe(ClassStudentObserver::class);
     }
 }

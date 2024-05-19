@@ -101,4 +101,9 @@ class Student extends Model
     {
         return $this->hasMany(StudentEducation::class, 'student_id', 'student_id');
     }
+
+    public function classes(): BelongsToMany
+    {
+        return $this->belongsToMany(TaClass::class, 'class_student', 'student_id', 'class_id')->withTimestamps();
+    }
 }

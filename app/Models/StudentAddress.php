@@ -10,6 +10,8 @@ class StudentAddress extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'student_address_id';
+
     protected   $fillable = [
         'student_id',
         'home_street',
