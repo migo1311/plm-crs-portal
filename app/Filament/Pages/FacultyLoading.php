@@ -4,14 +4,20 @@ namespace App\Filament\Pages;
 
 use App\Models\Aysem;
 use App\Models\TaClass;
-use Filament\Forms;
+use App\Models\Student;
 use Filament\Pages\Page;
-use Filament\Tables;
+use Filament\Forms\Components;
+use Filament\Forms\Form;
+use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Forms\Contracts\HasForms;
+use Filament\Tables\Table;
+use Filament\Tables\Contracts\HasTable;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Concerns\InteractsWithTable;
 
-class FacultyLoading extends Page implements Forms\Contracts\HasForms, Tables\Contracts\HasTable
+class FacultyLoading extends Page implements HasForms, HasTable
 {
-    use Tables\Concerns\InteractsWithTable;
-    use Forms\Concerns\InteractsWithForms;
+    use InteractsWithForms, InteractsWithTable;
 
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
 
@@ -19,62 +25,58 @@ class FacultyLoading extends Page implements Forms\Contracts\HasForms, Tables\Co
 
     protected static ?string $navigationGroup = 'Print Forms';
 
-    public $selectedAysem;
+    public $showTable = false;
 
-    public function mount()
+    public function form(Form $form): Form
     {
-        $this->selectedAysem = null; // Initialize with null or a default value
+        return $form
+            ->columns()
+            ->schema([
+                Components\Select::make('aysem_id')
+                    ->label('Ay-Sem')
+                    ->placeholder('Ay-Sem')
+                    ->options(Aysem::all()->pluck('aysem_id', 'aysem_id')->toArray())
+                    ->required(),
+            ]);
     }
 
-    protected function getFormSchema(): array
+    public static function table(Table $table): Table
     {
-        $aysems = Aysem::pluck('year', 'aysem_id')->toArray();
-
-        return [
-            Forms\Components\Select::make('selectedAysem')
-                ->options($aysems)
-                ->label('Select AYSEM')
-                ->required()
-                ->reactive()
-                ->afterStateUpdated(fn ($state) => $this->selectedAysem = $state),
-        ];
+        return $table
+            ->query(TaClass::query())
+            ->columns([
+                TextColumn::make('course.subject_code')
+                    ->label('Subject Code')
+                    ->formatStateUsing(function ($state, $record) {
+                        return $state . '-' . $record->section;
+                    }),
+                TextColumn::make('section')
+                    ->label('Section')
+                    ->sortable(),
+                TextColumn::make('course.subject_title')
+                    ->label('Subject Title'),
+                TextColumn::make('units')
+                    ->label('Units')
+                    ->sortable(),
+                TextColumn::make('classSchedules.schedule_name')
+                    ->label('Schedule')
+                    ->sortable(),
+                TextColumn::make('students_qty')
+                    ->label('No. of Students')
+                    ->sortable(),
+                TextColumn::make('instructor.instructor_code')
+                    ->label('Instructor')
+                    ->sortable(),
+            ]);
     }
 
-    protected function getTableQuery()
+    public function printReport()
     {
-        $query = TaClass::with(['course', 'classSchedules', 'instructor']);
-
-        if ($this->selectedAysem) {
-            $query->where('aysem_id', $this->selectedAysem);
-        }
-
-        return $query;
-    }
-
-    protected function getTableColumns(): array
-    {
-        return [
-            Tables\Columns\TextColumn::make('course.subject_code')
-                ->label('Subject Code')
-                ->sortable(),
-            Tables\Columns\TextColumn::make('section')
-                ->label('Section')
-                ->sortable(),
-            Tables\Columns\TextColumn::make('course.subject_title')
-                ->label('Subject Title')
-                ->sortable(),
-            Tables\Columns\TextColumn::make('classSchedules.schedule_name')
-                ->label('Schedule Name')
-                ->sortable(),
-            Tables\Columns\TextColumn::make('instructor.instructor_code')
-                ->label('Instructor Code')
-                ->sortable(),
-            Tables\Columns\TextColumn::make('slots')
-                ->label('Slots')
-                ->sortable(),
-            Tables\Columns\TextColumn::make('students_qty')
-                ->label('Students Quantity')
-                ->sortable(),
-        ];
+        // Set flag to true to show the table
+        $this->showTable = true;
     }
 }
+
+
+
+
