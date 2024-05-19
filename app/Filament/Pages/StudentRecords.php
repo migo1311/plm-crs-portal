@@ -8,7 +8,8 @@ use Filament\Forms\Form;
 use Filament\Pages\Page;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Components\Checkbox;
+use Filament\Forms\Components\Radio;
+use Filament\Notifications\Notification;
 use Filament\Tables; // Add this line
 
 class StudentRecords extends Page implements HasForms
@@ -132,12 +133,28 @@ class StudentRecords extends Page implements HasForms
                                 '5' => '5',
                             ])
                             ->required(),
-                        Checkbox::make('enrolled?_yes')->inline(false)
-                            ->accepted(),
-                        Checkbox::make('no')->inline(false)
-                            ->accepted()
+                        Radio::make('enrolled')
+                            ->options([
+                                'yes' => 'Yes',
+                                'no' => 'No',
+                            ])
+                            ->inline(false)
+                            ->default('no') // optional: set a default value
+                            ->rules('required'), // optional: enforce a rule
                     ])
             ])
             ->statePath('data');
+    }
+
+    public function create()
+    {
+        $this->validate();
+
+        $this->data = $this->form->getState();
+
+        Notification::make()
+            ->title('Data updated successfully!')
+            ->success()
+            ->send();
     }
 }

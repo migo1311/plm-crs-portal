@@ -54,18 +54,17 @@ class StudentInformationReport extends Page implements HasForms, HasTable
                     ->label('Subject Code')
                     ->formatStateUsing(function ($state, $record) {
                         return $state . '-' . $record->section;
-                    }),
+                    })
+                    ->sortable(),
                 TextColumn::make('section')
-                    ->label('Section'),
+                    ->label('Section')
+                    ->sortable(),
                 TextColumn::make('course.subject_title')
                     ->label('Subject Title'),
                 TextColumn::make('course.units')
                     ->label('Units'),
-                TextColumn::make('schedule')
-                    ->label('Schedule')
-                    ->formatStateUsing(function ($state, $record) {
-                        return $record->schedule ?? 'N/A';
-                    }),
+                TextColumn::make('classSchedules.schedule_name')
+                    ->label('Schedule'),
                 TextColumn::make('instructor.faculty_name')
                     ->label('Faculty')
             ]);

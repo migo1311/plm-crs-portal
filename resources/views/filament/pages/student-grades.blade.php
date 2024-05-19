@@ -10,6 +10,11 @@
         </form>
     </div>
 
+    <div class="mt-4 text-center font-bold text-2xl">
+        <p>College of Information Systems and Technology Management</p>
+        <p>Bachelor of Science in Computer Science</p>
+    </div>
+
     @if ($showTable)
         <div class="p-6 rounded-md shadow-sm">
             {{ $this->table }}

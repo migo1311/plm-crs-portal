@@ -24,6 +24,7 @@ class StudentGrades extends Page implements HasForms, HasTable
     protected static ?string $navigationGroup = 'Print Forms';
 
     public $showTable = false;
+    public $selectedStudentName = '';
 
     public function form(Form $form): Form
     {

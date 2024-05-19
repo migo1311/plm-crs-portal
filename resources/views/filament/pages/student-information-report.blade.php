@@ -10,6 +10,10 @@
         </form>
     </div>
 
+    <div class="mt-4 text-center font-bold text-2xl">
+        <p>Student Information</p>
+    </div>
+
     @if ($showTable)
         <div class="p-6 rounded-md shadow-sm">
             {{ $this->table }}
