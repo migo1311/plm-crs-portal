@@ -4,6 +4,7 @@ namespace App\Filament\Pages;
 
 use App\Models\Student;
 use App\Models\Aysem;
+use App\Models\TaClass;
 use Filament\Pages\Page;
 use Filament\Forms\Components;
 use Filament\Forms\Form;
@@ -39,7 +40,7 @@ class StudentInformationReport extends Page implements HasForms, HasTable
                 Components\Select::make('aysem_id')
                     ->label('Ay-Sem')
                     ->placeholder('Ay-Sem')
-                    ->options(Aysem::all()->pluck('aysem_id')->toArray())
+                    ->options(Aysem::all()->pluck('aysem_id', 'aysem_id')->toArray())
                     ->required(),
             ]);
     }
@@ -47,14 +48,26 @@ class StudentInformationReport extends Page implements HasForms, HasTable
     public function table(Table $table): Table
     {
         return $table
-            ->query(Student::query()) // Add this line to specify the data source
+            ->query(TaClass::query()) // Ensure it fetches the correct data
             ->columns([
-                TextColumn::make('subject_code')->label('Subject Code'),
-                TextColumn::make('section')->label('Section'),
-                TextColumn::make('subject_title')->label('Subject Title'),
-                TextColumn::make('units')->label('Units'),
-                TextColumn::make('schedule')->label('Schedule'),
-                TextColumn::make('faculty')->label('Faculty'),
+                TextColumn::make('course.subject_code')
+                    ->label('Subject Code')
+                    ->formatStateUsing(function ($state, $record) {
+                        return $state . '-' . $record->section;
+                    }),
+                TextColumn::make('section')
+                    ->label('Section'),
+                TextColumn::make('course.subject_title')
+                    ->label('Subject Title'),
+                TextColumn::make('course.units')
+                    ->label('Units'),
+                TextColumn::make('schedule')
+                    ->label('Schedule')
+                    ->formatStateUsing(function ($state, $record) {
+                        return $record->schedule ?? 'N/A';
+                    }),
+                TextColumn::make('instructor.faculty_name')
+                    ->label('Faculty')
             ]);
     }
 

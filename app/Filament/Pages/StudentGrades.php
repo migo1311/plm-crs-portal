@@ -19,7 +19,7 @@ class StudentGrades extends Page implements HasForms, HasTable
 {
     use InteractsWithForms, InteractsWithTable;
 
-    protected static ?string $navigationIcon = 'heroicon-o-document-text';
+    protected static ?string $navigationIcon = 'heroicon-o-trophy';
     protected static string $view = 'filament.pages.student-grades';
     protected static ?string $navigationGroup = 'Print Forms';
 
@@ -39,7 +39,7 @@ class StudentGrades extends Page implements HasForms, HasTable
                 Components\Select::make('aysem_id')
                     ->label('Ay-Sem')
                     ->placeholder('Ay-Sem')
-                    ->options(Aysem::all()->pluck('aysem_id')->toArray())
+                    ->options(Aysem::all()->pluck('aysem_id', 'aysem_id')->toArray())
                     ->required(),
             ]);
     }
@@ -47,13 +47,13 @@ class StudentGrades extends Page implements HasForms, HasTable
     public static function table(Table $table): Table
     {
         return $table
-            ->query(TaClass::query()) // Adjust the query to fetch data from the Course model
+            ->query(TaClass::query()) // Adjust the query to fetch data from the TaClass model
             ->columns([
                 TextColumn::make('course.subject_code')
+                    ->label('Subject Code')
                     ->formatStateUsing(function ($state, $record) {
-                    return $state . '-' . $record->section;
-                    })
-                    ->label('Subject Code'),
+                        return $state . '-' . $record->section;
+                    }),
                 TextColumn::make('course.subject_title')
                     ->label('Subject Title'),
                 TextColumn::make('course.units')

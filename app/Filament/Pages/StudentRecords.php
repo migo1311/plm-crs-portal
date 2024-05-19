@@ -14,7 +14,7 @@ use Filament\Tables; // Add this line
 class StudentRecords extends Page implements HasForms
 {
     use InteractsWithForms;
-    protected static ?string $navigationIcon = 'heroicon-o-document-text';
+    protected static ?string $navigationIcon = 'heroicon-o-identification';
 
     protected static string $view = 'filament.pages.student-records';
 
