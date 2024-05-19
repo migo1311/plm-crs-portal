@@ -1,8 +1,4 @@
 <x-filament-panels::page>
-
-    <h1 class="text-xl font-bold text-gray-900 text-center">Faculty Loading</h1>
-    <h3 class="text-xl font-semibold text-gray-500 text-center">College of Information Systems and Technology Management</h3>
-
     <div class="p-6 rounded-md shadow-sm">
         <form wire:submit.prevent="printReport">
             {{ $this->form }}

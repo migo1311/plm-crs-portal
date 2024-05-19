@@ -55,7 +55,7 @@ class FacultyLoading extends Page implements HasForms, HasTable
                     ->sortable(),
                 TextColumn::make('course.subject_title')
                     ->label('Subject Title'),
-                TextColumn::make('units')
+                TextColumn::make('course.units')
                     ->label('Units')
                     ->sortable(),
                 TextColumn::make('classSchedules.schedule_name')
@@ -64,8 +64,8 @@ class FacultyLoading extends Page implements HasForms, HasTable
                 TextColumn::make('students_qty')
                     ->label('No. of Students')
                     ->sortable(),
-                TextColumn::make('instructor.instructor_code')
-                    ->label('Instructor')
+                TextColumn::make('instructor.faculty_name')
+                    ->label('Faculty')
                     ->sortable(),
             ]);
     }
@@ -76,7 +76,3 @@ class FacultyLoading extends Page implements HasForms, HasTable
         $this->showTable = true;
     }
 }
-
-
-
-
