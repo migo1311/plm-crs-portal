@@ -32,5 +32,6 @@ class DatabaseSeeder extends Seeder
         // $this->call([TaClassSeeder::class]);
         // $this->call([ClassStudentSeeder::class]);
         // $this->call([BlockClassSeeder::class]);
+        $this->call([ScheduleSeeder::class]);
     }
 }
