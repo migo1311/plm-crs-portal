@@ -3,26 +3,24 @@
 namespace App\Filament\Pages;
 
 use App\Models\InstructorProfile;
-use App\Models\TaClass;
 use Filament\Forms\Components;
 use Filament\Forms\Form;
 use Filament\Pages\Page;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Tables; // Add this line
+use Filament\Notifications\Notification;
 
 class FacultyRecords extends Page implements HasForms
 {
     use InteractsWithForms;
+
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
-
     protected static string $view = 'filament.pages.faculty-records';
-
     protected static ?string $navigationGroup = 'Utilities';
 
     public ?array $data = [];
     public InstructorProfile $instructorProfile;
-    
+
     public function mount(): void
     {
         $this->form->fill();
@@ -34,7 +32,7 @@ class FacultyRecords extends Page implements HasForms
             ->columns(4)
             ->model(InstructorProfile::class)
             ->schema([
-               Components\Section::make('Personal Details')
+                Components\Section::make('Personal Details')
                     ->schema([
                         Components\Select::make('instructor_id')
                             ->label('Employee Number')
@@ -59,6 +57,13 @@ class FacultyRecords extends Page implements HasForms
                         Components\DatePicker::make('birth_date')
                             ->required(),
                         Components\Select::make('pedigree')
+                            ->options([
+                                'I' => 'I',
+                                'II' => 'II',
+                                'III' => 'III',
+                                'IV' => 'IV',
+                                'V' => 'V',
+                            ])
                             ->required(),
                         Components\Select::make('gender')
                             ->options([
@@ -68,8 +73,28 @@ class FacultyRecords extends Page implements HasForms
                             ])
                             ->required(),
                         Components\Select::make('civil_status')
+                            ->options([
+                                'single' => 'Single',
+                                'married' => 'Married',
+                                'widowed' => 'Widowed',
+                                'divorced' => 'Divorced',
+                                'separated' => 'Separated',
+                            ])
                             ->required(),
                         Components\Select::make('citizenship')
+                            ->options([
+                                'Philippines' => 'Philippines',
+                                'United States' => 'United States',
+                                'Canada' => 'Canada',
+                                'Australia' => 'Australia',
+                                'United Kingdom' => 'United Kingdom',
+                                'Germany' => 'Germany',
+                                'France' => 'France',
+                                'Japan' => 'Japan',
+                                'China' => 'China',
+                                'India' => 'India',
+                                'Other' => 'Other',
+                            ])
                             ->required(),
                         Components\TextInput::make('mobile_phone')
                             ->required()
@@ -80,15 +105,14 @@ class FacultyRecords extends Page implements HasForms
                     ]),
                 Components\Section::make('Employment Details')
                     ->schema([
-                        Components\Grid::make(2) // Define a 2-column grid
+                        Components\Grid::make(2) 
                             ->schema([
                                 Components\TextInput::make('tin_number')
                                     ->required()
-                                    ->columnSpan(1), // Span 1 out of 2 columns
-                
+                                    ->columnSpan(1), 
                                 Components\TextInput::make('gsis_number')
                                     ->required()
-                                    ->columnSpan(1), // Span 1 out of 2 columns
+                                    ->columnSpan(1),
                             ]),
                         Components\TextInput::make('instructor_code')
                             ->required()
@@ -97,16 +121,27 @@ class FacultyRecords extends Page implements HasForms
                 Components\Section::make('Current Address')
                     ->schema([
                         Components\Select::make('street_address')
+                            ->options([
+                                'Escolta Street' => 'Escolta Street',
+                                'Ayala Boulevard' => 'Ayala Boulevard',
+                                'Taft Avenue' => 'Taft Avenue',
+                                'Roxas Boulevard' => 'Roxas Boulevard',
+                                'Pedro Gil Street' => 'Pedro Gil Street',
+                                'Orosa Street' => 'Orosa Street',
+                                'Adriatico Street' => 'Adriatico Street',
+                                'Remedios Street' => 'Remedios Street',
+                                'P. Burgos Street' => 'P. Burgos Street',
+                                'R. Hidalgo Street' => 'R. Hidalgo Street',
+                            ])
                             ->required(),
-                        Components\Grid::make(2) // Define a 2-column grid
+                        Components\Grid::make(2) 
                             ->schema([
                                 Components\TextInput::make('zip_code')
                                     ->required()
-                                    ->columnSpan(1), // Span 1 out of 2 columns
-                
+                                    ->columnSpan(1), 
                                 Components\TextInput::make('phone_number')
                                     ->required()
-                                    ->columnSpan(1), // Span 1 out of 2 columns
+                                    ->columnSpan(1), 
                             ]),
                         Components\TextInput::make('province_city')
                             ->required()
@@ -114,5 +149,17 @@ class FacultyRecords extends Page implements HasForms
                     ])
             ])
             ->statePath('data');
+    }
+
+    public function create()
+    {
+        $this->validate();
+
+        $this->data = $this->form->getState();
+
+        Notification::make()
+            ->title('Data updated successfully!')
+            ->success()
+            ->send();
     }
 }
