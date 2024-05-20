@@ -3,19 +3,49 @@
 <div class="flex justify-center items-center h-full">
     {{ $this->form }}
 </div>
-    {{-- Display the selected student profile --}}
-    @if ($selectedStudent)
-        <div class="mb-4 p-4 bg-white shadow rounded">
-            <h2 class="text-xl font-bold mb-2">Student Profile</h2>
-            <p><strong>Student Number:</strong> {{ $selectedStudent->student_id }}</p>
-            <p><strong>Last Name:</strong> {{ $selectedStudent->last_name }}</p>
-            <p><strong>First Name:</strong> {{ $selectedStudent->first_name }}</p>
-            <p><strong>Middle Name:</strong> {{ $selectedStudent->middle_name }}</p>
-            <p><strong>Program:</strong> {{ $selectedStudent->program }}</p>
-            <p><strong>Registration Code:</strong> {{ $selectedStudent->registration_code }}</p>
-            <p><strong>Block Assignment:</strong> {{ $selectedStudent->block_assignment }}</p>
+
+        <div class="p-6 mt-6">
+            <div>
+            <div>
+            <table class="max-w-screen-sm border">
+                <tbody>
+                    <th>
+                        <h2 class="text-xl font-semibold mb-4">Student Profile</h2>
+                    </th>
+                    <tr>
+                        <th class="px-4 text-left text-sm">Student Number:</th>
+                        <td class="px-4"></td>
+                    </tr>
+                    <tr>
+                        <th class="px-4 text-left text-sm">Last Name:</th>
+                        <td class="px-4 text-left text-sm"></td>
+                    </tr>
+                    <tr>
+                        <th class="px-4 text-left text-sm">First Name:</th>
+                        <td class="px-4 text-left text-sm"></td>
+                    </tr>
+                    <tr>
+                        <th class="px-4 text-left text-sm">Middle Name:</th>
+                        <td class="px-4 text-left text-sm"></td>
+                    </tr>
+                    <tr>
+                        <th class="px-4 text-left text-sm">Program:</th>
+                        <td class="px-4 text-left text-sm"></td>
+                    </tr>
+                    <tr>
+                        <th class="px-4 text-left text-sm">Registration Code:</th>
+                        <td class="px-4 text-left text-sm"></td>
+                    </tr>
+                    <tr>
+                        <th class="px-4 text-left text-sm">Block Assignment:</th>
+                        <td class="px-4 text-left text-sm"></td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+
+            </div>
         </div>
-    @endif
 
     {{-- Button to trigger the print report method --}}
     <div class="flex justify-center items-center h-full">
@@ -25,7 +55,7 @@
     </div>
 
     {{-- Display the table if showTable is true --}}
-    @if ($showTable)
+    @if ($this->showTable)
     <div class="flex justify-center items-center h-full">
             {{ $this->table }}
         </div>
