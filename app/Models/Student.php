@@ -21,7 +21,6 @@ class Student extends Model
         'middleinitial',
         'nameextension',
         'maiden_name',
-        'yearlevel',
         'plm_email_address',
         'birth_date',
         'birth_place',

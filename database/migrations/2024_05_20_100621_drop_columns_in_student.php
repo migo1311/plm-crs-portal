@@ -23,6 +23,7 @@ return new class extends Migration
             $table->dropColumn('graduating');
             $table->dropColumn('student_type');
             $table->dropColumn('registration_status');
+            $table->dropColumn('yearlevel');
 
             $table->string('maiden_name')->nullable();
             $table->string('country')->nullable();

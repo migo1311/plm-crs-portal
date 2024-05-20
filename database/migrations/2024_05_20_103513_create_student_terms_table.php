@@ -36,8 +36,9 @@ return new class extends Migration
                 ->cascadeOnDelete();
             $table->string('student_type');
             $table->string('registration_status');
-            $table->boolean('graduating');
+            $table->string('graduating');
             $table->boolean('enrolled');
+            $table->unsignedInteger('year_level');
             $table->timestamps();
         });
     }

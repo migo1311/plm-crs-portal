@@ -19,6 +19,7 @@ class StudentTerm extends Model
         'college_id',
         'program_id',
         'block_id',
+        'year_level',
         'student_type',
         'registration_status',
         'graduating',
