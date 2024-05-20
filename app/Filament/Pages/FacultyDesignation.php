@@ -3,62 +3,77 @@
 namespace App\Filament\Pages;
 
 use App\Models\InstructorProfile;
-use App\Models\Course;
 use App\Models\Designation;
-use App\Models\TaClass;
+use App\Models\FacultyDesignation as FacultyDesignationModel;
+use Filament\Forms;
 use Filament\Forms\Components;
-use Filament\Forms\Form;
 use Filament\Pages\Page;
-use Filament\Forms\Concerns\InteractsWithForms;
-use Filament\Forms\Contracts\HasForms;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
-class FacultyDesignation extends Page implements HasForms
+class FacultyDesignation extends Page implements Forms\Contracts\HasForms
 {
-    use InteractsWithForms;
+    use Forms\Concerns\InteractsWithForms;
 
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
     protected static string $view = 'filament.pages.faculty-designation';
     protected static ?string $navigationGroup = 'Utilities';
 
-    public function form(Form $form): Form
+    public $instructor_id;
+    public $designation_id;
+    public $schedule;
+
+    public function mount()
     {
-        return $form
-            ->columns(1)
-            ->model(FacultyDesignation::class)
-            ->schema([
-                Components\Select::make('Select Faculty Name')
-                    ->placeholder('Select Option')
-                    ->options(InstructorProfile::pluck('faculty_name')) // Assuming Faculty model has 'name' and 'id' fields
-                    ->required(),
-                Components\Select::make('Select New Designation')
-                    ->placeholder('Select Option')
-                    ->options(Designation::pluck('title'))
-                    ->searchable()
-                    ->required(),
-                Components\TextInput::make('Enter New Schedule')
-                    ->required(),
-            ]);
+        $this->form->fill([]);
     }
 
-    public function update(Form $form)
+    protected function getFormSchema(): array
     {
-        // Validate form input
-        $validatedData = $form->validate([
-            'Select Faculty Name' => 'required',
-            'Select New Designation' => 'required',
-            'Enter New Schedule' => 'required',
-        ]);
+        return [
+            Components\Select::make('instructor_id')
+                ->label('Select Faculty Name')
+                ->placeholder('Select Option')
+                ->options(InstructorProfile::pluck('faculty_name', 'instructor_id')->toArray())
+                ->required(),
+            Components\Select::make('designation_id')
+                ->label('Select New Designation')
+                ->placeholder('Select Option')
+                ->options(Designation::pluck('title', 'designation_id')->toArray())
+                ->searchable()
+                ->required(),
+            Components\TextInput::make('schedule')
+                ->label('Enter New Schedule')
+                ->required(),
+        ];
+    }
 
-        // Save the form data to the database
-        FacultyDesignation::create([
-            'faculty_name' => $validatedData['Select Faculty Name'],
-            'new_designation' => $validatedData['Select New Designation'],
-            'new_schedule' => $validatedData['Enter New Schedule'],
-        ]);
+    public function save()
+    {
+        $data = $this->form->getState();
+        $userId = Auth::id(); // Get the ID of the authenticated user
 
-        // Optionally, you can add a success message or redirect the user to a different page
-        // For example:
-        // session()->flash('success', 'Faculty designation updated successfully.');
-        // return redirect()->route('your.route.name');
+        DB::transaction(function() use ($data, $userId) {
+            FacultyDesignationModel::create([
+                'instructor_id' => $data['instructor_id'],
+                'designation_id' => $data['designation_id'],
+                'schedule' => $data['schedule'],
+                'update_by' => $userId,  // Set the 'update_by' field to the authenticated user's ID
+                'is_active' => true,     // Automatically set 'is_active' to true
+            ]);
+        });
+
+        session()->flash('success', 'Faculty designation updated successfully.');
+        $this->resetForm();
+    }
+
+    protected function getFormModel(): string
+    {
+        return FacultyDesignationModel::class;
+    }
+
+    protected function resetForm()
+    {
+        $this->form->fill([]);
     }
 }
