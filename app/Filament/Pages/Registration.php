@@ -19,41 +19,45 @@ use Filament\Tables\Concerns\InteractsWithTable;
 class Registration extends Page implements HasForms, HasTable
 {
     use InteractsWithForms, InteractsWithTable;
-    
+
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
     protected static string $view = 'filament.pages.registration';
-    protected static ?int $navigationsort = 2;
+    protected static ?int $navigationSort = 2;
 
     public $showTable = false;
     public $selectedStudentName = '';
+    public $selectedStudent;
 
     public function form(Form $form): Form
     {
         return $form
-            ->columns(2)
             ->schema([
                 Components\Select::make('student_id')
                     ->label('Student Number')
                     ->placeholder('Select Student Number')
                     ->options(Student::all()->pluck('student_id', 'student_id')->toArray())
-                    ->searchable()
-                    ->required(),
+                    ->required()
+                    ->reactive()
+                    ->afterStateUpdated(fn ($state) => $this->updateSelectedStudent($state)),
             ]);
+    }
+
+    protected function updateSelectedStudent($studentId)
+    {
+        $this->selectedStudent = Student::find($studentId);
     }
 
     public static function table(Table $table): Table
     {
         return $table
-            ->query(TaClass::query()) // Adjust the query to fetch data from the TaClass model
+            ->query(TaClass::query())
             ->columns([
-                CheckboxColumn::make('selected') // Checklist column
+                CheckboxColumn::make('selected')
                     ->label('Select')
                     ->sortable(),
-                TextColumn::make('class_id')
+                TextColumn::make('course.class_code')
                     ->label('Class')
-                    ->formatStateUsing(function ($state, $record) {
-                        return $state . '-' . $record->class;
-                    }),
+                    ->formatStateUsing(fn ($state, $record) => $state . ' ' . $record->class),
                 TextColumn::make('section')
                     ->label('Section')
                     ->sortable(),
@@ -67,7 +71,6 @@ class Registration extends Page implements HasForms, HasTable
 
     public function printReport()
     {
-        // Set flag to true to show the table
         $this->showTable = true;
     }
 }

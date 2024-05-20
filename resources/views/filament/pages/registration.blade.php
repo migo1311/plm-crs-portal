@@ -1,27 +1,33 @@
-<x-filament-panels::page>
-    <div class="bg-white p-6 rounded-md shadow-sm">
-        @if (session()->has('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
-        @endif
+<x-filament::page>
 
-        <form wire:submit.prevent="printReport">
-            <!-- Your form components -->
-            {{ $this->form }}
+<div class="flex justify-center items-center h-full">
+    {{ $this->form }}
+</div>
+    {{-- Display the selected student profile --}}
+    @if ($selectedStudent)
+        <div class="mb-4 p-4 bg-white shadow rounded">
+            <h2 class="text-xl font-bold mb-2">Student Profile</h2>
+            <p><strong>Student Number:</strong> {{ $selectedStudent->student_id }}</p>
+            <p><strong>Last Name:</strong> {{ $selectedStudent->last_name }}</p>
+            <p><strong>First Name:</strong> {{ $selectedStudent->first_name }}</p>
+            <p><strong>Middle Name:</strong> {{ $selectedStudent->middle_name }}</p>
+            <p><strong>Program:</strong> {{ $selectedStudent->program }}</p>
+            <p><strong>Registration Code:</strong> {{ $selectedStudent->registration_code }}</p>
+            <p><strong>Block Assignment:</strong> {{ $selectedStudent->block_assignment }}</p>
+        </div>
+    @endif
 
-            <!-- Submit Button -->
-            <div class="mt-4">
-                <button type="submit" class="inline-flex items-center px-4 py-2 mt-1 text-sm font-medium text-white border border-transparent rounded-md shadow-sm hover:bg-yellow-600" style="background-color: gold;">
-                    Show Classes
-                </button>
-            </div>
-        </form>
-
-        @if ($showTable)
-            <div class="mt-6">
-                {{ $this->table }}
-            </div>
-        @endif
+    {{-- Button to trigger the print report method --}}
+    <div class="flex justify-center items-center h-full">
+        <button type="button" wire:click="printReport" class="inline-flex items-center px-4 py-2 mt-1 text-sm font-medium text-white border border-transparent rounded-md shadow-sm hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500" style="background-color: gold;">
+            Submit
+        </button>
     </div>
-</x-filament-panels::page>
+
+    {{-- Display the table if showTable is true --}}
+    @if ($showTable)
+    <div class="flex justify-center items-center h-full">
+            {{ $this->table }}
+        </div>
+    @endif
+</x-filament::page>
