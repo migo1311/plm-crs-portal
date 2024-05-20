@@ -23,6 +23,7 @@ class StudentInformation extends Page implements HasForms
     public ?array $data = [];
     public array $selectedFields = [];
     public array $studentsData = [];
+    public string $search = '';
 
     public function mount(): void
     {
@@ -36,7 +37,8 @@ class StudentInformation extends Page implements HasForms
                 ->label('Ay-Sem')
                 ->placeholder('Ay-Sem')
                 ->options(Aysem::all()->pluck('aysem_id', 'aysem_id')->toArray())
-                ->required(),
+                ->required()
+                ->searchable(), // Make the Ay-Sem field searchable
             Components\Section::make('Fields to be Included')
                 ->schema([
                     Components\Select::make('field_selection')
@@ -61,7 +63,8 @@ class StudentInformation extends Page implements HasForms
                             'height' => 'Height',
                             'complexion' => 'Complexion',
                         ])
-                        ->required(),
+                        ->required()
+                        ->searchable(), // Make the Field Selection field searchable
                 ]),
         ];
     }
@@ -94,10 +97,19 @@ class StudentInformation extends Page implements HasForms
             return;
         }
 
-        // Fetch students' data based on valid selected fields and Ay-Sem
-        $this->studentsData = Student::where('aysem_id', $aysemId)
-            ->limit(20) // Limiting to 20 records for initial display
-            ->get()
+        // Fetch students' data based on valid selected fields and Ay-Sem, including search functionality
+        $query = Student::where('aysem_id', $aysemId);
+
+        if ($this->search) {
+            $query->where(function ($q) {
+                foreach ($this->selectedFields as $field) {
+                    $q->orWhere($field, 'like', '%' . $this->search . '%');
+                }
+            });
+        }
+
+        $this->studentsData = $query->limit(10) // Limiting to 20 records for initial display
+            ->get($validFields) // Fetch only the valid selected fields
             ->toArray();
 
         Notification::make()
@@ -106,5 +118,3 @@ class StudentInformation extends Page implements HasForms
             ->send();
     }
 }
-
-

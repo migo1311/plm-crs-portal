@@ -16,7 +16,7 @@
 
     @if ($data)
         <div class="bg-white p-6 mt-6 rounded-md shadow-sm">
-            <h2 class="text-xl font-semibold mb-4">Faculty Records</h2>
+            <h2 class="text-xl font-semibold mb-4">Student Records</h2>
             <div style="overflow-x: auto;">
                 <table class="min-w-full bg-white">
                     <thead>

@@ -17,6 +17,7 @@
 
     @if ($showTable)
         <div class="p-6 rounded-md shadow-sm">
+            <p>Selected Student: {{ $selectedStudentName }}</p>
             {{ $this->table }}
         </div>
     @endif

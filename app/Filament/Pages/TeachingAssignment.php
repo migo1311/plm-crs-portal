@@ -5,7 +5,7 @@ namespace App\Filament\Pages;
 use App\Models\Aysem;
 use App\Models\InstructorProfile;
 use App\Models\TaClass;
-use App\Models\Student;
+use App\Models\College;
 use Filament\Pages\Page;
 use Filament\Forms\Components;
 use Filament\Forms\Components\Actions;
@@ -66,7 +66,7 @@ class TeachingAssignment extends Page implements HasForms, HasTable
                 ->label('No. of Students'),
             TextColumn::make('credited_units')
                 ->label('Credited Units'),
-            TextColumn::make('college.college_name')
+            TextColumn::make('college.college_code')
                 ->label('College'),
             TextColumn::make('designation.type_load')
                 ->label('Type of Load'),

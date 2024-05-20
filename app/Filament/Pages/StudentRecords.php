@@ -3,14 +3,14 @@
 namespace App\Filament\Pages;
 
 use App\Models\Student;
+use App\Models\Aysem;
 use Filament\Forms\Components;
 use Filament\Forms\Form;
 use Filament\Pages\Page;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Components\Radio;
 use Filament\Notifications\Notification;
-use Filament\Tables; // Add this line
+use Filament\Forms\Components\Radio;
 
 class StudentRecords extends Page implements HasForms
 {
@@ -23,6 +23,7 @@ class StudentRecords extends Page implements HasForms
 
     public ?array $data = [];
     public Student $student;
+
     
     public function mount(): void
     {
@@ -35,7 +36,22 @@ class StudentRecords extends Page implements HasForms
             ->columns(4)
             ->model(StudentGrades::class)
             ->schema([
-               Components\Section::make('Personal Details')
+                Components\Section::make('First Step')
+                    ->columns(2)
+                    ->schema([
+                        Components\Select::make('student_id')
+                            ->label('Student Number')
+                            ->options(Student::all()->pluck('student_id', 'student_id')->toArray())
+                            ->searchable()
+                            ->required(),
+                        Components\Select::make('aysem_id')
+                            ->label('Ay-Sem')
+                            ->placeholder('Ay-Sem')
+                            ->options(Aysem::all()->pluck('aysem_id', 'aysem_id')->toArray())
+                            ->required()
+                            ->searchable(), 
+                    ]),
+                Components\Section::make('Personal Details')
                     ->schema([
                         Components\Select::make('student_id')
                             ->label('Student Number')
@@ -74,26 +90,24 @@ class StudentRecords extends Page implements HasForms
                                 'widowed' => 'Widowed',
                             ])
                             ->required(),
-                        Components\TextInput::make('country')
+                        Components\TextInput::make('mobile_num')
                             ->required(),
-                        Components\TextInput::make('mobile_phone')
-                            ->required(),
-                        Components\TextInput::make('email_address')
+                        Components\TextInput::make('email_add')
                             ->required()
                             ->columnSpan(2)
                     ]),
                 Components\Section::make('Student Terms')
                     ->columns(4)
                     ->schema([
-                        Components\TextInput::make('ay')
+                        Components\TextInput::make('aysem_id')
                             ->required()
-                            ->columnSpan(2),
-                        Components\TextInput::make('sem')
-                            ->required()
-                            ->columnSpan(2),
-                        Components\TextInput::make('programs')
+                            ->columnSpan(2)
                             ->required(),
-                        Components\Select::make('block')
+                        Components\TextInput::make('program_id')
+                            ->label('Program')
+                            ->required(),
+                        Components\Select::make('block_id')
+                            ->label('Block')
                             ->options([
                                 '1' => '1',
                                 '2' => '2',
@@ -101,9 +115,10 @@ class StudentRecords extends Page implements HasForms
                                 '4' => '4',
                             ])
                             ->required(),
-                        Components\TextInput::make('college')
+                        Components\TextInput::make('college_id')
+                            ->label('College')
                             ->required(),
-                        Components\Select::make('registration_code')
+                        Components\Select::make('registration_status')
                             ->options([
                                 'regular' => 'Regular',
                                 'irregular' => 'Irregular',
@@ -124,7 +139,7 @@ class StudentRecords extends Page implements HasForms
                                 'No' => 'No',
                             ])
                             ->required(),
-                        Components\Select::make('year_level')
+                        Components\Select::make('yearlevel')
                             ->options([
                                 '1' => '1',
                                 '2' => '2',
@@ -139,7 +154,7 @@ class StudentRecords extends Page implements HasForms
                                 'no' => 'No',
                             ])
                             ->inline(false)
-                            ->default('no') // optional: set a default value
+                            ->default('') // optional: set a default value
                             ->rules('required'), // optional: enforce a rule
                     ])
             ])

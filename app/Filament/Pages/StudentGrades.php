@@ -68,5 +68,13 @@ class StudentGrades extends Page implements HasForms, HasTable
     {
         // Set flag to true to show the table
         $this->showTable = true;
+
+        /*// Fetch selected student's name
+        $selectedStudentId = request()->input('form.student_id');
+
+        $selectedStudent = Student::where('student_id', $selectedStudentId)->first();
+        if ($selectedStudent) {
+            $this->selectedStudentName = $selectedStudent->firstname . ' ' . $selectedStudent->lastname;
+        }*/
     }
 }

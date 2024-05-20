@@ -3,16 +3,26 @@
         <form wire:submit.prevent="printReport">
             {{ $this->form }}
             <div class="p-3 rounded-md shadow-sm">
-                <button type="submit" class="inline-flex items-center px-4 py-2 mt-1 text-sm font-medium text-white border border-transparent rounded-md shadow-sm hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500" style="background-color: gold;">
-                    Generate Data
-                </button>
+                <div class="flex justify-center items-center mb-4"> <!-- Centering the button -->
+                    <button type="submit" class="inline-flex items-center px-4 py-2 text-sm font-medium text-white border border-transparent rounded-md shadow-sm hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500" style="background-color: gold;">
+                        Generate Data
+                    </button>
+                </div>
+                <div class="flex justify-end">
+                    <input
+                        type="text"
+                        wire:model.debounce.500ms="search"
+                        placeholder="Search..."
+                        class="w-48 px-4 py-2 text-sm border rounded-md shadow-sm"
+                    />
+                </div>
             </div>
         </form>
     </div>
 
     @if (!empty($studentsData))
         <div class="bg-white p-6 mt-6 rounded-md shadow-sm">
-            <h2 class="text-xl font-semibold mb-4">Faculty Records</h2>
+            <h2 class="text-xl font-semibold mb-4">Student Records</h2>
             <div style="overflow-x: auto;">
                 <table class="min-w-full bg-white">
                     <thead>
