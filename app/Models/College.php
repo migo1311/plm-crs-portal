@@ -31,4 +31,9 @@ class College extends Model
     {
         return $this->hasMany(InstructorProfile::class, 'college_id', 'college_id');
     }
+
+    public function studentTerm(): HasMany
+    {
+        return $this->hasMany(StudentTerm::class, 'college_id', 'college_id');
+    }
 }
