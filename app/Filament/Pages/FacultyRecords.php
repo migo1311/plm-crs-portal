@@ -91,8 +91,4 @@ class FacultyRecords extends Page implements HasForms
             ])
             ->statePath('data');
     }
-
-    
-
- 
 }
