@@ -23,7 +23,7 @@ class StudentRecords extends Page implements HasForms
 
     public ?array $data = [];
     public Student $student;
-
+    public ?array $personalData = [];
     
     public function mount(): void
     {
@@ -36,66 +36,6 @@ class StudentRecords extends Page implements HasForms
             ->columns(4)
             ->model(StudentGrades::class)
             ->schema([
-                Components\Section::make('First Step')
-                    ->columns(2)
-                    ->schema([
-                        Components\Select::make('student_id')
-                            ->label('Student Number')
-                            ->options(Student::all()->pluck('student_id', 'student_id')->toArray())
-                            ->searchable()
-                            ->required(),
-                        Components\Select::make('aysem_id')
-                            ->label('Ay-Sem')
-                            ->placeholder('Ay-Sem')
-                            ->options(Aysem::all()->pluck('aysem_id', 'aysem_id')->toArray())
-                            ->required()
-                            ->searchable(), 
-                    ]),
-                Components\Section::make('Personal Details')
-                    ->schema([
-                        Components\Select::make('student_id')
-                            ->label('Student Number')
-                            ->options(Student::all()->pluck('student_id', 'student_id')->toArray())
-                            ->searchable()
-                            ->required(),
-                        Components\TextInput::make('last_name')
-                            ->label('Last Name')
-                            ->required(),
-                        Components\TextInput::make('first_name')
-                            ->label('First Name')
-                            ->required(),
-                        Components\TextInput::make('middle_name')
-                            ->label('Middle Name'),
-                        Components\TextInput::make('maiden_name')
-                            ->label('Maiden Name'),
-                        Components\TextInput::make('name_extension')
-                            ->label('Name Extension'),
-                        Components\TextInput::make('birth_place')
-                            ->label('Birth Place (Province-City)')
-                            ->required(),
-                        Components\DatePicker::make('birth_date')
-                            ->required(),
-                        Components\Select::make('gender')
-                            ->options([
-                                'male' => 'Male',
-                                'female' => 'Female',
-                                'other' => 'Other',
-                            ])
-                            ->required(),
-                        Components\Select::make('civil_status')
-                            ->options([
-                                'single' => 'Single',
-                                'married' => 'Married',
-                                'divorced' => 'Divorced',
-                                'widowed' => 'Widowed',
-                            ])
-                            ->required(),
-                        Components\TextInput::make('mobile_num')
-                            ->required(),
-                        Components\TextInput::make('email_add')
-                            ->required()
-                            ->columnSpan(2)
-                    ]),
                 Components\Section::make('Student Terms')
                     ->columns(4)
                     ->schema([
@@ -161,6 +101,62 @@ class StudentRecords extends Page implements HasForms
             ->statePath('data');
     }
 
+    public function personal(Form $form): Form
+    {
+        return $form
+            ->columns(4)
+            ->model(Student::class)
+            ->schema([
+                Components\Section::make('Personal Details')
+                    ->schema([
+                        Components\Select::make('student_id')
+                            ->label('Student Number')
+                            ->options(Student::all()->pluck('student_id', 'student_id')->toArray())
+                            ->searchable()
+                            ->required(),
+                        Components\TextInput::make('last_name')
+                            ->label('Last Name')
+                            ->required(),
+                        Components\TextInput::make('first_name')
+                            ->label('First Name')
+                            ->required(),
+                        Components\TextInput::make('middle_name')
+                            ->label('Middle Name'),
+                        Components\TextInput::make('maiden_name')
+                            ->label('Maiden Name'),
+                        Components\TextInput::make('name_extension')
+                            ->label('Name Extension'),
+                        Components\TextInput::make('birth_place')
+                            ->label('Birth Place (Province-City)')
+                            ->required(),
+                        Components\DatePicker::make('birth_date')
+                            ->required(),
+                        Components\Select::make('gender')
+                            ->options([
+                                'male' => 'Male',
+                                'female' => 'Female',
+                                'other' => 'Other',
+                            ])
+                            ->required(),
+                        Components\Select::make('civil_status')
+                            ->options([
+                                'single' => 'Single',
+                                'married' => 'Married',
+                                'divorced' => 'Divorced',
+                                'widowed' => 'Widowed',
+                            ])
+                            ->required(),
+                        Components\TextInput::make('country')
+                            ->required(),
+                        Components\TextInput::make('mobile_phone')
+                            ->required(),
+                        Components\TextInput::make('email_address')
+                            ->required()
+                            ->columnSpan(2)
+                    ]),
+            ])
+            ->statePath('personalData');}
+
     public function create()
     {
         $this->validate();
@@ -171,5 +167,13 @@ class StudentRecords extends Page implements HasForms
             ->title('Data updated successfully!')
             ->success()
             ->send();
+    }
+
+    protected function getForms(): array
+    {
+        return [
+            'form',
+            'personal',
+        ];
     }
 }
