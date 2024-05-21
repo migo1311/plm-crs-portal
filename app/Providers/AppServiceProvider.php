@@ -27,11 +27,5 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Pivot::observe(ClassStudentObserver::class);
-        Filament::serving(function () {
-            Filament::registerUserMenuItems([
-                FacultyInformation::getNavigationSort(),
-                // ...
-            ]);
-        });
     }
 }
