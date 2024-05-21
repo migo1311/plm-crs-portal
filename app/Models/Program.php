@@ -11,6 +11,8 @@ class Program extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'program_id';
+
     protected $fillable = [
         'college_id',
         'program_title',
@@ -34,5 +36,10 @@ class Program extends Model
     public function student(): HasMany
     {
         return $this->hasMany(Student::class, 'program_id', 'program_id');
+    }
+
+    public function studentTerm(): HasMany
+    {
+        return $this->hasMany(StudentTerm::class, 'program_id', 'program_id');
     }
 }

@@ -10,6 +10,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Room extends Model
 {
     use HasFactory;
+
+    protected $primaryKey = 'room_id';
+    
     protected $fillable = [
        'building_id', 
         'room_number',

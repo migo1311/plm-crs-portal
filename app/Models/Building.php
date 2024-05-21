@@ -10,6 +10,8 @@ class Building extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'building_id';
+
     protected $fillable = [
         'building_code',
         'building_name',

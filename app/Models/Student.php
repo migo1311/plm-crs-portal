@@ -20,20 +20,14 @@ class Student extends Model
         'middlename',
         'middleinitial',
         'nameextension',
-        'college_id',
-        'program_id',
-        'yearlevel',
+        'maiden_name',
         'plm_email_address',
-        'aysem_id',
-        'registration_status',
-        'block_id',
-        'graduating',
-        'student_type',
         'birth_date',
         'birth_place',
         'age',
         'gender',
         'civil_status',
+        'country',
         'mobile_num',
         'email_add',
         'religion',
@@ -100,5 +94,15 @@ class Student extends Model
     public function studentEducation(): HasMany
     {
         return $this->hasMany(StudentEducation::class, 'student_id', 'student_id');
+    }
+
+    public function classes(): BelongsToMany
+    {
+        return $this->belongsToMany(TaClass::class, 'class_student', 'student_id', 'class_id')->withTimestamps();
+    }
+
+    public function studentTerm(): HasMany
+    {
+        return $this->hasMany(StudentTerm::class, 'student_id', 'student_id');
     }
 }

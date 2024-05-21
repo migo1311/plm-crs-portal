@@ -3,40 +3,77 @@
 namespace App\Filament\Pages;
 
 use App\Models\InstructorProfile;
-use App\Models\Course;
-use App\Models\TaClass;
+use App\Models\Designation;
+use App\Models\FacultyDesignation as FacultyDesignationModel;
+use Filament\Forms;
 use Filament\Forms\Components;
-use Filament\Forms\Form;
 use Filament\Pages\Page;
-use Filament\Forms\Concerns\InteractsWithForms;
-use Filament\Forms\Contracts\HasForms;
-use Filament\Tables; // Add this line
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
-class FacultyDesignation extends Page implements HasForms
+class FacultyDesignation extends Page implements Forms\Contracts\HasForms
 {
-    use InteractsWithForms;
-    protected static ?string $navigationIcon = 'heroicon-o-document-text';
+    use Forms\Concerns\InteractsWithForms;
 
+    protected static ?string $navigationIcon = 'heroicon-o-user-group';
     protected static string $view = 'filament.pages.faculty-designation';
-
     protected static ?string $navigationGroup = 'Utilities';
 
-    public function form(Form $form): Form
+    public $instructor_id;
+    public $designation_id;
+    public $schedule;
+
+    public function mount()
     {
-        return $form
-            ->columns(1)
-            ->schema([
-                Components\Select::make('Select Faculty Name')
-                    ->placeholder('Select Option')
-                    ->options(InstructorProfile::pluck('faculty_name')) // Assuming Faculty model has 'name' and 'id' fields
-                    ->required(),
-                Components\Select::make('Select New Designation')
-                    ->placeholder('Select Option')
-                    ->options(Course::pluck('subject_title'))
-                    ->required(),
-                Components\TextInput::make('Enter New Schedule')
-                    ->placeholder('')
-                    ->required(),
+        $this->form->fill([]);
+    }
+
+    protected function getFormSchema(): array
+    {
+        return [
+            Components\Select::make('instructor_id')
+                ->label('Select Faculty Name')
+                ->placeholder('Select Option')
+                ->options(InstructorProfile::pluck('faculty_name', 'instructor_id')->toArray())
+                ->required(),
+            Components\Select::make('designation_id')
+                ->label('Select New Designation')
+                ->placeholder('Select Option')
+                ->options(Designation::pluck('title', 'designation_id')->toArray())
+                ->searchable()
+                ->required(),
+            Components\TextInput::make('schedule')
+                ->label('Enter New Schedule')
+                ->required(),
+        ];
+    }
+
+    public function save()
+    {
+        $data = $this->form->getState();
+        $userId = Auth::id(); // Get the ID of the authenticated user
+
+        DB::transaction(function() use ($data, $userId) {
+            FacultyDesignationModel::create([
+                'instructor_id' => $data['instructor_id'],
+                'designation_id' => $data['designation_id'],
+                'schedule' => $data['schedule'],
+                'update_by' => $userId,  // Set the 'update_by' field to the authenticated user's ID
+                'is_active' => true,     // Automatically set 'is_active' to true
             ]);
+        });
+
+        session()->flash('success', 'Faculty designation updated successfully.');
+        $this->resetForm();
+    }
+
+    protected function getFormModel(): string
+    {
+        return FacultyDesignationModel::class;
+    }
+
+    protected function resetForm()
+    {
+        $this->form->fill([]);
     }
 }

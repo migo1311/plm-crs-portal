@@ -10,6 +10,8 @@ class College extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'college_id';
+
     protected $fillable = [
         'college_code',
         'college_name',
@@ -28,5 +30,10 @@ class College extends Model
     public function instructor(): HasMany
     {
         return $this->hasMany(InstructorProfile::class, 'college_id', 'college_id');
+    }
+
+    public function studentTerm(): HasMany
+    {
+        return $this->hasMany(StudentTerm::class, 'college_id', 'college_id');
     }
 }

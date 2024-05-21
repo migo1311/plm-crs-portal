@@ -9,6 +9,8 @@ class TaSummary extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'ta_summary_id';
+
     protected $fillable = [
         'instructor_id',
         'regular',

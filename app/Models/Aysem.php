@@ -11,6 +11,8 @@ class Aysem extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'aysem_id';
+
     protected $fillable = [
         'academic_year_id',
         'year',
@@ -68,5 +70,10 @@ class Aysem extends Model
     public function student(): HasMany
     {
         return $this->hasMany(Student::class, 'aysem_id', 'aysem_id');
+    }
+
+    public function studentTerm(): HasMany
+    {
+        return $this->hasMany(StudentTerm::class, 'aysem_id', 'aysem_id');
     }
 }

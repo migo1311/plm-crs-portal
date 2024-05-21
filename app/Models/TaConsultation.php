@@ -9,6 +9,8 @@ class TaConsultation extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'ta_consultation_id';
+
     protected $fillable = [
         'instructor_id',
         'day',

@@ -12,8 +12,7 @@
         "laravel/framework": "^11.0",
         "laravel/tinker": "^2.9",
         "livewire/livewire": "^3.0",
-        "psr/simple-cache": "^2.0",
-        "pxlrbt/filament-excel": "^2.3"
+        "maatwebsite/excel": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

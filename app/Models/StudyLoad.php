@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class StudyLoad extends Model
 {
     use HasFactory;
+
+    protected $primaryKey = 'study_load_id';
     protected $fillable = [
         'instructor_id',
         'study_units',
