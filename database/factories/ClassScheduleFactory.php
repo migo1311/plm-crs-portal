@@ -37,7 +37,7 @@ class ClassScheduleFactory extends Factory
             'end_time'=> $end,
             'mode_id' => $mode->mode_id,
             'room_id' => $room->room_id,
-            'schedule_name' => $letter . ' ' . $start . ' - ' . $end . ' ' . $mode->mode_code . $room->room_name,
+            'schedule_name' => $letter . ' ' . $start . ' - ' . $end . ' ' . $mode->mode_code . ' ' . $room->room_name,
         ];
     }
 }

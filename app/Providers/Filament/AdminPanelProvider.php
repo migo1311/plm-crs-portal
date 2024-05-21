@@ -33,7 +33,6 @@ class AdminPanelProvider extends PanelProvider
                 'primary' => Color::Blue,
             ])
             ->favicon('images/image_plm.png')
-            ->sidebarCollapsibleOnDesktop()
             ->navigationGroups([
                 NavigationGroup::make()
                      ->label('Print Forms'),
