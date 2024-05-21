@@ -2,13 +2,10 @@
 
 namespace App\Filament\Pages;
 
-use App\Models\Aysem;
 use App\Models\InstructorProfile;
 use App\Models\TaClass;
-use App\Models\Student;
 use Filament\Pages\Page;
 use Filament\Forms\Components;
-use Filament\Forms\Components\Actions;
 use Filament\Forms\Form;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
@@ -16,7 +13,9 @@ use Filament\Tables\Table;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
-use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Actions\EditAction as ActionsEditAction;
+use Filament\Forms\Components\Wizard\Step;
+use Illuminate\Database\Eloquent\Model;
 
 class TeachingAssignment extends Page implements HasForms, HasTable
 {
@@ -45,7 +44,7 @@ class TeachingAssignment extends Page implements HasForms, HasTable
     }
 
     public static function table(Table $table): Table
-{
+    {
     return $table
         ->query(TaClass::query()) // Adjust the query to fetch data from the TaClass model
         ->columns([
@@ -58,9 +57,9 @@ class TeachingAssignment extends Page implements HasForms, HasTable
                 ->label('Subject Title'),
             TextColumn::make('course.units')
                 ->label('Units'),
-            TextColumn::make('grade.final_grade')
+            TextColumn::make('final_grade')
                 ->label('Grades'),
-            TextColumn::make('schedule')
+            TextColumn::make('classSchedules.schedule_name')
                 ->label('Schedule'),
             TextColumn::make('students_qty')
                 ->label('No. of Students'),
@@ -72,7 +71,50 @@ class TeachingAssignment extends Page implements HasForms, HasTable
                 ->label('Type of Load'),
         ])
         ->actions([
-                EditAction::make(),
+            ActionsEditAction::make()
+            ->modalHeading('Edit Teaching Assignment')
+            ->steps([
+                Step::make('Class Information')
+                    ->model(TaClass::class)
+                    ->columns(4)
+                    ->schema([
+                        Components\TextInput::make('class_id')
+                            ->label('Class ID')
+                            ->hidden(),
+                        Components\TextInput::make('course.subject_code')
+                            ->label('Subject Code')
+                            ->required(),  
+                        Components\TextInput::make('course.subject_title')
+                            ->label('Subject Title')
+                            ->required(),
+                        Components\TextInput::make('course.units')
+                            ->label('Units')
+                            ->required(),
+                        Components\TextInput::make('final_grade')
+                            ->label('Grades')
+                            ->required(),
+                        Components\TextInput::make('classSchedules.schedule_name')
+                            ->label('Schedule')
+                            ->required(),
+                        Components\TextInput::make('students_qty')
+                            ->label('No. of Students')
+                            ->required(),
+                        Components\TextInput::make('credited_units')
+                            ->label('Credited Units')
+                            ->required(),
+                        Components\TextInput::make('college.college_name')
+                            ->label('College')
+                            ->required(),
+                        Components\TextInput::make('designation.type_load')
+                            ->label('Type of Load')
+                            ->required(),
+                    ])
+            ])
+            ->using(function (array $data, Model $record) {
+
+                // dd(session()->get('class_id'));
+                $record->update($data);
+            })
         ]);
 }
 

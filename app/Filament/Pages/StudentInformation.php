@@ -23,6 +23,7 @@ class StudentInformation extends Page implements HasForms
     public ?array $data = [];
     public array $selectedFields = [];
     public array $studentsData = [];
+    public string $search = '';
 
     public function mount(): void
     {
@@ -36,7 +37,8 @@ class StudentInformation extends Page implements HasForms
                 ->label('Ay-Sem')
                 ->placeholder('Ay-Sem')
                 ->options(Aysem::all()->pluck('aysem_id', 'aysem_id')->toArray())
-                ->required(),
+                ->required()
+                ->searchable(), // Make the Ay-Sem field searchable
             Components\Section::make('Fields to be Included')
                 ->schema([
                     Components\Select::make('field_selection')
@@ -48,7 +50,6 @@ class StudentInformation extends Page implements HasForms
                             'middlename' => 'Middle Name',
                             'middleinitial' => 'Middle Initial',
                             'nameextension' => 'Name Extension',
-                            'yearlevel' => 'Year Level',
                             'plm_email_address' => 'PLM Email Address',
                             'email_add' => 'Email Address',
                             'birth_date' => 'Birthdate',
@@ -61,7 +62,8 @@ class StudentInformation extends Page implements HasForms
                             'height' => 'Height',
                             'complexion' => 'Complexion',
                         ])
-                        ->required(),
+                        ->required()
+                        ->searchable(), // Make the Field Selection field searchable
                 ]),
         ];
     }
@@ -74,37 +76,55 @@ class StudentInformation extends Page implements HasForms
     }
 
     public function printReport()
-    {
-        $this->validate();
+{
+    $this->validate();
 
-        $this->data = $this->form->getState();
-        $this->selectedFields = $this->data['field_selection'];
-        $aysemId = $this->data['aysem_id'];
+    $this->data = $this->form->getState();
+    $this->selectedFields = $this->data['field_selection'];
+    $aysemId = $this->data['aysem_id'];
 
-        // Validate that the selected fields exist in the Student table
-        $validFields = array_filter($this->selectedFields, function ($field) {
-            return Schema::hasColumn('students', $field);
-        });
+    // Validate that the selected fields exist in the Student table
+    $validFields = array_filter($this->selectedFields, function ($field) {
+        return Schema::hasColumn('students', $field);
+    });
 
-        if (count($validFields) !== count($this->selectedFields)) {
-            Notification::make()
-                ->title('Some selected fields are not valid.')
-                ->danger()
-                ->send();
-            return;
+    if (count($validFields) !== count($this->selectedFields)) {
+        Notification::make()
+            ->title('Some selected fields are not valid.')
+            ->danger()
+            ->send();
+        return;
+    }
+
+    // Fetch students' data based on valid selected fields and Ay-Sem, including search functionality
+    $query = Student::where('aysem_id', $aysemId);
+
+        if ($this->search) {
+            $query->where(function ($q) {
+                foreach ($this->selectedFields as $field) {
+                    $q->orWhere($field, 'like', '%' . $this->search . '%');
+                }
+            });
         }
 
-        // Fetch students' data based on valid selected fields and Ay-Sem
-        $this->studentsData = Student::where('aysem_id', $aysemId)
-            ->limit(20) // Limiting to 20 records for initial display
+        $this->studentsData = Student::select($validFields)
+            ->limit(10)
             ->get()
             ->toArray();
 
+    // Display success notification only if there are search results
+    if (!empty($this->studentsData)) {
         Notification::make()
             ->title('Data updated successfully!')
             ->success()
             ->send();
+    } else {
+        Notification::make()
+            ->title('No records found!')
+            ->info()
+            ->send();
+        }
     }
+
+    
 }
-
-
