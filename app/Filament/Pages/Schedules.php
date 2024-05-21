@@ -26,9 +26,6 @@ use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
 use Filament\Forms\Components\Wizard\Step;
-use Filament\Forms\Form;
-use Filament\Forms\Get;
-use Filament\Notifications\Collection;
 use Filament\Tables\Actions\EditAction as ActionsEditAction;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Database\Eloquent\Model;
@@ -603,6 +600,6 @@ class Schedules extends Page implements HasForms, HasTable
         $assignments = TAclass::all();
         return view('filament.document.teaching-assignment', compact('assignments'));
     }
-    
+
     
 }

@@ -27,18 +27,22 @@ class StudentInformationReport extends Page implements HasForms, HasTable
     protected static string $view = 'filament.pages.student-information-report';
     protected static ?string $navigationGroup = 'Print Forms';
 
+    public ?array $data = [];
+
     public $showTable = false;
 
     public $selectedStudent, $studentFamily, $blockStats, $college;
-    public $studentId;
+    public $studentId, $aysemId;
     public $SelectedStudentId = false; // New property to hold the selected student's data
 
     public function mount()
     {
         // Set the initial value of $studentId if not already set
-        if (!$this->studentId) {
-            $this->studentId = Student::first()->student_id;
-        }
+        // if (!$this->studentId) {
+        //     $this->studentId = Student::first()->student_id;
+        // }
+
+        $this->form->fill();
     }
 
     public function form(Form $form): Form
@@ -59,13 +63,15 @@ class StudentInformationReport extends Page implements HasForms, HasTable
                 ->options($studentOptions) // Use fetched student options
                 ->required()
                 ->reactive()
-                ->afterStateUpdated(fn ($state) => $this->updateSelectedStudent($state['student_id'])),
+                ->searchable()
+                // ->afterStateUpdated(fn ($state) => $this->updateSelectedStudent($state['student_id']))
+                ,
             Components\Select::make('aysem_id')
                 ->label('Ay-Sem')
                 ->placeholder('Ay-Sem')
                 ->options(Aysem::all()->pluck('aysem_id', 'aysem_id')->toArray())
                 ->required(),
-        ]);
+        ])->statePath('data');
     }
 
     public function updateSelectedStudent($studentId)
@@ -77,7 +83,7 @@ class StudentInformationReport extends Page implements HasForms, HasTable
     public function table(Table $table): Table
     {
         return $table
-            ->query(TaClass::query()) // Ensure it fetches the correct data
+            ->query(TaClass::query()->where('aysem_id', '=', $this->aysemId))
             ->columns([
                 TextColumn::make('course.subject_code')
                     ->label('Subject Code')
@@ -104,7 +110,8 @@ class StudentInformationReport extends Page implements HasForms, HasTable
         // Set flag to true to show the table
         $this->showTable = true;
         $this->SelectedStudentId = true;
-        $this->selectedStudent = Student::find($this->studentId);
+        $this->aysemId = $this->data['aysem_id'];
+        $this->selectedStudent = Student::find($this->data['student_id']);
         $this->blockStats = Block::where('block_id', $this->selectedStudent->block_id)->first();
         $this->college = College::where('college_id', $this->selectedStudent->college_id)->first();
         $this->studentFamily = StudentFamily::where('student_family_id', $this->selectedStudent->student_family_id)->first();
