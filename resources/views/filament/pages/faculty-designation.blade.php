@@ -1,5 +1,5 @@
 <x-filament-panels::page>
-    <div class="bg-white p-6 rounded-md shadow-sm">
+    <div class="border-4 border-yellow-500 bg-transparent p-6 rounded-md shadow-sm">
         @if (session()->has('success'))
             <div class="alert alert-success">
                 {{ session('success') }}

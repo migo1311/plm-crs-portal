@@ -20,7 +20,7 @@ class Registration extends Page implements HasForms, HasTable
 {
     use InteractsWithForms, InteractsWithTable;
     
-    protected static ?string $navigationIcon = 'heroicon-o-document-text';
+    protected static ?string $navigationIcon = 'heroicon-o-arrow-down-on-square';
     protected static string $view = 'filament.pages.registration';
     protected static ?int $navigationsort = 2;
 
