@@ -57,15 +57,14 @@ class TeachingAssignment extends Page implements HasForms, HasTable
                 ->label('Subject Title'),
             TextColumn::make('course.units')
                 ->label('Units'),
-            TextColumn::make('final_grade')
-                ->label('Grades'),
             TextColumn::make('classSchedules.schedule_name')
+                ->wrap()
                 ->label('Schedule'),
             TextColumn::make('students_qty')
                 ->label('No. of Students'),
             TextColumn::make('credited_units')
                 ->label('Credited Units'),
-            TextColumn::make('college.college_name')
+            TextColumn::make('instructor.college.college_code')
                 ->label('College'),
             TextColumn::make('designation.type_load')
                 ->label('Type of Load'),
@@ -90,10 +89,8 @@ class TeachingAssignment extends Page implements HasForms, HasTable
                         Components\TextInput::make('course.units')
                             ->label('Units')
                             ->required(),
-                        Components\TextInput::make('final_grade')
-                            ->label('Grades')
-                            ->required(),
                         Components\TextInput::make('classSchedules.schedule_name')
+                            ->wrap()
                             ->label('Schedule')
                             ->required(),
                         Components\TextInput::make('students_qty')
@@ -102,7 +99,7 @@ class TeachingAssignment extends Page implements HasForms, HasTable
                         Components\TextInput::make('credited_units')
                             ->label('Credited Units')
                             ->required(),
-                        Components\TextInput::make('college.college_name')
+                        Components\TextInput::make('instructor.college.college_code')
                             ->label('College')
                             ->required(),
                         Components\TextInput::make('designation.type_load')
@@ -112,7 +109,7 @@ class TeachingAssignment extends Page implements HasForms, HasTable
             ])
             ->using(function (array $data, Model $record) {
 
-                // dd(session()->get('class_id'));
+                dd($data);
                 $record->update($data);
             })
         ]);

@@ -59,9 +59,10 @@ class Registration extends Page implements HasForms, HasTable
                     ->label('Section')
                     ->sortable(),
                 TextColumn::make('classSchedules.schedule_name')
+                    ->wrap()
                     ->label('Schedule')
                     ->sortable(),
-                TextColumn::make('taClass.credited_units')
+                TextColumn::make('credited_units')
                     ->label('Credits'),
             ]);
     }
