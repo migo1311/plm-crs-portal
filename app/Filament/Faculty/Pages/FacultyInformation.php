@@ -6,7 +6,7 @@ use Filament\Pages\Page;
 
 class FacultyInformation extends Page
 {
-    protected static ?string $navigationIcon = 'heroicon-o-document-text';
+    protected static ?string $navigationIcon = 'heroicon-o-identification';
 
     protected static string $view = 'filament.faculty.pages.faculty-information';
 

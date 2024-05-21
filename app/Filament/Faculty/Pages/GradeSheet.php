@@ -6,7 +6,7 @@ use Filament\Pages\Page;
 
 class GradeSheet extends Page
 {
-    protected static ?string $navigationIcon = 'heroicon-o-document-text';
+    protected static ?string $navigationIcon = 'heroicon-o-document-check';
 
     protected static string $view = 'filament.faculty.pages.grade-sheet';
     

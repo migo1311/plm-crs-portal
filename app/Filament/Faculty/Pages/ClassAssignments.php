@@ -6,7 +6,7 @@ use Filament\Pages\Page;
 
 class ClassAssignments extends Page
 {
-    protected static ?string $navigationIcon = 'heroicon-o-document-text';
+    protected static ?string $navigationIcon = 'heroicon-o-academic-cap';
 
     protected static string $view = 'filament.faculty.pages.class-assignments';
     
