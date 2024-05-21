@@ -22,28 +22,36 @@ class StudentGrades extends Page implements HasForms, HasTable
     protected static ?string $navigationIcon = 'heroicon-o-trophy';
     protected static string $view = 'filament.pages.student-grades';
     protected static ?string $navigationGroup = 'Print Forms';
-
+    public ?array $data = [];
     public $showTable = false;
     public $selectedStudentName = '';
 
     public function form(Form $form): Form
-    {
-        return $form
-            ->columns(2)
-            ->schema([
-                Components\Select::make('student_id')
-                    ->label('Student Number')
-                    ->placeholder('Select Student Number')
-                    ->options(Student::all()->pluck('student_id', 'student_id')->toArray())
-                    ->searchable()
-                    ->required(),
-                Components\Select::make('aysem_id')
-                    ->label('Ay-Sem')
-                    ->placeholder('Ay-Sem')
-                    ->options(Aysem::all()->pluck('aysem_id', 'aysem_id')->toArray())
-                    ->required(),
-            ]);
+{
+    // Fetch student options with Student ID and Last Name as the label
+    $students = Student::all();
+    $studentOptions = [];
+    foreach ($students as $student) {
+        $studentOptions[$student->student_id] = $student->student_id . ' (' . $student->lastname . ', ' . $student->firstname .')';
     }
+
+    return $form
+        ->columns(2)
+        ->schema([
+            Components\Select::make('student_id')
+                ->label('Student ID and Name') // Change the label to indicate both Student ID and Last Name
+                ->placeholder('Select Student') // Change the placeholder accordingly
+                ->options($studentOptions) // Use fetched student options
+                ->searchable()
+                ->required(),
+            Components\Select::make('aysem_id')
+                ->label('Ay-Sem')
+                ->placeholder('Ay-Sem')
+                ->options(Aysem::all()->pluck('aysem_id', 'aysem_id')->toArray())
+                ->required(),
+        ]);
+}
+
 
     public static function table(Table $table): Table
     {
@@ -59,7 +67,7 @@ class StudentGrades extends Page implements HasForms, HasTable
                     ->label('Subject Title'),
                 TextColumn::make('course.units')
                     ->label('Units'),
-                TextColumn::make('grade.final_grade')
+                TextColumn::make('final_grade')
                     ->label('Grades'),
             ]);
     }
@@ -68,13 +76,6 @@ class StudentGrades extends Page implements HasForms, HasTable
     {
         // Set flag to true to show the table
         $this->showTable = true;
-
-        /*// Fetch selected student's name
-        $selectedStudentId = request()->input('form.student_id');
-
-        $selectedStudent = Student::where('student_id', $selectedStudentId)->first();
-        if ($selectedStudent) {
-            $this->selectedStudentName = $selectedStudent->firstname . ' ' . $selectedStudent->lastname;
-        }*/
+        
     }
 }

@@ -8,14 +8,6 @@
                         Generate Data
                     </button>
                 </div>
-                <div class="flex justify-end">
-                    <input
-                        type="text"
-                        wire:model.debounce.500ms="search"
-                        placeholder="Search..."
-                        class="w-48 px-4 py-2 text-sm border rounded-md shadow-sm"
-                    />
-                </div>
             </div>
         </form>
     </div>

@@ -4,7 +4,10 @@ namespace App\Filament\Pages;
 
 use App\Models\Student;
 use App\Models\Aysem;
+use App\Models\StudentFamily;
 use App\Models\TaClass;
+use App\Models\Block;
+use App\Models\College;
 use Filament\Pages\Page;
 use Filament\Forms\Components;
 use Filament\Forms\Form;
@@ -26,23 +29,49 @@ class StudentInformationReport extends Page implements HasForms, HasTable
 
     public $showTable = false;
 
+    public $selectedStudent, $studentFamily, $blockStats, $college;
+    public $studentId;
+    public $SelectedStudentId = false; // New property to hold the selected student's data
+
+    public function mount()
+    {
+        // Set the initial value of $studentId if not already set
+        if (!$this->studentId) {
+            $this->studentId = Student::first()->student_id;
+        }
+    }
+
     public function form(Form $form): Form
     {
-        return $form
-            ->columns(2)
-            ->schema([
-                Components\Select::make('student_number')
-                    ->label('Student Number')
-                    ->placeholder('Select Student Number')
-                    ->options(Student::all()->pluck('student_id', 'student_id')->toArray())
-                    ->searchable()
-                    ->required(),
-                Components\Select::make('aysem_id')
-                    ->label('Ay-Sem')
-                    ->placeholder('Ay-Sem')
-                    ->options(Aysem::all()->pluck('aysem_id', 'aysem_id')->toArray())
-                    ->required(),
-            ]);
+    // Fetch student options with Student ID and Last Name as the label
+    $students = Student::all();
+    $studentOptions = [];
+    foreach ($students as $student) {
+        $studentOptions[$student->student_id] = $student->student_id . ' (' . $student->lastname . ', ' . $student->firstname .')';
+    }
+
+    return $form
+        ->columns(2)
+        ->schema([
+            Components\Select::make('student_id')
+                ->label('Student ID and Name') // Change the label to indicate both Student ID and Last Name
+                ->placeholder('Select Student') // Change the placeholder accordingly
+                ->options($studentOptions) // Use fetched student options
+                ->required()
+                ->reactive()
+                ->afterStateUpdated(fn ($state) => $this->updateSelectedStudent($state['student_id'])),
+            Components\Select::make('aysem_id')
+                ->label('Ay-Sem')
+                ->placeholder('Ay-Sem')
+                ->options(Aysem::all()->pluck('aysem_id', 'aysem_id')->toArray())
+                ->required(),
+        ]);
+    }
+
+    public function updateSelectedStudent($studentId)
+    {
+        $this->studentId = $studentId;
+        $this->selectedStudent = Student::find($studentId);
     }
 
     public function table(Table $table): Table
@@ -74,5 +103,10 @@ class StudentInformationReport extends Page implements HasForms, HasTable
     {
         // Set flag to true to show the table
         $this->showTable = true;
+        $this->SelectedStudentId = true;
+        $this->selectedStudent = Student::find($this->studentId);
+        $this->blockStats = Block::where('block_id', $this->selectedStudent->block_id)->first();
+        $this->college = College::where('college_id', $this->selectedStudent->college_id)->first();
+        $this->studentFamily = StudentFamily::where('student_family_id', $this->selectedStudent->student_family_id)->first();
     }
 }

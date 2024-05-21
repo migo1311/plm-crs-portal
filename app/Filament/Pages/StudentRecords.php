@@ -4,6 +4,7 @@ namespace App\Filament\Pages;
 
 use App\Models\Student;
 use App\Models\Aysem;
+use App\Models\Comment;
 use Filament\Forms\Components;
 use Filament\Forms\Form;
 use Filament\Pages\Page;
@@ -15,33 +16,56 @@ use Filament\Forms\Components\Radio;
 class StudentRecords extends Page implements HasForms
 {
     use InteractsWithForms;
+
     protected static ?string $navigationIcon = 'heroicon-o-identification';
-
     protected static string $view = 'filament.pages.student-records';
-
     protected static ?string $navigationGroup = 'Utilities';
 
     public ?array $data = [];
-    public Student $student;
     public ?array $personalData = [];
-    
+    public ?array $firstData = [];
+
+    public bool $showForms = false;
+    public $student_id;
+    public $aysem_id;// Add state variable to track form visibility
+
     public function mount(): void
     {
         $this->form->fill();
     }
 
+    public function first(Form $form): Form
+    {
+        return $form
+            ->columns(2)
+            ->schema([
+                Components\Select::make('student_id')
+                    ->label('Student Number')
+                    ->placeholder('Select Student Number')
+                    ->options(Student::all()->pluck('student_id', 'student_id')->toArray())
+                    ->searchable()
+                    ->required(),
+                Components\Select::make('aysem_id')
+                    ->label('Ay-Sem')
+                    ->placeholder('Ay-Sem')
+                    ->options(Aysem::all()->pluck('aysem_id', 'aysem_id')->toArray())
+                    ->required(),
+            ])
+            ->statePath('firstData');
+    }
+
     public function form(Form $form): Form
     {
         return $form
-            ->columns(4)
             ->model(StudentGrades::class)
             ->schema([
                 Components\Section::make('Student Terms')
                     ->columns(4)
                     ->schema([
-                        Components\TextInput::make('aysem_id')
-                            ->required()
-                            ->columnSpan(2)
+                        Components\Select::make('aysem_id')
+                            ->label('Ay-Sem')
+                            ->placeholder('Ay-Sem')
+                            ->options(Aysem::all()->pluck('aysem_id', 'aysem_id')->toArray())
                             ->required(),
                         Components\TextInput::make('program_id')
                             ->label('Program')
@@ -104,13 +128,14 @@ class StudentRecords extends Page implements HasForms
     public function personal(Form $form): Form
     {
         return $form
-            ->columns(4)
             ->model(Student::class)
             ->schema([
                 Components\Section::make('Personal Details')
+                    ->columns(4)
                     ->schema([
                         Components\Select::make('student_id')
                             ->label('Student Number')
+                            ->placeholder('Select Student Number')
                             ->options(Student::all()->pluck('student_id', 'student_id')->toArray())
                             ->searchable()
                             ->required(),
@@ -155,9 +180,10 @@ class StudentRecords extends Page implements HasForms
                             ->columnSpan(2)
                     ]),
             ])
-            ->statePath('personalData');}
+            ->statePath('personalData');
+    }
 
-    public function create()
+    /*public function create()
     {
         $this->validate();
 
@@ -167,13 +193,35 @@ class StudentRecords extends Page implements HasForms
             ->title('Data updated successfully!')
             ->success()
             ->send();
+    }*/
+
+    public function search()
+    {
+        $this->validate([
+            //'firstData.student_id' => 'required',
+            'firstData.aysem_id' => 'required',
+        ]);
+
+        $this->showForms = true;
     }
+
+    public function addStudent()
+    {
+        $this->validate([
+            'firstData.aysem_id' => 'required',
+        ]);
+
+        $this->showForms = true;
+    }
+
 
     protected function getForms(): array
     {
         return [
-            'form',
-            'personal',
+            'first' => $this->first($this->makeForm()),
+            'personal' => $this->personal($this->makeForm()),
+            'form' => $this->form($this->makeForm()),
         ];
     }
 }
+
