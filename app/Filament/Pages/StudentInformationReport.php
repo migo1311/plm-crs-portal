@@ -32,16 +32,11 @@ class StudentInformationReport extends Page implements HasForms, HasTable
     public $showTable = false;
 
     public $selectedStudent, $studentFamily, $blockStats, $college;
-    public $studentId, $aysemId;
+    public $studentId;
     public $SelectedStudentId = false; // New property to hold the selected student's data
 
     public function mount()
     {
-        // Set the initial value of $studentId if not already set
-        // if (!$this->studentId) {
-        //     $this->studentId = Student::first()->student_id;
-        // }
-
         $this->form->fill();
     }
 
@@ -63,9 +58,7 @@ class StudentInformationReport extends Page implements HasForms, HasTable
                 ->options($studentOptions) // Use fetched student options
                 ->required()
                 ->reactive()
-                ->searchable()
-                // ->afterStateUpdated(fn ($state) => $this->updateSelectedStudent($state['student_id']))
-                ,
+                ->searchable(),
             Components\Select::make('aysem_id')
                 ->label('Ay-Sem')
                 ->placeholder('Ay-Sem')
@@ -74,16 +67,12 @@ class StudentInformationReport extends Page implements HasForms, HasTable
         ])->statePath('data');
     }
 
-    public function updateSelectedStudent($studentId)
-    {
-        $this->studentId = $studentId;
-        $this->selectedStudent = Student::find($studentId);
-    }
-
     public function table(Table $table): Table
     {
         return $table
-            ->query(TaClass::query()->where('aysem_id', '=', $this->aysemId))
+            ->query(TaClass::query()->whereHas('students', function($query) {
+                $query->where('students.student_id', '=', $this->data['student_id']);
+            })->where('aysem_id', '=', $this->data['aysem_id']))
             ->columns([
                 TextColumn::make('course.subject_code')
                     ->label('Subject Code')
@@ -110,7 +99,6 @@ class StudentInformationReport extends Page implements HasForms, HasTable
         // Set flag to true to show the table
         $this->showTable = true;
         $this->SelectedStudentId = true;
-        $this->aysemId = $this->data['aysem_id'];
         $this->selectedStudent = Student::find($this->data['student_id']);
         $this->blockStats = Block::where('block_id', $this->selectedStudent->block_id)->first();
         $this->college = College::where('college_id', $this->selectedStudent->college_id)->first();

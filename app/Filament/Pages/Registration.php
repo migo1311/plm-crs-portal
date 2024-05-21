@@ -26,6 +26,7 @@ class Registration extends Page implements HasForms, HasTable
 
     public $showTable = false;
     public $selectedStudentName = '';
+    public ?array $data = [];
 
     public function form(Form $form): Form
     {
