@@ -596,5 +596,13 @@ class Schedules extends Page implements HasForms, HasTable
             'index' => Schedules::route('/'),
         ];
     }
+
+    public function print()
+    {
+        // Example: Fetch assignments data
+        $assignments = TAclass::all();
+        return view('filament.document.teaching-assignment', compact('assignments'));
+    }
+    
     
 }
