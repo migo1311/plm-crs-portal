@@ -11,7 +11,8 @@ use Filament\Forms\Components\Radio;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\ToggleButtons;
-
+use Filament\Forms\Components\Wizard;
+use Illuminate\Support\HtmlString;
 
 use Filament\Pages\Page;
 
@@ -34,6 +35,8 @@ class Statistics extends Page implements HasForms
     {
         return $form
             ->schema([
+
+                
              
                 Select::make('AYSEM')
                     ->label('AYSEM')
@@ -69,9 +72,11 @@ class Statistics extends Page implements HasForms
                         'Bar' => 'Bar',
                         'Line' => 'Line',
                         'Pie' => 'Pie',
+                        'Table of data only' => 'Table of data',
                     ])
                     ->required(),
-                Checkbox::make('Include table of data'),
+                Checkbox::make('Include table of data')
+                ->required(),
 
             ])
             ->statePath('data');
