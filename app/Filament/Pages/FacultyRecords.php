@@ -58,11 +58,8 @@ class FacultyRecords extends Page implements HasForms
                             ->required(),
                         Components\Select::make('pedigree')
                             ->options([
-                                'I' => 'I',
-                                'II' => 'II',
-                                'III' => 'III',
-                                'IV' => 'IV',
-                                'V' => 'V',
+                                'Atty.' => 'Atty.',
+                                'N/A' => 'N/A',
                             ])
                             ->required(),
                         Components\Select::make('gender')
@@ -155,11 +152,19 @@ class FacultyRecords extends Page implements HasForms
     {
         $this->validate();
 
-        $this->data = $this->form->getState();
+        $formData = $this->form->getState();
 
+        // Retrieve the InstructorProfile record based on the instructor_id
+        $instructorProfile = InstructorProfile::findOrFail($formData['instructor_id']);
+
+        // Update the fields of the retrieved InstructorProfile with the form data
+        $instructorProfile->update($formData);
+
+        // Display a success notification
         Notification::make()
             ->title('Data updated successfully!')
             ->success()
             ->send();
     }
+
 }
