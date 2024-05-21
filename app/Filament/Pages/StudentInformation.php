@@ -16,7 +16,7 @@ class StudentInformation extends Page implements HasForms
 {
     use InteractsWithForms;
 
-    protected static ?string $navigationIcon = 'heroicon-o-document-text';
+    protected static ?string $navigationIcon = 'heroicon-o-user-circle';
     protected static string $view = 'filament.pages.student-information';
     protected static ?string $navigationGroup = 'Utilities';
 

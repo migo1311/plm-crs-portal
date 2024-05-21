@@ -6,7 +6,7 @@ use Filament\Pages\Page;
 
 class RoomAssignments extends Page
 {
-    protected static ?string $navigationIcon = 'heroicon-o-document-text';
+    protected static ?string $navigationIcon = 'heroicon-o-building-library';
 
     protected static string $view = 'filament.pages.room-assignments';
 

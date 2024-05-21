@@ -23,7 +23,7 @@ class StudentInformationReport extends Page implements HasForms, HasTable
 {
     use InteractsWithForms, InteractsWithTable;
 
-    protected static ?string $navigationIcon = 'heroicon-o-document-text';
+    protected static ?string $navigationIcon = 'heroicon-o-clipboard-document';
     protected static string $view = 'filament.pages.student-information-report';
     protected static ?string $navigationGroup = 'Print Forms';
 
