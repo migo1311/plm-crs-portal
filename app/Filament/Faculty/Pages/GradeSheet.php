@@ -6,10 +6,12 @@ use App\Models\Aysem;
 use App\Models\TaClass;
 use App\Models\ClassStudent;
 use App\Models\Grade; // Add Grade model
+use App\Models\Student;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Forms\Form;
 use Filament\Forms\Components;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Pages\Page;
 use Filament\Tables\Actions\Action;
@@ -30,7 +32,8 @@ class GradeSheet extends Page implements HasForms, HasTable
     public $showTable = false;
     public $showStudentGradesTable = false;
     public $selectedClassId;
-    public array $grades = [];
+    public ?array $classGrades = [];
+    public array $grades = [], $students = [];
 
     public function mount(): void
     {
@@ -89,10 +92,11 @@ class GradeSheet extends Page implements HasForms, HasTable
                 Action::make('Input Grades')
                     ->action(function (TaClass $record) 
                     {
-                        $this->selectedClassId = $record->id;
+                        $attributes = $record->getAttributes();
+                        $this->selectedClassId = $attributes['class_id']; // Check if the selected class is correct
                         $this->showTable = false;
                         $this->showStudentGradesTable = true;
-                        $this->grades = $this->loadGrades();
+                        $this->students = $this->loadStudents();
                     })
                     ->button()
                     ->label('Input Grades')
@@ -100,34 +104,63 @@ class GradeSheet extends Page implements HasForms, HasTable
             ]);
     }
 
-    protected function loadGrades()
+    protected function loadStudents()
     {
-        $grades = [];
+        $students = [];
         $classStudents = ClassStudent::where('class_id', $this->selectedClassId)->with('student')->get();
-
+        
         foreach ($classStudents as $classStudent) {
-            $grade = Grade::where('class_student_id', $classStudent->id)->first();
-            $grades[$classStudent->id] = $grade ? $grade->grade : null;
+            $student = $classStudent->getAttributes();
+            // $grade = Grade::query()->where('class_student_id', $student['class_student_id'])->first();
+            $students[] = $student;
+            // $grades[$classStudent->id] = $grade ? $grade->grade : null;
         }
 
-        return $grades;
+        return $students;
     }
 
+    public function studentGradesForm(Form $form): Form
+    {
+        return $form
+            ->model(Grade::class)
+            ->schema([
+                Textarea::make('students.firstname')
+                    ->formatStateUsing(function ($state, $record) {
+                        return $state . ' ' . $record->middleinitial . ' ' . $record->lastname;
+                    })
+                    ->readOnly(),
+            ])
+            ->statePath('classGrades');
+    }
 
     protected function getStudentGradeSchema(): array
     {
         $schema = [];
 
-        foreach ($this->grades as $classStudentId => $grade) {
-            $classStudent = ClassStudent::with('student')->find($classStudentId);
-            $student = $classStudent->student;
+        foreach ($this->students as $classStudentIdx => $value) { // as index => array value
+            
+            // $classStudent = TaClass::all()->find($classStudentIdx['class_id']);
+            $studentId = $value['student_id'];
+            $student = Student::query()->where('student_id', $studentId)->first()->getAttributes();
+            $name = $student['firstname'] . ' ' . $student['middleinitial'] . '. ' . $student['lastname'];
 
-            $schema[$classStudentId] = (object) [
-                'student_number' => $student->student_id,
-                'student_name' => $student->lastname,
-                'grade' => $grade,
-                'grade_input' => Components\TextInput::make("grades.$classStudentId")
-                                    ->default($grade)
+            $schema[$classStudentIdx] = (object) [
+                'student_number' => $studentId,
+                'student_name' => $name,
+                'grade_input' => Components\Select::make("grades")
+                                    ->options([
+                                        '1.0' => '1.0',
+                                        '1.25' => '1.25',
+                                        '1.5' => '1.5',
+                                        '1.75' => '1.75',
+                                        '2.0' => '2.0',
+                                        '2.25' => '2.25',
+                                        '2.5' => '2.5',
+                                        '2.75' => '2.75',
+                                        '3.0' => '3.0',
+                                        '4.0' => '4.0',
+                                        '5.0' => '5.0',
+                                    ])
                                     ->required()
             ];
         }
@@ -137,8 +170,10 @@ class GradeSheet extends Page implements HasForms, HasTable
 
     public function submit(): void
     {
+        $this->validateOnly($this->data['aysem_id']);
         $this->showTable = true;
         $this->showStudentGradesTable = false;
+
     }
 
     public function saveGrades(): void
@@ -157,4 +192,13 @@ class GradeSheet extends Page implements HasForms, HasTable
         $this->showTable = true;
         $this->showStudentGradesTable = false;
     }
+
+    protected function getForms(): array
+    {
+        return [
+            'form' => $this->form($this->makeForm()),
+            'studentGradesForm' => $this->studentGradesForm($this->makeForm())
+        ];
+    }
+
 }
