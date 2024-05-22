@@ -88,6 +88,7 @@ class StudentInformationReport extends Page implements HasForms, HasTable
                 TextColumn::make('course.units')
                     ->label('Units'),
                 TextColumn::make('classSchedules.schedule_name')
+                    ->wrap()
                     ->label('Schedule'),
                 TextColumn::make('instructor.faculty_name')
                     ->label('Faculty')
