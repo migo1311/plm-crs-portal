@@ -46,4 +46,9 @@ class Block extends Model
                     ->withTimestamps();
     }
 
+    public function studentTerms(): HasMany
+    {
+        return $this->hasMany(StudentTerm::class, 'block_id', 'block_id');
+    }
+
 }

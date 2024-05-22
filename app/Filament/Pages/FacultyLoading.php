@@ -27,6 +27,7 @@ class FacultyLoading extends Page implements HasForms, HasTable
 
     public $showTable = false;
 
+
     public function form(Form $form): Form
     {
         return $form

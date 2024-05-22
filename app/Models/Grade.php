@@ -13,8 +13,7 @@ class Grade extends Model
     protected $primaryKey = 'grade_id';
 
     protected $fillable = [
-        'student_id',
-        'class_id',
+        'class_student_id',
         'initial_grade',
         'final_grade',
         'finalization_date',
@@ -22,14 +21,9 @@ class Grade extends Model
         'remark_id',
     ];
 
-    public function student(): BelongsTo
+    public function classStudent(): BelongsTo
     {
-        return $this->belongsTo(Student::class, 'student_id', 'student_id');
-    }
-
-    public function taClass(): BelongsTo
-    {
-        return $this->belongsTo(TAClass::class, 'class_id', 'class_id');
+        return $this->belongsTo(ClassStudent::class, 'class_student_id', 'class_student_id');
     }
 
     public function remark(): BelongsTo

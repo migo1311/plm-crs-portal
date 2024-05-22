@@ -13,18 +13,19 @@ return new class extends Migration
     {
         Schema::create('grades', function (Blueprint $table) {
             $table->id('grade_id');
-            $table->foreignId('student_id')
+            $table->foreignId('class_student_id')
                     ->nullable()
-                    ->constrained('students', 'student_id')
-                    ->cascadeOnDelete();
-            $table->foreignId('class_id')
+                    ->constrained('class_student', 'class_student_id');
+            $table->double('initial_grade')
+                    ->unsigned();
+            $table->double('final_grade')
                     ->nullable()
-                    ->constrained('ta_classes', 'class_id')
-                    ->cascadeOnDelete();
-            $table->float('initial_grade');
-            $table->float('final_grade');
-            $table->date('finalization_date');
-            $table->float('completion_grade');
+                    ->unsigned();
+            $table->date('finalization_date')
+                    ->nullable();
+            $table->double('completion_grade')
+                    ->unsigned()
+                    ->nullable();
             $table->foreignId('remark_id')
                     ->nullable()
                     ->constrained('remarks', 'remark_id');

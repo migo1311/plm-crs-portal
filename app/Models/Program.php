@@ -37,4 +37,9 @@ class Program extends Model
     {
         return $this->hasMany(Student::class, 'program_id', 'program_id');
     }
+
+    public function studentTerm(): HasMany
+    {
+        return $this->hasMany(StudentTerm::class, 'program_id', 'program_id');
+    }
 }

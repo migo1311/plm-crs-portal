@@ -71,4 +71,9 @@ class Aysem extends Model
     {
         return $this->hasMany(Student::class, 'aysem_id', 'aysem_id');
     }
+
+    public function studentTerm(): HasMany
+    {
+        return $this->hasMany(StudentTerm::class, 'aysem_id', 'aysem_id');
+    }
 }

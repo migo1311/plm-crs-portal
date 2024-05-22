@@ -19,7 +19,7 @@ class ClassStudentSeeder extends Seeder
         $students = Student::all();
 
         foreach ($students as $student) {
-            $classIds = $classes->random(rand(1, 5))->pluck('class_id');
+            $classIds = $classes->random(rand(1, 3))->pluck('class_id');
             $student->classes()->attach($classIds);
 
             foreach ($classIds as $classId) {

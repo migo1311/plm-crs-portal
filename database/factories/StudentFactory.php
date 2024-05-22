@@ -17,7 +17,6 @@ class StudentFactory extends Factory
     public function definition(): array
     {
         $aysem = \App\Models\Aysem::all()->random();
-        $aysemid = $aysem->aysem_id;
         $aysemyear = $aysem->year;
 
         $middlename = $this->faker->lastName;
@@ -29,15 +28,7 @@ class StudentFactory extends Factory
             'middlename' => $middlename,
             'middleinitial' => $middlename[0],
             'nameextension' => $this->faker->randomElement(['', 'Jr.', 'Sr.', 'II', 'III', 'IV']),
-            'college_id' => \App\Models\College::all()->random()->college_id,
-            'program_id' => $this->faker->randomElement([2, 3, 4]),
-            'yearlevel' => $this->faker->numberBetween(1, 5),
             'plm_email_address' => $this->faker->unique()->safeEmail,
-            'aysem_id' => $aysemid,
-            'registration_status' => $this->faker->randomElement(['Regular', 'Irregular']),
-            'block_id' => \App\Models\Block::all()->random()->block_id,
-            'graduating' => $this->faker->randomElement(['Yes', 'No']),
-            'student_type' => $this->faker->randomElement(['New', 'Old', 'Transferee', 'Shifter']),
             'birth_date' => $this->faker->date(),
             'birth_place' => $this->faker->city,
             'age' => $this->faker->numberBetween(15, 30),
