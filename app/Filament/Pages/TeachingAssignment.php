@@ -90,7 +90,6 @@ class TeachingAssignment extends Page implements HasForms, HasTable
                             ->label('Units')
                             ->required(),
                         Components\TextInput::make('classSchedules.schedule_name')
-                            ->wrap()
                             ->label('Schedule')
                             ->required(),
                         Components\TextInput::make('students_qty')
