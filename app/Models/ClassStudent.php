@@ -17,4 +17,9 @@ class ClassStudent extends Model
     {
         return $this->hasOne(Grade::class, 'class_student_id', 'class_student_id');
     }
+
+    public function student()
+    {
+        return $this->belongsTo(Student::class);
+    }
 }
