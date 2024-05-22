@@ -33,6 +33,6 @@ class DatabaseSeeder extends Seeder
         // $this->call([ClassStudentSeeder::class]);
         // $this->call([BlockClassSeeder::class]);
         // $this->call([ScheduleSeeder::class]);
-        // $this->call([StudentTermSeeder::class]);
+        $this->call([StudentTermSeeder::class]);
     }
 }
