@@ -23,7 +23,7 @@ return new class extends Migration
                     ->cascadeOnDelete();
             $table->string('schedule');
             $table->string('update_by');
-            $table->boolean('is_active');
+            // $table->boolean('is_active');
             $table->timestamps();
         });
     }

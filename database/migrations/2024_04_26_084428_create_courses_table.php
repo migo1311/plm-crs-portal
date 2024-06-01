@@ -21,6 +21,10 @@ return new class extends Migration
             $table->foreignId('aysem_id')
                     ->nullable()
                     ->constrained('aysems', 'aysem_id');
+            $table->foreignId('program_id')
+                    ->nullable()
+                    ->constrained('programs', 'program_id');
+            $table->string('pre_requisite');
             $table->timestamps();
         });
     }

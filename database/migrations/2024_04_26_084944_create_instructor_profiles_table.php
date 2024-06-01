@@ -16,10 +16,8 @@ return new class extends Migration
             $table->string('last_name');
             $table->string('first_name');
             $table->string('middle_name');
-            $table->string('pedigree')
-                    ->nullable();
-            $table->string('maiden_name')
-                    ->nullable();
+            $table->string('pedigree')->nullable();
+            $table->string('maiden_name')->nullable();
             $table->string('birth_place');
             $table->string('birth_date');
             $table->string('gender');
@@ -30,14 +28,10 @@ return new class extends Migration
             $table->string('tin_number', length: 15)->unique()->nullable();
             $table->string('gsis_number')->unique()->nullable();
             $table->string('instructor_code');
-            $table->string('street_address')
-                    ->nullable();
-            $table->string('province_city')
-                    ->nullable();
-            $table->string('zip_code', length: 4)
-                    ->nullable();
-            $table->string('phone_number')
-                    ->nullable();
+            $table->string('street_address')->nullable();
+            $table->string('province_city')->nullable();
+            $table->string('zip_code', length: 4)->nullable();
+            $table->string('phone_number')->nullable();
             $table->string('faculty_name');
             $table->foreignId('college_id')
                     ->nullable()

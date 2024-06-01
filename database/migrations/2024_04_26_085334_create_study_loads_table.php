@@ -17,8 +17,8 @@ return new class extends Migration
                     ->nullable()
                     ->constrained('instructor_profiles', 'instructor_id')
                     ->cascadeOnDelete();    
-            $table->integer('study_units');
-            $table->integer('teaching_units');
+            $table->integer('study_units')->unsigned();
+            $table->integer('teaching_units')->unsigned();
             $table->foreignId('aysem_id')
                     ->nullable()
                     ->constrained('aysems', 'aysem_id');

@@ -19,15 +19,6 @@ return new class extends Migration
                     ->cascadeOnDelete();
             $table->timestamps();
         });
-
-        Schema::create('class_student', function (Blueprint $table) {
-            $table->id('class_student_id');
-            $table->foreignIdFor(\App\Models\TaClass::class, 'class_id')
-                    ->cascadeOnDelete();
-            $table->foreignIdFor(\App\Models\Student::class, 'student_id')
-                    ->cascadeOnDelete();
-            $table->timestamps();
-        });
     }
 
     /**
@@ -36,6 +27,5 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('block_class');
-        Schema::dropIfExists('class_student');
     }
 };

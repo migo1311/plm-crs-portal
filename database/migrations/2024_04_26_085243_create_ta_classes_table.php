@@ -19,25 +19,18 @@ return new class extends Migration
             $table->integer('section');
             $table->integer('students_qty')->nullable();
             $table->integer('credited_units');
-            $table->integer('slots');
-            $table->foreignId('instructor_id')
-                     ->nullable()
-                     ->constrained('instructor_profiles', 'instructor_id')
-                     ->cascadeOnDelete();    
+            $table->unsignedSmallInteger('actual_units')->nullable();
+            $table->integer('slots');  
             $table->foreignId('aysem_id')
                      ->nullable()
                      ->constrained('aysems', 'aysem_id');
-            $table->string('nstp_activity')
-                    ->nullable();
-            $table->string('parent_class_code')
-                    ->nullable();
-            $table->string('link_type')
-                    ->nullable();
+            $table->string('nstp_activity')->nullable();
+            $table->string('parent_class_code')->nullable();
+            $table->string('link_type')->nullable();
             $table->string('instruction_language');
-            $table->text('teams_assigned_link')
-                    ->nullable();
-            $table->date('effectivity_dateSL')
-                    ->nullable();
+            $table->integer('minimum_year_level')->nullable();
+            $table->text('teams_assigned_link')->nullable();
+            $table->date('effectivity_dateSL')->nullable();
             $table->timestamps();
          });
     }
