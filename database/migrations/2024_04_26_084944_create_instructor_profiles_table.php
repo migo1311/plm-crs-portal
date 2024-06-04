@@ -35,7 +35,8 @@ return new class extends Migration
             $table->string('faculty_name');
             $table->foreignId('college_id')
                     ->nullable()
-                    ->constrained('colleges', 'college_id');
+                    ->constrained('colleges', 'college_id')
+                    ->cascadeOnDelete();
             $table->timestamps();
         });
     }

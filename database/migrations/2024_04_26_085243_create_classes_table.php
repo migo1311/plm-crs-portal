@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('ta_classes', function (Blueprint $table) {
+        Schema::create('classes', function (Blueprint $table) {
             $table->id('class_id');
             $table->foreignId('course_id')
                      ->nullable()
-                     ->constrained('courses', 'course_id');
+                     ->constrained('courses', 'course_id')
+                     ->cascadeOnDelete();
             $table->integer('section');
             $table->integer('students_qty')->nullable();
             $table->integer('credited_units');
@@ -23,7 +24,8 @@ return new class extends Migration
             $table->integer('slots');  
             $table->foreignId('aysem_id')
                      ->nullable()
-                     ->constrained('aysems', 'aysem_id');
+                     ->constrained('aysems', 'aysem_id')
+                     ->cascadeOnDelete();
             $table->string('nstp_activity')->nullable();
             $table->string('parent_class_code')->nullable();
             $table->string('link_type')->nullable();

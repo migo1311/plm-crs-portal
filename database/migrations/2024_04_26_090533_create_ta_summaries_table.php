@@ -11,20 +11,24 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('study_loads', function (Blueprint $table) {
-            $table->id('study_load_id');
+        Schema::create('ta_summaries', function (Blueprint $table) {
+            $table->id('ta_summary_id');
             $table->foreignId('instructor_id')
                     ->nullable()
                     ->constrained('instructor_profiles', 'instructor_id')
-                    ->cascadeOnDelete();    
-            $table->integer('study_units')->unsigned();
-            $table->integer('teaching_units')->unsigned();
+                    ->cascadeOnDelete();
+            $table->integer('regular');
+            $table->integer('extra');
+            $table->integer('administrative');
+            $table->integer('substitution');
+            $table->integer('off_campus');
+            $table->integer('study');
+            $table->integer('outside');
+            $table->integer('pro_bono');
             $table->foreignId('aysem_id')
                     ->nullable()
                     ->constrained('aysems', 'aysem_id')
                     ->cascadeOnDelete();
-            $table->string('entered_by');
-            $table->date('entered_on');
             $table->timestamps();
         });
     }
@@ -34,6 +38,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('study_loads');
+        Schema::dropIfExists('ta_summaries');
     }
 };

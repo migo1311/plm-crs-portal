@@ -11,20 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('study_loads', function (Blueprint $table) {
-            $table->id('study_load_id');
+        Schema::create('ta_consultations', function (Blueprint $table) {
+            $table->id('ta_consultation_id');
             $table->foreignId('instructor_id')
                     ->nullable()
                     ->constrained('instructor_profiles', 'instructor_id')
-                    ->cascadeOnDelete();    
-            $table->integer('study_units')->unsigned();
-            $table->integer('teaching_units')->unsigned();
+                    ->cascadeOnDelete();
+            $table->string('day');
+            $table->time('time_start');
+            $table->time('time_end');
+            $table->unsignedInteger('num_hours');
             $table->foreignId('aysem_id')
                     ->nullable()
                     ->constrained('aysems', 'aysem_id')
                     ->cascadeOnDelete();
-            $table->string('entered_by');
-            $table->date('entered_on');
             $table->timestamps();
         });
     }
@@ -34,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('study_loads');
+        Schema::dropIfExists('ta_consultations');
     }
 };
