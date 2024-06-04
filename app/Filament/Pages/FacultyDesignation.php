@@ -11,10 +11,11 @@ use Filament\Pages\Page;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
+
 class FacultyDesignation extends Page implements Forms\Contracts\HasForms
 {
     use Forms\Concerns\InteractsWithForms;
-
+    use Forms\Concerns\InteractsWithForms;
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
     protected static string $view = 'filament.pages.faculty-designation';
     protected static ?string $navigationGroup = 'Utilities';

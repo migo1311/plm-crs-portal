@@ -19,7 +19,7 @@ class FacultyLoading extends Page implements HasForms, HasTable
 {
     use InteractsWithForms, InteractsWithTable;
 
-    protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-list';
+    protected static ?string $navigationIcon = 'heroicon-o-users';
 
     protected static string $view = 'filament.pages.faculty-loading';
 
@@ -27,14 +27,15 @@ class FacultyLoading extends Page implements HasForms, HasTable
 
     public $showTable = false;
 
+
     public function form(Form $form): Form
     {
         return $form
             ->columns()
             ->schema([
                 Components\Select::make('aysem_id')
-                    ->label('Ay-Sem')
-                    ->placeholder('Ay-Sem')
+                    ->label('Select')
+                    ->placeholder('AYSEM')
                     ->options(Aysem::all()->pluck('aysem_id', 'aysem_id')->toArray())
                     ->required(),
             ]);
@@ -59,7 +60,6 @@ class FacultyLoading extends Page implements HasForms, HasTable
                     ->label('Units')
                     ->sortable(),
                 TextColumn::make('classSchedules.schedule_name')
-                    ->wrap()
                     ->label('Schedule')
                     ->sortable(),
                 TextColumn::make('students_qty')
@@ -77,7 +77,3 @@ class FacultyLoading extends Page implements HasForms, HasTable
         $this->showTable = true;
     }
 }
-
-
-
-

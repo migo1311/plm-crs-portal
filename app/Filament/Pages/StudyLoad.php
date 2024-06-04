@@ -15,7 +15,7 @@ class StudyLoad extends Page implements HasForms
 {
     use InteractsWithForms;
 
-    protected static ?string $navigationIcon = 'heroicon-o-credit-card';
+    protected static ?string $navigationIcon = 'heroicon-o-book-open';
 
     protected static string $view = 'filament.pages.study-load';
 

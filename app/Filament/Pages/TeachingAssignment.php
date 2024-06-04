@@ -58,7 +58,6 @@ class TeachingAssignment extends Page implements HasForms, HasTable
             TextColumn::make('course.units')
                 ->label('Units'),
             TextColumn::make('classSchedules.schedule_name')
-                ->wrap()
                 ->label('Schedule'),
             TextColumn::make('students_qty')
                 ->label('No. of Students'),

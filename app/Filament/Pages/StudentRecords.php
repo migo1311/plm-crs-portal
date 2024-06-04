@@ -120,6 +120,7 @@ class StudentRecords extends Page implements HasForms
                             ->inline(false)
                             ->default('') // optional: set a default value
                             ->rules('required'), // optional: enforce a rule
+                        
                     ])
             ])
             ->statePath('data');

@@ -105,4 +105,14 @@ class Student extends Model
     {
         return $this->hasMany(StudentTerm::class, 'student_id', 'student_id');
     }
+
+    public function classStudents()
+    {
+        return $this->hasMany(ClassStudent::class,  'student_id', 'student_id');
+    }
+
+    public function remark(): BelongsTo
+    {
+        return $this->belongsTo(Remark::class, 'remark_id', 'remark_id');
+    }
 }

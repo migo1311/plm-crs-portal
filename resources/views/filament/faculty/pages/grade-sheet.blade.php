@@ -1,6 +1,6 @@
 <x-filament-panels::page>
     @if (!$showStudentGradesTable)
-        <form wire:submit.prevent="submit">
+        <form wire:submit="submit">
             {{ $this->form }}
 
             <div class="p-3 rounded-md shadow-sm">
@@ -8,6 +8,9 @@
                     Submit
                 </button>
             </div>
+            <div wire:loading class="mt-2 text-sm text-gray-600">
+                    Loading...
+                </div>
         </form>
     @endif
 
@@ -29,7 +32,7 @@
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Grades</th>
                             </tr>
                         </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
+                        <tbody class="bg-tansparent divide-y divide-blue-200">
                             @foreach($this->getStudentGradeSchema() as $classStudentId => $input)
                                 <tr>
                                     <td class="px-6 py-4 whitespace-nowrap">{{ $input->student_number }}</td>

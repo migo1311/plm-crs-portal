@@ -14,11 +14,11 @@ class DesignationSeeder extends Seeder
     public function run(): void
     {
         Designation::insert([
-            [
+           /* [
                 'title' => 'Instructor 1',
                 'eq_units' => 18,
                 'type_load' => 'RL'
-            ],
+            ],*/
             [
                 'title' => 'Instructor 2',
                 'eq_units' => 18,

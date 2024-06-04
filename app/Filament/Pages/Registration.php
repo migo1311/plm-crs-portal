@@ -2,7 +2,7 @@
 
 namespace App\Filament\Pages;
 
-use App\Models\Aysem;
+use App\Models\Block;
 use App\Models\TaClass;
 use App\Models\Student;
 use Filament\Pages\Page;
@@ -19,57 +19,73 @@ use Filament\Tables\Concerns\InteractsWithTable;
 class Registration extends Page implements HasForms, HasTable
 {
     use InteractsWithForms, InteractsWithTable;
-    
-    protected static ?string $navigationIcon = 'heroicon-o-arrow-down-on-square';
+
+    protected static ?string $navigationIcon = 'heroicon-o-document-text';
     protected static string $view = 'filament.pages.registration';
-    protected static ?int $navigationsort = 2;
+    protected static ?int $navigationSort = 2;
 
     public $showTable = false;
-    public $selectedStudentName = '';
-    public ?array $data = [];
+    public $selectedStudent, $blockStats;
+    public $studentId;
+    public $SelectedStudentId = false;
+
+    public function mount()
+    {
+        if (!$this->studentId) {
+            $this->studentId = Student::first()->student_id;
+        }
+    }
+    
 
     public function form(Form $form): Form
     {
+        $students = Student::all()->pluck('student_id', 'student_id')->toArray();
+
         return $form
-            ->columns(2)
             ->schema([
                 Components\Select::make('student_id')
                     ->label('Student Number')
                     ->placeholder('Select Student Number')
-                    ->options(Student::all()->pluck('student_id', 'student_id')->toArray())
-                    ->searchable()
-                    ->required(),
+                    ->options($students)
+                    ->required()
+                    ->reactive()
+                    ->afterStateUpdated(fn ($state) => $this->updateSelectedStudent($state['student_id'])),
             ]);
+    }
+
+    public function updateSelectedStudent($studentId)
+    {
+        $this->studentId = $studentId;
+        $this->selectedStudent = Student::find($studentId);
     }
 
     public static function table(Table $table): Table
     {
         return $table
-            ->query(TaClass::query()) // Adjust the query to fetch data from the TaClass model
+            ->query(TaClass::query())
             ->columns([
-                CheckboxColumn::make('selected') // Checklist column
+                CheckboxColumn::make('selected')
                     ->label('Select')
                     ->sortable(),
                 TextColumn::make('course.class_code')
                     ->label('Class')
-                    ->formatStateUsing(function ($state, $record) {
-                        return $state . '' . $record->class;
-                    }),
+                    ->formatStateUsing(fn ($state, $record) => $state . ' ' . $record->class),
                 TextColumn::make('section')
                     ->label('Section')
                     ->sortable(),
                 TextColumn::make('classSchedules.schedule_name')
-                    ->wrap()
                     ->label('Schedule')
                     ->sortable(),
-                TextColumn::make('credited_units')
+                TextColumn::make('taClass.credited_units')
                     ->label('Credits'),
             ]);
     }
 
     public function printReport()
     {
-        // Set flag to true to show the table
         $this->showTable = true;
+        $this->SelectedStudentId = true;
+        $this->selectedStudent = Student::find($this->studentId);
+        $this->blockStats = Block::where('block_id', $this->selectedStudent->block_id)->first();
     }
 }
