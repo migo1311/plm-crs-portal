@@ -4,13 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ClassRestriction extends Model
 {
     use HasFactory;
-
-    protected $primaryKey = 'class_restriction_id';
 
     protected $fillable = [
         'class_id',
@@ -18,9 +15,8 @@ class ClassRestriction extends Model
         'restriction',
     ];
 
-    public function class(): BelongsTo
+    public function class()
     {
-        return $this->belongsTo(TaClass::class, 'class_id', 'class_id');
+        return $this->belongsTo(Classes::class);
     }
-
 }

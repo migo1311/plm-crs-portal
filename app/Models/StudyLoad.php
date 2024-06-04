@@ -4,13 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class StudyLoad extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'study_load_id';
     protected $fillable = [
         'instructor_id',
         'study_units',
@@ -20,13 +18,13 @@ class StudyLoad extends Model
         'entered_on'
     ];
 
-    public function aysem(): BelongsTo
+    public function instructor()
     {
-        return $this->belongsTo(Aysem::class, 'aysem_id', 'aysem_id');
+        return $this->belongsTo(Instructor::class);
     }
 
-    public function instructor(): BelongsTo
+    public function aysem()
     {
-        return $this->belongsTo(InstructorProfile::class, 'instructor_id', 'instructor_id');
+        return $this->belongsTo(Aysem::class);
     }
 }

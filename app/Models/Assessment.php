@@ -9,10 +9,8 @@ class Assessment extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'assessment_id';
-
     protected $fillable = [
-        'student_id',
+        'student_no',
         'assess_amount',
         'amount_paid',
         'subsidy',
@@ -28,7 +26,7 @@ class Assessment extends Model
         'development_fund',
         'ang_pamantasan_fee',
         'ssc_fee',
-        'fee_status',
+        'fee_status_id',
         'total_assess_fee',
         'previous_payment',
         'units',
@@ -37,16 +35,22 @@ class Assessment extends Model
 
     public function student()
     {
-        return $this->belongsTo(Student::class, 'student_id', 'student_id');
+        return $this->belongsTo(Student::class, 'student_no');
     }
 
     public function aysem()
     {
-        return $this->belongsTo(Aysem::class, 'aysem_id', 'aysem_id');
+        return $this->belongsTo(Aysem::class, 'aysem_id');
     }
 
     public function refundForm()
     {
-        return $this->hasOne(RefundForm::class, 'assessment_id', 'assessment_id');
+        return $this->hasOne(RefundForm::class, 'assessment_id');
     }
+
+    public function feeStatus()
+    {
+        return $this->belongsTo(FeeStatus::class, 'fee_status_id');
+    }
+    
 }

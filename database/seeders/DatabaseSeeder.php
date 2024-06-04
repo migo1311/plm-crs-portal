@@ -22,7 +22,6 @@ class DatabaseSeeder extends Seeder
         // $this->call([BuildingSeeder::class]);
         // $this->call([RoomSeeder::class]);
         // $this->call([CourseSeeder::class]);
-        // $this->call([RemarkSeeder::class]);
         // $this->call([BlockSeeder::class]);
         // $this->call([StudentSeeder::class]);
         // $this->call([InstructorProfileSeeder::class]);
@@ -33,6 +32,6 @@ class DatabaseSeeder extends Seeder
         // $this->call([ClassStudentSeeder::class]);
         // $this->call([BlockClassSeeder::class]);
         // $this->call([ScheduleSeeder::class]);
-        $this->call([StudentTermSeeder::class]);
+        // $this->call([StudentTermSeeder::class]);
     }
 }

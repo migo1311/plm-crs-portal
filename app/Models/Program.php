@@ -4,14 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Program extends Model
 {
     use HasFactory;
-
-    protected $primaryKey = 'program_id';
 
     protected $fillable = [
         'college_id',
@@ -23,23 +19,18 @@ class Program extends Model
         'num_credits',
     ];
 
-    public function college(): BelongsTo
+    public function college()
     {
-        return $this->belongsTo(College::class, 'college_id', 'college_id');
+        return $this->belongsTo(College::class);
     }
 
-    public function block(): HasMany
+    public function blocks()
     {
-        return $this->hasMany(Block::class, 'program_id', 'program_id');
+        return $this->hasMany(Block::class);
     }
 
-    public function student(): HasMany
+    public function studentTerms()
     {
-        return $this->hasMany(Student::class, 'program_id', 'program_id');
-    }
-
-    public function studentTerm(): HasMany
-    {
-        return $this->hasMany(StudentTerm::class, 'program_id', 'program_id');
+        return $this->hasMany(StudentTerm::class);
     }
 }

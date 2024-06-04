@@ -9,17 +9,14 @@ class AcademicYear extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'academic_year_id';
-
     protected $fillable = [
         'academic_year_code',
-        'date_end',
         'date_start',
+        'date_end',
     ];
 
-    public function aysem()
-    {
-        return $this->hasMany(Aysem::class, 'academic_year_id', 'academic_year_id');
-    }
-
+    // public function aysems()
+    // {
+    //     return $this->hasMany(Aysem::class);
+    // }
 }

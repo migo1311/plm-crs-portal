@@ -4,28 +4,24 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Room extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'room_id';
-    
     protected $fillable = [
-       'building_id', 
+        'building_id',
         'room_number',
-        'romm_name',
+        'room_name',
     ];
 
-    public function building(): BelongsTo
+    public function building()
     {
-        return $this->belongsTo(Building::class, 'building_id', 'building_id');
+        return $this->belongsTo(Building::class);
     }
 
-    public function classSchedules(): HasMany
+    public function classSchedules()
     {
-        return $this->hasMany(ClassSchedule::class, 'room_id', 'room_id');
+        return $this->hasMany(ClassSchedule::class);
     }
 }

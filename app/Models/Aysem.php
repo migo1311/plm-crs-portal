@@ -4,76 +4,62 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Aysem extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'aysem_id';
-
     protected $fillable = [
-        'academic_year_id',
-        'year',
-        'semester_index',
-        'semester_code',
-        'date_end',
+        'academic_year',
+        'academic_year_code',
+        'semester',
+        'academic_year_sem',
         'date_start',
+        'date_end',
     ];
 
-    public function academicYear(): BelongsTo
+    public function blocks()
     {
-        return $this->belongsTo(AcademicYear::class, 'academic_year_id', 'academic_year_id');
+        return $this->hasMany(Block::class);
     }
 
-    public function blocks(): HasMany
+    public function taSummary()
     {
-        return $this->hasMany(Block::class, 'aysem_id', 'aysem_id');
+        return $this->hasMany(TaSummary::class);
     }
 
-    public function classes(): HasMany
+    public function taConsultations()
     {
-        return $this->hasMany(TaClass::class, 'aysem_id', 'aysem_id');
+        return $this->hasMany(TaConsultation::class);
     }
 
-    public function course(): HasMany
+    public function studyLoads()
     {
-        return $this->hasMany(Course::class, 'aysem_id', 'aysem_id');
+        return $this->hasMany(StudyLoad::class);
     }
 
-    public function assessments(): HasMany
+    public function classes()
     {
-        return $this->hasMany(Assessment::class, 'aysem_id', 'aysem_id');
+        return $this->hasMany(Classes::class);
     }
 
-    public function taSummary(): HasMany
+    public function gwas()
     {
-        return $this->hasMany(TaSummary::class, 'aysem_id', 'aysem_id');
+        return $this->hasMany(Gwa::class);
     }
 
-    public function taConsultation(): HasMany
+    public function assessments()
     {
-        return $this->hasMany(TaConsultation::class, 'aysem_id', 'aysem_id');
+        return $this->hasMany(Assessment::class);
     }
 
-    public function studyLoad(): HasMany
+    public function students()
     {
-        return $this->hasMany(StudyLoad::class, 'aysem_id', 'aysem_id');
+        return $this->hasMany(Student::class);
     }
 
-    public function gwa(): HasMany
+    public function studentTerms()
     {
-        return $this->hasMany(Gwa::class, 'aysem_id', 'aysem_id');
-    }
-
-    public function student(): HasMany
-    {
-        return $this->hasMany(Student::class, 'aysem_id', 'aysem_id');
-    }
-
-    public function studentTerm(): HasMany
-    {
-        return $this->hasMany(StudentTerm::class, 'aysem_id', 'aysem_id');
+        return $this->hasMany(StudentTerm::class);
     }
 }

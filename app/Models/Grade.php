@@ -4,30 +4,29 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Grade extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'grade_id';
-
     protected $fillable = [
-        'class_student_id',
-        'initial_grade',
-        'final_grade',
-        'finalization_date',
+        'student_no',
+        'class_id',
+        'grade',
+        'remarks',
         'completion_grade',
-        'remark_id',
+        'submitted_date',
+        'finalization_date',
+        'updated_by',
     ];
 
-    public function classStudent(): BelongsTo
+    public function student()
     {
-        return $this->belongsTo(ClassStudent::class, 'class_student_id', 'class_student_id');
+        return $this->belongsTo(Student::class, 'student_no');
     }
 
-    public function remark(): BelongsTo
+    public function class()
     {
-        return $this->belongsTo(Remark::class, 'remark_id', 'remark_id');
+        return $this->belongsTo(Classes::class, 'class_id');
     }
 }

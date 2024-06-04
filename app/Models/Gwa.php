@@ -4,27 +4,24 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Gwa extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'gwa_id';
-
     protected $fillable = [
-        'student_id',
+        'student_no',
         'gwa',
         'aysem_id',
     ];
 
-    public function aysem(): BelongsTo
+    public function student()
     {
-        return $this->belongsTo(Aysem::class, 'aysem_id', 'aysem_id');
+        return $this->belongsTo(Student::class, 'student_no');
     }
 
-    public function student(): BelongsTo
+    public function aysem()
     {
-        return $this->belongsTo(Student::class, 'student_id', 'student_id');
+        return $this->belongsTo(Aysem::class, 'aysem_id');
     }
 }

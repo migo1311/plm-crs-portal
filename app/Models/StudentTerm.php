@@ -9,45 +9,40 @@ class StudentTerm extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'student_term_id';
-
     protected $fillable = [
-        'student_id',
-        'academic_year',
-        'semester',
+        'student_no',
         'aysem_id',
-        'college_id',
         'program_id',
         'block_id',
-        'year_level',
+        'registration_status_id',
         'student_type',
-        'registration_status',
         'graduating',
         'enrolled',
+        'year_level',
     ];
 
     public function student()
     {
-        return $this->belongsTo(Student::class, 'student_id', 'student_id');
+        return $this->belongsTo(Student::class, 'student_no');
     }
 
     public function aysem()
     {
-        return $this->belongsTo(Aysem::class, 'aysem_id', 'aysem_id');
-    }
-
-    public function college()
-    {
-        return $this->belongsTo(College::class, 'college_id', 'college_id');
+        return $this->belongsTo(Aysem::class, 'aysem_id');
     }
 
     public function program()
     {
-        return $this->belongsTo(Program::class, 'program_id', 'program_id');
+        return $this->belongsTo(Program::class, 'program_id');
     }
 
     public function block()
     {
-        return $this->belongsTo(Block::class, 'block_id', 'block_id');
+        return $this->belongsTo(Block::class, 'block_id');
+    }
+
+    public function registrationStatus()
+    {
+        return $this->belongsTo(RegistrationStatus::class, 'registration_status_id');
     }
 }

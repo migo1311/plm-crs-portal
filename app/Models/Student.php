@@ -4,115 +4,143 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Student extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'student_id';
+    protected $primaryKey = 'student_no';
 
     protected $fillable = [
-        'lastname',
-        'firstname',
-        'middlename',
-        'middleinitial',
-        'nameextension',
+        'biological_sex_id',
+        'civil_status_id',
+        'citizenship_id',
+        'city_id',
+        'birthplace_city_id',
+        'aysem_id',
+        'last_name',
+        'first_name',
+        'middle_name',
         'maiden_name',
-        'plm_email_address',
-        'birth_date',
-        'birth_place',
-        'age',
-        'gender',
-        'civil_status',
-        'country',
-        'mobile_num',
-        'email_add',
+        'suffix',
+        'birthdate',
+        'permanent_address',
+        'pedigree',
         'religion',
+        'personal_email',
+        'mobile_no',
+        'telephone_no',
+        'photo_link',
+        'entry_date',
+        'plm_email',
+        'paying',
+        'password',
+        'graduation_date',
         'height',
         'weight',
         'complexion',
         'blood_type',
-        'telephone_num',
         'dominant_hand',
         'medical_history',
-        'annual_income',
-        'q1_answer',
-        'q2_answer',
-        'q2a_answer',
-        'q2b_answer',
-        'q3_answer',
+        'lrn',
+        'school_name',
+        'school_address',
+        'school_type',
+        'strand',
+        'year_entered',
+        'year_graduated',
+        'honors_awards',
+        'general_average',
+        'remarks',
+        'org_name',
+        'org_position',
+        'previous_tertiary',
+        'previous_sem',
+        'father_last_name',
+        'father_first_name',
+        'father_middle_name',
+        'father_address',
+        'father_contact_no',
+        'father_office_employer',
+        'father_office_address',
+        'father_office_num',
+        'mother_last_name',
+        'mother_first_name',
+        'mother_middle_name',
+        'mother_address',
+        'mother_contact_no',
+        'mother_office_employer',
+        'mother_office_address',
+        'mother_office_num',
+        'guardian_last_name',
+        'guardian_first_name',
+        'guardian_middle_name',
+        'guardian_address',
+        'guardian_contact_no',
+        'guardian_office_employer',
+        'guardian_office_address',
+        'guardian_office_num',
+        'annual_family_income',
     ];
 
-    public function gwa(): HasMany
+    public function biologicalSex()
     {
-        return $this->hasMany(Gwa::class, 'student_id', 'student_id');
+        return $this->belongsTo(BiologicalSex::class);
     }
 
-    public function aysem(): BelongsTo
+    public function civilStatus()
     {
-        return $this->belongsTo(Aysem::class, 'aysem_id', 'aysem_id');
+        return $this->belongsTo(CivilStatus::class);
     }
 
-    public function program(): BelongsTo
+    public function citizenship()
     {
-        return $this->belongsTo(Program::class, 'program_id', 'program_id');
+        return $this->belongsTo(Citizenship::class);
     }
 
-    public function block(): BelongsTo
+    public function city()
     {
-        return $this->belongsTo(Block::class, 'block_id', 'block_id');
+        return $this->belongsTo(City::class);
     }
 
-    public function college(): BelongsTo
+    public function birthplaceCity()
     {
-        return $this->belongsTo(College::class, 'college_id', 'college_id');
+        return $this->belongsTo(City::class, 'birthplace_city_id', 'city_id');
     }
 
-    public function grade(): HasMany
+    public function aysem()
     {
-        return $this->hasMany(Grade::class, 'student_id', 'student_id');
+        return $this->belongsTo(Aysem::class);
     }
 
-    public function assessment(): HasMany
+    public function studentViolations()
     {
-        return $this->hasMany(Assessment::class, 'student_id', 'student_id');
+        return $this->hasMany(StudentViolation::class, 'student_no', 'student_no');
     }
 
-    public function studentAddress(): HasMany
+    public function classes()
     {
-        return $this->hasMany(StudentAddress::class, 'student_id', 'student_id');
+        return $this->belongsToMany(Classes::class, 'student_class', 'student_no', 'class_id')->withTimestamps();
     }
 
-    public function studentFamily(): HasMany
+    public function grades()
     {
-        return $this->hasMany(StudentFamily::class, 'student_id', 'student_id');
+        return $this->hasMany(Grade::class, 'student_no', 'student_no');
     }
 
-    public function studentEducation(): HasMany
+    public function gwas()
     {
-        return $this->hasMany(StudentEducation::class, 'student_id', 'student_id');
+        return $this->hasMany(Gwa::class, 'student_no', 'student_no');
     }
 
-    public function classes(): BelongsToMany
+    public function assessments()
     {
-        return $this->belongsToMany(TaClass::class, 'class_student', 'student_id', 'class_id')->withTimestamps();
+        return $this->hasMany(Assessment::class, 'student_no', 'student_no');
     }
 
-    public function studentTerm(): HasMany
+    public function studentTerms()
     {
-        return $this->hasMany(StudentTerm::class, 'student_id', 'student_id');
+        return $this->hasMany(StudentTerm::class, 'student_no', 'student_no');
     }
-
-    public function classStudents()
-    {
-        return $this->hasMany(ClassStudent::class,  'student_id', 'student_id');
-    }
-
-    public function remark(): BelongsTo
-    {
-        return $this->belongsTo(Remark::class, 'remark_id', 'remark_id');
-    }
+    
 }

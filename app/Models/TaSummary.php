@@ -9,8 +9,6 @@ class TaSummary extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'ta_summary_id';
-
     protected $fillable = [
         'instructor_id',
         'regular',
@@ -24,13 +22,13 @@ class TaSummary extends Model
         'aysem_id',
     ];
 
-    public function aysem()
-    {
-        return $this->belongsTo(Aysem::class, 'aysem_id', 'aysem_id');
-    }
-
     public function instructor()
     {
-        return $this->belongsTo(InstructorProfile::class, 'instructor_id', 'instructor_id');
+        return $this->belongsTo(Instructor::class);
+    }
+
+    public function aysem()
+    {
+        return $this->belongsTo(Aysem::class);
     }
 }

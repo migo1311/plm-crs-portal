@@ -4,31 +4,28 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Course extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'course_id';
-
     protected $fillable = [
+        'program_id',
         'subject_code',
         'subject_title',
         'course_number',
         'units',
         'class_code',
-        'aysem_id'
+        'pre_requisite',
     ];
 
-    public function aysem():BelongsTo
+    public function program()
     {
-        return $this->belongsTo(Aysem::class, 'aysem_id', 'aysem_id');
+        return $this->belongsTo(Program::class, 'program_id');
     }
 
-    public function classes(): HasMany
+    public function classes()
     {
-        return $this->hasMany(TaClass::class, 'course_id', 'course_id');
+        return $this->hasMany(Classes::class, 'course_id');
     }
 }

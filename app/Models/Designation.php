@@ -4,23 +4,20 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Designation extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'designation_id';
-
     protected $fillable = [
         'title',
         'eq_units',
         'plm_email_address',
-        'type_load',
+        'type_load'
     ];
 
-    public function facultyDesignation(): HasMany
+    public function facultyDesignations()
     {
-        return $this->hasMany(FacultyDesignation::class, 'designation_id', 'designation_id');
+        return $this->hasMany(FacultyDesignation::class);
     }
 }

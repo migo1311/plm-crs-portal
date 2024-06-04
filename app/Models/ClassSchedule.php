@@ -4,41 +4,33 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ClassSchedule extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'class_schedule_id';
-
-    protected $casts = [
-        'start_time' => 'datetime',
-        'end_time' => 'datetime'
-    ];
-
     protected $fillable = [
-        'classes_id',
+        'class_id',
         'day',
         'start_time',
         'end_time',
-        'mode_id',
+        'class_mode_id',
         'room_id',
         'schedule_name'
     ];
 
-    public function classes(): BelongsTo
+    public function class()
     {
-        return $this->belongsTo(TaClass::class, 'classes_id', 'class_id');
+        return $this->belongsTo(Classes::class);
     }
 
-    public function mode(): BelongsTo
+    public function classMode()
     {
-        return $this->belongsTo(Mode::class, 'mode_id', 'mode_id');
+        return $this->belongsTo(ClassMode::class);
     }
 
-    public function room(): BelongsTo
+    public function room()
     {
-        return $this->belongsTo(Room::class, 'room_id', 'room_id');
+        return $this->belongsTo(Room::class);
     }
 }

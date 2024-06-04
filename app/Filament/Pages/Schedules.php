@@ -70,7 +70,7 @@ class Schedules extends Page implements HasForms, HasTable
                                 Components\TextInput::make('class_id')
                                     ->label('Class ID')
                                     ->hidden(),
-                                Components\Select::make('course_id') 
+                                Components\Select::make('id') 
                                     ->relationship(
                                         name: 'course', 
                                         titleAttribute: 'course_number',
@@ -80,7 +80,7 @@ class Schedules extends Page implements HasForms, HasTable
                                     ->label('Course')
                                     ->live()
                                     ->afterStateUpdated(function ($state, $set){
-                                        $units = Course::query()->where('course_id', '=', $state)->value('units');
+                                        $units = Course::query()->where('id', '=', $state)->value('units');
                                         $set('credited_units', $units);
                                     })
                                     ->columnSpanFull()
@@ -276,7 +276,7 @@ class Schedules extends Page implements HasForms, HasTable
                                 Components\TextInput::make('class_id')
                                     ->label('Class ID')
                                     ->hidden(),
-                                Components\Select::make('course_id') 
+                                Components\Select::make('id') 
                                     ->relationship(
                                         name: 'course', 
                                         titleAttribute: 'course_number',
@@ -286,7 +286,7 @@ class Schedules extends Page implements HasForms, HasTable
                                     ->label('Course')
                                     ->live()
                                     ->afterStateUpdated(function ($state, $set){
-                                        $units = Course::query()->where('course_id', '=', $state)->value('units');
+                                        $units = Course::query()->where('id', '=', $state)->value('units');
                                         $set('credited_units', $units);
                                     })
                                     ->columnSpanFull()
@@ -357,7 +357,7 @@ class Schedules extends Page implements HasForms, HasTable
                                 ->afterValidation(function ($get, $set) {
                                     
                                     $exists = TaClass::query()
-                                    ->where('course_id', '=', $get('course_id'))
+                                    ->where('id', '=', $get('id'))
                                     ->where('instructor_id', '=', $get('instructor_id'))
                                     ->where('section', '=', $get('section'))
                                     ->first();
@@ -379,7 +379,7 @@ class Schedules extends Page implements HasForms, HasTable
 
                                     if (!$exists){
                                         $fields = TaClass::create([
-                                            'course_id' => $get('course_id'),
+                                            'id' => $get('id'),
                                             'instructor_id' => $get('instructor_id'),
                                             'section' => $get('section'),
                                             'nstp_activity' => $get('nstp_activity'),

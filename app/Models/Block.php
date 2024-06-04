@@ -4,51 +4,35 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Block extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'block_id';
-
     protected $fillable = [
-        'block_id',
-        'year_level',
-        'section',
         'program_id',
         'aysem_id',
-        'block_name',
-        'block_code',
-        'slots',
+        'year_level',
+        'section'
     ];
 
-    public function program(): BelongsTo
+    public function program()
     {
-        return $this->belongsTo(Program::class, 'program_id', 'program_id');
+        return $this->belongsTo(Program::class);
     }
 
-    public function aysem(): BelongsTo
+    public function aysem()
     {
-        return $this->belongsTo(Aysem::class, 'aysem_id', 'aysem_id');
+        return $this->belongsTo(Aysem::class);
     }
 
-    public function students(): HasMany
+    public function classes()
     {
-        return $this->hasMany(Student::class, 'block_id', 'block_id');
+        return $this->hasMany(Classes::class);
     }
 
-    public function classes(): BelongsToMany
+    public function studentTerms()
     {
-        return $this->belongsToMany(TaClass::class, 'block_class', 'block_id', 'class_id')
-                    ->withTimestamps();
+        return $this->hasMany(StudentTerm::class);
     }
-
-    public function studentTerms(): HasMany
-    {
-        return $this->hasMany(StudentTerm::class, 'block_id', 'block_id');
-    }
-
 }
