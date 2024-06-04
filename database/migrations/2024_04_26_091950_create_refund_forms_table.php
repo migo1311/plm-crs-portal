@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id('refund_form_id');
             $table->foreignId('assessment_id')
                     ->nullable()
-                    ->constrained('assessments', 'assessment_id');
+                    ->constrained('assessments', 'assessment_id')
+                    ->cascadeOnDelete();
             $table->string('type_of_refund');
             $table->string('rate_of_refund');
             $table->timestamps();

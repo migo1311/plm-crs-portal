@@ -22,10 +22,12 @@ return new class extends Migration
             $table->time('end_time');
             $table->foreignId('mode_id')
                     ->nullable()
-                    ->constrained('modes', 'mode_id');
+                    ->constrained('modes', 'mode_id')
+                    ->cascadeOnDelete();
             $table->foreignId('room_id')
                     ->nullable()
-                    ->constrained('rooms', 'room_id');
+                    ->constrained('rooms', 'room_id')
+                    ->cascadeOnDelete();
             $table->string('schedule_name');
             $table->timestamps();
         });

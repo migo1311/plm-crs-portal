@@ -23,10 +23,10 @@ return new class extends Migration
             $table->id('aysem_id');
             $table->foreignId('academic_year_id')
                     ->nullable()
-                    ->constrained('academic_years', 'academic_year_id');
+                    ->constrained('academic_years', 'academic_year_id')
+                    ->cascadeOnDelete();
             $table->integer('year');
             $table->integer('semester_index');
-            $table->string('semester_code');
             $table->date('date_end');
             $table->date('date_start');
             $table->timestamps();

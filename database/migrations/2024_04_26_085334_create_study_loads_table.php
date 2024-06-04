@@ -21,7 +21,8 @@ return new class extends Migration
             $table->integer('teaching_units')->unsigned();
             $table->foreignId('aysem_id')
                     ->nullable()
-                    ->constrained('aysems', 'aysem_id');
+                    ->constrained('aysems', 'aysem_id')
+                    ->cascadeOnDelete();
             $table->string('entered_by');
             $table->date('entered_on');
             $table->timestamps();

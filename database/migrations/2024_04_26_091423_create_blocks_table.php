@@ -17,13 +17,12 @@ return new class extends Migration
             $table->unsignedInteger('section');
             $table->foreignId('program_id')
                     ->nullable()
-                    ->constrained('programs', 'program_id');
+                    ->constrained('programs', 'program_id')
+                    ->cascadeOnDelete();
             $table->foreignId('aysem_id')
                     ->nullable()
-                    ->constrained('aysems', 'aysem_id');
-            $table->string('block_name');
-            $table->string('block_code');
-            $table->unsignedInteger('slots');
+                    ->constrained('aysems', 'aysem_id')
+                    ->cascadeOnDelete();
             $table->timestamps();
         });
     }

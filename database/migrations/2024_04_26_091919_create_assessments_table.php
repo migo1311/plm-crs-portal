@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id('assessment_id');
             $table->foreignId('student_id')
                     ->nullable()
-                    ->constrained('students', 'student_id');
+                    ->constrained('students', 'student_id')
+                    ->cascadeOnDelete();
             $table->double('assess_amount');
             $table->double('amount_paid');
             $table->double('subsidy');
@@ -37,7 +38,8 @@ return new class extends Migration
             $table->string('units');
             $table->foreignId('aysem_id')
                     ->nullable()
-                    ->constrained('aysems', 'aysem_id');
+                    ->constrained('aysems', 'aysem_id')
+                    ->cascadeOnDelete();
             $table->timestamps();
         });
     }

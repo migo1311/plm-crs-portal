@@ -20,10 +20,12 @@ return new class extends Migration
             $table->integer('class_code');
             $table->foreignId('aysem_id')
                     ->nullable()
-                    ->constrained('aysems', 'aysem_id');
+                    ->constrained('aysems', 'aysem_id')
+                    ->cascadeOnDelete();
             $table->foreignId('program_id')
                     ->nullable()
-                    ->constrained('programs', 'program_id');
+                    ->constrained('programs', 'program_id')
+                    ->cascadeOnDelete();
             $table->string('pre_requisite');
             $table->timestamps();
         });

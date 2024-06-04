@@ -20,9 +20,7 @@ return new class extends Migration
             $table->double('grade')->unsigned();
             $table->double('completion_grade')->unsigned()->nullable();
             $table->date('submitted_date')->nullable();
-            $table->foreignId('remark_id')
-                    ->nullable()
-                    ->constrained('remarks', 'remark_id');
+            $table->string('remark_id');
             $table->timestamps();
         });
     }

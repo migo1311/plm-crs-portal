@@ -27,7 +27,8 @@ return new class extends Migration
             $table->integer('pro_bono');
             $table->foreignId('aysem_id')
                     ->nullable()
-                    ->constrained('aysems', 'aysem_id');
+                    ->constrained('aysems', 'aysem_id')
+                    ->cascadeOnDelete();
             $table->timestamps();
         });
     }

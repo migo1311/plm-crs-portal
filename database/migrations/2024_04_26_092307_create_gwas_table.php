@@ -20,7 +20,8 @@ return new class extends Migration
             $table->float('gwa');
             $table->foreignId('aysem_id')
                     ->nullable()
-                    ->constrained('aysems', 'aysem_id');
+                    ->constrained('aysems', 'aysem_id')
+                    ->cascadeOnDelete();
             $table->timestamps();
         });
     }

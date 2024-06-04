@@ -37,7 +37,6 @@ return new class extends Migration
             $table->string('student_type');
             $table->string('registration_status');
             $table->string('graduating');
-            $table->boolean('enrolled');
             $table->unsignedInteger('year_level');
             $table->timestamps();
         });
