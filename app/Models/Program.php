@@ -21,7 +21,7 @@ class Program extends Model
 
     public function college()
     {
-        return $this->belongsTo(College::class);
+        return $this->belongsTo(College::class, 'college_id');
     }
 
     public function blocks()

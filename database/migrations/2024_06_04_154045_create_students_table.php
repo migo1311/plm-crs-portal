@@ -74,7 +74,7 @@ return new class extends Migration
             $table->string('father_office_employer')->nullable();
             $table->string('father_office_address')->nullable();
             $table->string('father_office_num')->nullable();
-            $table->string('mother_lastname')->nullable();
+            $table->string('mother_last_name')->nullable();
             $table->string('mother_first_name')->nullable();
             $table->string('mother_middle_name')->nullable();
             $table->string('mother_address')->nullable();
@@ -82,7 +82,7 @@ return new class extends Migration
             $table->string('mother_office_employer')->nullable();
             $table->string('mother_office_address')->nullable();
             $table->string('mother_office_num')->nullable();
-            $table->string('guardian_lastname')->nullable();
+            $table->string('guardian_last_name')->nullable();
             $table->string('guardian_first_name')->nullable();
             $table->string('guardian_middle_name')->nullable();
             $table->string('guardian_address')->nullable();

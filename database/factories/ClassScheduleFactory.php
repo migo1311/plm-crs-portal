@@ -16,26 +16,24 @@ class ClassScheduleFactory extends Factory
      */
     public function definition(): array
     {
-        $classes = \App\Models\TaClass::all()->random();
+        $classes = \App\Models\Classes::all()->random();
         
-        $mode = \App\Models\Mode::all()->random();
+        $mode = \App\Models\ClassMode::all()->random();
         $room = \App\Models\Room::all()->random();
-        $day = $this->faker->randomElement(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']);
-        $start = date("g:i A", strtotime($this->faker->time()));
-        $end = date("g:i A", strtotime($this->faker->time()));
+        $day = \App\Models\Days::all()->random();
+        $startTime = $this->faker->time();
+        $endTime = $this->faker->time();
+        $start = date("g:i A", strtotime($startTime));
+        $end = date("g:i A", strtotime($endTime));
 
-        if ($day == 'Thursday'){
-            $letter = substr($day, 0, 2);
-        }else {
-            $letter = $day[0];
-        }
+        $letter = $day->day_code;
 
         return [
-            'classes_id' => $classes->class_id,
-            'day' => $day,
-            'start_time' => $start,
-            'end_time'=> $end,
-            'mode_id' => $mode->mode_id,
+            'class_id' => $classes->id,
+            'day_id' => $day,
+            'start_time' => $startTime,
+            'end_time'=> $endTime,
+            'class_mode_id' => $mode->id,
             'room_id' => $room->room_id,
             'schedule_name' => $letter . ' ' . $start . ' - ' . $end . ' ' . $mode->mode_code . ' ' . $room->room_name,
         ];

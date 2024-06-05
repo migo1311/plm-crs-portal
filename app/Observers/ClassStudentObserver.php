@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Models\Classes;
 use App\Models\TaClass;
 
 class ClassStudentObserver
@@ -12,7 +13,7 @@ class ClassStudentObserver
     public function created($model)
     {
         if ($model instanceof \Illuminate\Database\Eloquent\Relations\Pivot && $model->table === 'class_student') {
-            $class = TaClass::find($model->class_id);
+            $class = Classes::find($model->id);
             if ($class) {
                 $class->updateStudentsQuantity();
             }
@@ -22,7 +23,7 @@ class ClassStudentObserver
     /**
      * Handle the Class "updated" event.
      */
-    public function updated(TaClass $class): void
+    public function updated(Classes $class): void
     {
         //
     }
@@ -33,7 +34,7 @@ class ClassStudentObserver
     public function deleted($model)
     {
         if ($model instanceof \Illuminate\Database\Eloquent\Relations\Pivot && $model->table === 'class_student') {
-            $class = TaClass::find($model->class_id);
+            $class = Classes::find($model->class_id);
             if ($class) {
                 $class->updateStudentsQuantity();
             }
@@ -43,7 +44,7 @@ class ClassStudentObserver
     /**
      * Handle the Class "restored" event.
      */
-    public function restored(TaClass $class): void
+    public function restored(Classes $class): void
     {
         //
     }
@@ -51,7 +52,7 @@ class ClassStudentObserver
     /**
      * Handle the Class "force deleted" event.
      */
-    public function forceDeleted(TaClass $class): void
+    public function forceDeleted(Classes $class): void
     {
         //
     }

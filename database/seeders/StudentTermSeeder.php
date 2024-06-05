@@ -14,7 +14,7 @@ class StudentTermSeeder extends Seeder
     public function run(): void
     {
         StudentTerm::factory()
-            ->count(200)
+            ->count(10)
             ->create();
     }
 }

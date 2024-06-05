@@ -2,17 +2,20 @@
 
 namespace Database\Seeders;
 
-use App\Models\InstructorProfile;
+use App\Models\Classes;
+use App\Models\TaClass;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class InstructorProfileSeeder extends Seeder
+class ClassSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        InstructorProfile::factory()->count(5)->create();
+        Classes::factory()
+            ->count(10)
+            ->create();
     }
 }

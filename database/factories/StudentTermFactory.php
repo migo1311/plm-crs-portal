@@ -20,25 +20,22 @@ class StudentTermFactory extends Factory
         $aysemid = $aysem->aysem_id;
 
         do {
-            $student = \App\Models\Student::all()->random()->student_id;
+            $student = \App\Models\Student::all()->random()->student_no;
             $exists = \App\Models\StudentTerm::query()
-                ->where('student_id', $student)
-                ->where('aysem_id', $aysemid)->value('student_term_id');
+                ->where('student_no', $student)
+                ->where('aysem_id', $aysemid)->value('id');
         } while ($exists);
 
         return [
-            'student_id' => $student,
-            'college_id' => \App\Models\College::all()->random()->college_id,
-            'program_id' => $this->faker->randomElement([2, 3, 4]),
-            'academic_year' => $aysem->academicYear->academic_year_code,
-            'semester' => $aysem->semester_code,
+            'student_no' => $student,
             'aysem_id' => $aysemid,
-            'block_id' => \App\Models\Block::all()->random()->block_id,
-            'year_level' => $this->faker->numberBetween(1, 5),
-            'registration_status' => $this->faker->randomElement(['Regular', 'Irregular']),
+            'program_id' => \App\Models\Program::all()->random()->id,
+            'block_id' => \App\Models\Block::all()->random()->id,
+            'registration_status_id' => \App\Models\RegistrationStatus::all()->random()->id,
             'student_type' => $this->faker->randomElement(['New', 'Old', 'Transferee', 'Shifter']),
-            'graduating' => $this->faker->randomElement(['Yes', 'No']),
-            'enrolled' => 1,
+            'graduating' => false,
+            'enrolled' => true,
+            'year_level' => $this->faker->numberBetween(1, 5),
         ];
     }
 }

@@ -60,7 +60,13 @@ class Classes extends Model
 
     public function student()
     {
-        return $this->belongsToMany(Student::class, 'student_class', 'class_id', 'student_id')->withTimestamps();
+        return $this->belongsToMany(Student::class, 'student_class', 'class_id', 'student_no')->withTimestamps();
+    }
+
+    public function updateStudentsQuantity()
+    {
+        $this->students_qty = $this->student()->count();
+        $this->save();
     }
 
     public function grades()

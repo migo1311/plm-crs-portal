@@ -14,7 +14,7 @@ class BlockSeeder extends Seeder
     public function run(): void
     {
         Block::factory()
-            ->count(50)
+            ->count(10)
             ->create();
     }
 }

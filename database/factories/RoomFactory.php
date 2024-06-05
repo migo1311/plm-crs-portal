@@ -22,8 +22,8 @@ class RoomFactory extends Factory
     public function definition(): array
     {
         $model = new Building();
-        $id = $model->all()->random()->building_id;
-        $name = Building::query()->where('building_id', '=', $id)->value('building_code');
+        $id = $model->all()->random()->id;
+        $name = Building::query()->where('id', '=', $id)->value('building_code');
         $number = $this->faker->randomNumber(3, true);
 
         return [

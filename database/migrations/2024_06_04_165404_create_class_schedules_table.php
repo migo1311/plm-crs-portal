@@ -16,7 +16,8 @@ return new class extends Migration
             $table->foreignId('class_id')
                     ->constrained('classes', 'id')
                     ->cascadeOnDelete();
-            $table->string('day');
+            $table->foreignId('day_id')
+                    ->constrained();
             $table->time('start_time');
             $table->time('end_time');
             $table->foreignId('class_mode_id')

@@ -14,91 +14,91 @@ class AysemSeeder extends Seeder
     public function run(): void
     {
         Aysem::create([
-            'aysem_id' => 20211,
-            'academic_year_id' => 1,
-            'year' => 2021,
-            'semester_index' => 1,
-            'semester_code' => '1st Semester',
+            'id' => 20211,
+            'academic_year' => 2021,
+            //'academic_year_code' => 2021-2022,
+            'semester' => 1,
+            //'academic_year_sem' => 2021-1,
             'date_end' => '2022-01-31',
             'date_start' => '2021-09-06',
         ]);
 
         Aysem::create([
-            'aysem_id' => 20212,
-            'academic_year_id' => 1,
-            'year' => 2021,
-            'semester_index' => 2,
-            'semester_code' => '2nd Semester',
+            'id' => 20212,
+            'academic_year' => 2021,
+            //'academic_year_code' => 2021-2022,
+            'semester' => 2,
+            //'academic_year_sem' => 2021-2,
             'date_end' => '2022-06-30',
             'date_start' => '2022-01-31',
         ]);
 
         Aysem::create([
-            'aysem_id' => 20213,
-            'academic_year_id' => 1,
-            'year' => 2021,
-            'semester_index' => 3,
-            'semester_code' => 'Summer',
+            'id' => 20213,
+            'academic_year' => 2021,
+            //'academic_year_code' => 2021-2022,
+            'semester' => 3,
+            //'academic_year_sem' => 2021-3,
             'date_end' => '2022-09-01',
             'date_start' => '2022-07-01',
         ]);
 
         Aysem::create([
-            'aysem_id' => 20221,
-            'academic_year_id' => 2,
-            'year' => 2022,
-            'semester_index' => 1,
-            'semester_code' => '1st Semester',
+            'id' => 20221,
+            'academic_year' => 2022,
+            //'academic_year_code' => 2022-2023,
+            'semester' => 1,
+            //'academic_year_sem' => 2022-1,
             'date_end' => '2023-01-31',
             'date_start' => '2022-09-06',
         ]);
 
         Aysem::create([
-            'aysem_id' => 20222,
-            'academic_year_id' => 2,
-            'year' => 2022,
-            'semester_index' => 2,
-            'semester_code' => '2nd Semester',
+            'id' => 20222,
+            'academic_year' => 2022,
+            //'academic_year_code' => 2022-2023,
+            'semester' => 2,
+            //'academic_year_sem' => 2022-2,
             'date_end' => '2023-06-30',
             'date_start' => '2023-01-31',
         ]);
 
         Aysem::create([
-            'aysem_id' => 20223,
-            'academic_year_id' => 2,
-            'year' => 2022,
-            'semester_index' => 3,
-            'semester_code' => 'Summer',
+            'id' => 20223,
+            'academic_year' => 2022,
+            //'academic_year_code' => 2022-2023,
+            'semester' => 3,
+            //'academic_year_sem' => 2022-3,
             'date_end' => '2022-09-01',
             'date_start' => '2022-07-01',
         ]);
 
         Aysem::create([
-            'aysem_id' => 20231,
-            'academic_year_id' => 3,
-            'year' => 2023,
-            'semester_index' => 1,
-            'semester_code' => '1st Semester',
+            'id' => 20231,
+            'academic_year' => 2023,
+            //'academic_year_code' => 2023-2024,
+            'semester' => 1,
+            //'academic_year_sem' => 2023-1,
             'date_end' => '2024-01-31',
             'date_start' => '2023-09-06',
         ]);
 
         Aysem::create([
-            'aysem_id' => 20232,
-            'academic_year_id' => 3,
-            'year' => 2023,
-            'semester_index' => 2,
-            'semester_code' => '2nd Semester',
+            'id' => 20232,
+            'academic_year' => 2023,
+            //'academic_year_code' => 2023-2024,
+            'semester' => 2,
+            //'academic_year_sem' => 2023-2,
             'date_end' => '2024-06-30',
             'date_start' => '2024-01-31',
         ]);
 
         Aysem::create([
-            'aysem_id' => 20233,
-            'academic_year_id' => 3,
-            'year' => 2023,
-            'semester_index' => 3,
-            'semester_code' => 'Summer',
+            'id' => 20233,
+            'academic_year' => 2023,
+            ///'academic_year_code' => 2023-2024,
+            'semester' => 3,
+            //'academic_year_sem' => 2023-3,
             'date_end' => '2022-09-01',
             'date_start' => '2022-07-01',
         ]);

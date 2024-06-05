@@ -7,14 +7,14 @@ use Illuminate\Support\Str;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\InstructorProfile>
  */
-class InstructorProfileFactory extends Factory
+class InstructorFactory extends Factory
 {
     /**
      * Define the model's default state.
      *
      * @return array<string, mixed>
      */
-    protected $model = \App\Models\InstructorProfile::class;
+    protected $model = \App\Models\Instructor::class;
     
     public function definition(): array
     {
@@ -29,27 +29,28 @@ class InstructorProfileFactory extends Factory
         $facultyname = Str::upper($lastname) . ', ' . Str::upper($firstname) . ' ' . Str::upper($middlename[0]) . '. (' . $instructorcode . ')';
 
         return [
-            'instructor_id' => $aysemyear . $this->faker->unique(true)->randomNumber(6, true),
+            'id' => $aysemyear . $this->faker->unique(true)->randomNumber(6, true),
             'last_name' => $lastname,
             'first_name' => $firstname,
             'middle_name' => $middlename,
-            'pedigree' => $this->faker->randomElement(['', 'Dr.', 'Engr.', 'Atty.']),
-            'birth_place' => $this->faker->city,
+            'maiden_name' => null,
+            'instructor_code' => $instructorcode,
+            'pedigree' => $this->faker->randomElement(['', 'I', 'II', 'III', 'Jr.', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X']),
             'birth_date' => $this->faker->date(),
-            'gender' => $this->faker->randomElement(['Female', 'Male']),
-            'civil_status' => $this->faker->randomElement(['Single', 'Married']),
-            'citizenship' => $this->faker->randomElement(['Filipino', 'American', 'Chinese', 'Japanese']),
+            'birthplace_id' => \App\Models\City::all()->random()->id,
+            'city_id' => \App\Models\City::all()->random()->id,
+            'biological_sex_id' => \App\Models\BiologicalSex::all()->random()->id,
+            'civil_status_id' => \App\Models\CivilStatus::all()->random()->id,
+            'citizenship_id' => \App\Models\Citizenship::all()->random()->id,
+            'college_id' => \App\Models\College::query()->where('college_code', '=', 'CISTM')->value('id'),
             'mobile_phone' => $this->faker->phoneNumber,
             'email_address' => $this->faker->unique()->safeEmail,
             'tin_number' => $this->faker->unique()->randomNumber(9, true),
             'gsis_number' => $this->faker->unique()->randomNumber(9, true),
-            'instructor_code' => $instructorcode,
             'street_address' => $this->faker->streetAddress,
-            'province_city' => $this->faker->city,
             'zip_code' => $this->faker->randomNumber(4, true),
             'phone_number' => $this->faker->phoneNumber,
             'faculty_name' => $facultyname,
-            'college_id' => \App\Models\College::query()->where('college_code', '=', 'CISTM')->value('college_id'),
         ];
     }
 }

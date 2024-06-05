@@ -2,19 +2,17 @@
 
 namespace Database\Seeders;
 
-use App\Models\TaClass;
+use App\Models\Instructor;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class TaClassSeeder extends Seeder
+class InstructorSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        TaClass::factory()
-            ->count(10)
-            ->create();
+        Instructor::factory()->count(5)->create();
     }
 }

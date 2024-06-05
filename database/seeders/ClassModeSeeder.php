@@ -2,18 +2,19 @@
 
 namespace Database\Seeders;
 
+use App\Models\ClassMode;
 use App\Models\Mode;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class ModeSeeder extends Seeder
+class ClassModeSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        Mode::insert([
+        ClassMode::insert([
             [
                 'mode_code' => 'LEC',
                 'mode_type' => 'Lecture'
