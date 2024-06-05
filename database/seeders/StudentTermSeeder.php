@@ -13,6 +13,7 @@ class StudentTermSeeder extends Seeder
      */
     public function run(): void
     {
+        StudentTerm::truncate();
         StudentTerm::factory()
             ->count(200)
             ->create();
