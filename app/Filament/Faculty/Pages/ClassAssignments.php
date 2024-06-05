@@ -4,6 +4,7 @@ namespace App\Filament\Faculty\Pages;
 
 use App\Models\Aysem;
 use App\Models\Classes;
+use App\Models\Instructor;
 use Filament\Pages\Page;
 use Filament\Forms\Components;
 use Filament\Forms\Form;
@@ -13,32 +14,54 @@ use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
-class ClassAssignments extends Page
+class ClassAssignments extends Page implements HasTable
 {
+    use InteractsWithForms;
+    use InteractsWithTable;
+
     protected static ?string $navigationIcon = 'heroicon-o-academic-cap';
 
     protected static string $view = 'filament.faculty.pages.class-assignments';
     
     protected static ?int $navigationsort = 1;
 
-    public $showTable = true; // Show table by default
-    public $aysem_id = 'Current';
+    public $showTable = false; // Show table by default
+    public $latestAysem = 'Current';
+    public ?array $data = [];
     
     public $academic_year_code;// Default to 'Current'
 
     public function form(Form $form): Form
-    {
+    {$user = Auth::user()->name;
+        $instructor = Instructor::where('instructor_code', $user)->first();
+        $classes = Classes::with('instructor')->get()->where('instructor_id', $instructor->instructor_id);
+
         return $form
+            ->columns(2)
             ->schema([
-                Components\Select::make('academic_year_code')
+                Components\Select::make('aysem')
                     ->label('')
                     ->placeholder('AYSEM')
-                    ->options(['Current' => 'Current', 'Previous' => 'Previous'])
+                    ->options([ 'Current' => 'Current', 'Previous' => 'Previous'])
                     ->default('Current')
-                    ->reactive() // Make it reactive to update the table on change
-                    ->afterStateUpdated(fn () => $this->resetTable()), // Reset the table to refresh data
-            ]);
+                    ->live()->columns(1),
+                Components\Select::make('academic_year_code')
+                    ->label('')
+                    ->placeholder('Academic Year')
+                    ->options(function ($get) use ($classes) {
+                        if ($get('aysem')=== 'Current') {
+                            return [$classes->max('aysem_id') => $classes->max('aysem_id')];
+                        } else {
+                            $otherClasses = $classes->where('aysem_id', '!=', $classes->max('aysem_id'));
+                            return $otherClasses->pluck('aysem_id', 'aysem_id')->toArray();
+                        }
+                    })
+                    ->default('Current')
+                    ->live()
+                    ->required()->columns(1),
+            ])->statePath('data');
     }
 
     protected function getTableQuery()
@@ -87,8 +110,8 @@ class ClassAssignments extends Page
             ]);
     }
 
-    protected function resetTable()
+    public function submit()
     {
-        $this->emit('refreshTable'); // Emit event to refresh the table
+        $this->showTable = true;
     }
 }

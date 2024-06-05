@@ -76,28 +76,28 @@ class StudentInformation extends Page implements HasForms
     }
 
     public function printReport()
-{
-    $this->validate();
+    {
+        $this->validate();
 
-    $this->data = $this->form->getState();
-    $this->selectedFields = $this->data['field_selection'];
-    $aysemId = $this->data['aysem_id'];
+        $this->data = $this->form->getState();
+        $this->selectedFields = $this->data['field_selection'];
+        $aysemId = $this->data['aysem_id'];
 
-    // Validate that the selected fields exist in the Student table
-    $validFields = array_filter($this->selectedFields, function ($field) {
-        return Schema::hasColumn('students', $field);
-    });
+        // Validate that the selected fields exist in the Student table
+        $validFields = array_filter($this->selectedFields, function ($field) {
+            return Schema::hasColumn('students', $field);
+        });
 
-    if (count($validFields) !== count($this->selectedFields)) {
-        Notification::make()
-            ->title('Some selected fields are not valid.')
-            ->danger()
-            ->send();
-        return;
-    }
+        if (count($validFields) !== count($this->selectedFields)) {
+            Notification::make()
+                ->title('Some selected fields are not valid.')
+                ->danger()
+                ->send();
+            return;
+        }
 
-    // Fetch students' data based on valid selected fields and Ay-Sem, including search functionality
-    $query = Student::where('aysem_id', $aysemId);
+        // Fetch students' data based on valid selected fields and Ay-Sem, including search functionality
+        $query = Student::where('aysem_id', $aysemId);
 
         if ($this->search) {
             $query->where(function ($q) {
