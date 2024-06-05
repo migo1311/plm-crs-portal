@@ -3,8 +3,8 @@
 namespace App\Filament\Faculty\Pages;
 
 use Filament\Navigation\NavigationItem;
-use App\Models\InstructorProfile;
-use App\Models\TaClass;
+use App\Models\Instructor;
+use App\Models\Classes;
 use Filament\Pages\Page;
 use Filament\Forms\Form;
 use Filament\Forms\Contracts\HasForms;
@@ -32,7 +32,7 @@ class TeachingAssignment extends Page implements HasForms, HasTable
                 Components\Select::make('instructor.faculty_name')
                     ->label('Faculty Name')
                     ->placeholder('Select Faculty')
-                    ->options(InstructorProfile::all()->pluck('faculty_name', 'faculty_name')->toArray())
+                    ->options(Instructor::all()->pluck('faculty_name', 'faculty_name')->toArray())
                     ->searchable()
                     ->required(),
             ]);
@@ -41,7 +41,7 @@ class TeachingAssignment extends Page implements HasForms, HasTable
     public static function table(Table $table): Table
     {
     return $table
-        ->query(TaClass::query()) // Adjust the query to fetch data from the TaClass model
+        ->query(Classes::query()) // Adjust the query to fetch data from the Classes model
         ->columns([
             TextColumn::make('course.subject_code')
                 ->label('Subject Code')

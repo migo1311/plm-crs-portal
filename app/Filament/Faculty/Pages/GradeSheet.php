@@ -3,7 +3,7 @@
 namespace App\Filament\Faculty\Pages;
 
 use App\Models\Aysem;
-use App\Models\TaClass;
+use App\Models\Classes;
 use App\Models\ClassStudent;
 use App\Models\Grade; // Add Grade model
 use App\Models\Student;
@@ -47,7 +47,7 @@ class GradeSheet extends Page implements HasForms, HasTable
                 Components\Select::make('aysem_id')
                     ->label('Ay-Sem')
                     ->placeholder('Ay-Sem')
-                    ->options(Aysem::all()->pluck('aysem_id', 'aysem_id')->toArray())
+                    ->options(Aysem::all()->pluck('id', 'id')->toArray())
                     ->required()
                     ->searchable(),
             ])
@@ -57,7 +57,7 @@ class GradeSheet extends Page implements HasForms, HasTable
     public function table(Table $table): Table
     {
         return $table
-            ->query(TaClass::query()->where('aysem_id', '=', $this->data['aysem_id'] ?? 0))
+            ->query(Classes::query()->where('aysem_id', '=', $this->data['aysem_id'] ?? 0))
             ->columns([
                 TextColumn::make('course.subject_code')
                     ->label('Class')
@@ -76,21 +76,21 @@ class GradeSheet extends Page implements HasForms, HasTable
             ])
             ->actions([
                 Action::make('Print')
-                    ->action(function (TaClass $record) 
+                    ->action(function (Classes $record) 
                     {
                         dd($record);
                     })
                     ->icon('heroicon-o-printer')
                     ->color(Color::Amber),
                 Action::make('Download')
-                    ->action(function (TaClass $record) 
+                    ->action(function (Classes $record) 
                     {
                         dd($record);
                     })
                     ->icon('heroicon-o-arrow-down-tray')
                     ->color(Color::Amber),
                 Action::make('Input Grades')
-                    ->action(function (TaClass $record) 
+                    ->action(function (Classes $record) 
                     {
                         $attributes = $record->getAttributes();
                         $this->selectedClassId = $attributes['class_id']; // Check if the selected class is correct
@@ -107,7 +107,11 @@ class GradeSheet extends Page implements HasForms, HasTable
     protected function loadStudents()
     {
         $students = [];
-        $classStudents = ClassStudent::where('class_id', $this->selectedClassId)->with('student')->get();
+        $classStudents = Classes::whereHas('student', function($query)  {
+            $query->where('class_id', $this->selectedClassId);
+        })->with('student')->get();
+
+        dd($classStudents); 
         
         foreach ($classStudents as $classStudent) {
             $student = $classStudent->getAttributes();
@@ -139,7 +143,7 @@ class GradeSheet extends Page implements HasForms, HasTable
 
         foreach ($this->students as $classStudentIdx => $value) { // as index => array value
             
-            // $classStudent = TaClass::all()->find($classStudentIdx['class_id']);
+            // $classStudent = Classes::all()->find($classStudentIdx['class_id']);
             $studentId = $value['student_id'];
             $student = Student::query()->where('student_id', $studentId)->first()->getAttributes();
             $name = $student['firstname'] . ' ' . $student['middleinitial'] . '. ' . $student['lastname'];
@@ -179,7 +183,9 @@ class GradeSheet extends Page implements HasForms, HasTable
     public function saveGrades(): void
     {
         foreach ($this->grades as $classStudentId => $grade) {
-            $classStudent = ClassStudent::find($classStudentId);
+            $classStudent = Classes::whereHas('student', function($query)  {
+                $query->where('class_id', $this->selectedClassId);
+            })->with('student')->find($classStudentId);
             $gradeModel = Grade::where('class_student_id', $classStudentId)->first();
             if ($gradeModel) {
                 $gradeModel->update(['grade' => $grade]);

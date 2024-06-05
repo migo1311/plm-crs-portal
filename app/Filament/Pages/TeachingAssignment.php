@@ -2,6 +2,8 @@
 
 namespace App\Filament\Pages;
 
+use App\Models\Classes;
+use App\Models\Instructor;
 use App\Models\InstructorProfile;
 use App\Models\TaClass;
 use Filament\Pages\Page;
@@ -37,7 +39,7 @@ class TeachingAssignment extends Page implements HasForms, HasTable
                 Components\Select::make('instructor.faculty_name')
                     ->label('Faculty Name')
                     ->placeholder('Select Faculty')
-                    ->options(InstructorProfile::all()->pluck('faculty_name', 'faculty_name')->toArray())
+                    ->options(Instructor::all()->pluck('faculty_name', 'faculty_name')->toArray())
                     ->searchable()
                     ->required(),
             ]);
@@ -46,7 +48,7 @@ class TeachingAssignment extends Page implements HasForms, HasTable
     public static function table(Table $table): Table
     {
     return $table
-        ->query(TaClass::query()) // Adjust the query to fetch data from the TaClass model
+        ->query(Classes::query()) // Adjust the query to fetch data from the TaClass model
         ->columns([
             TextColumn::make('course.subject_code')
                 ->label('Subject Code')
@@ -73,7 +75,7 @@ class TeachingAssignment extends Page implements HasForms, HasTable
             ->modalHeading('Edit Teaching Assignment')
             ->steps([
                 Step::make('Class Information')
-                    ->model(TaClass::class)
+                    ->model(Classes::class)
                     ->columns(4)
                     ->schema([
                         Components\TextInput::make('class_id')
