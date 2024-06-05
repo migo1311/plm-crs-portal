@@ -276,9 +276,11 @@ class StudyPlanValidation extends Page implements HasForms, HasTable
                             ->label('Student ID')
                             ->options(StudyPlanValidations::all()->pluck('student_id', 'student_id')->toArray())
                             ->searchable()
-                            ->required(),
+                            ->required()
+                            ->reactive()
+                            ->default($this->student_id), // Bind the property here
                     ]),
-
+    
             ])
             ->statePath('data');
     }
@@ -301,16 +303,9 @@ class StudyPlanValidation extends Page implements HasForms, HasTable
             ->filters([])
             ->actions([
                 Action::make('View Student')
-                    ->registerModalActions([
-                        Action::make('report')
-                            ->requiresConfirmation()
-                            ->action(fn (Post $record) => $record->report()),
-                        Action::make('edit')
-                            ->registerModalActions([
-                                Action::make('View Student')
-                                    ->action(fn (Post $record) => $this->editStudents($record->student_id)),
-                            ]),
-                    ]),
+                    ->action(fn ($record) => $this->editStudents($record->student_id)) // Set the student_id
+
             ]);
     }
+    
 }
