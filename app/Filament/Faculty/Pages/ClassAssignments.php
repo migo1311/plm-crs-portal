@@ -14,6 +14,7 @@ use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Carbon\Carbon;
+use Filament\Forms\Get;
 use Illuminate\Support\Facades\Auth;
 
 class ClassAssignments extends Page implements HasTable
@@ -33,10 +34,18 @@ class ClassAssignments extends Page implements HasTable
     
     public $academic_year_code;// Default to 'Current'
 
+    public function mount()
+    {
+        $this->form->fill();
+    }
+
     public function form(Form $form): Form
-    {$user = Auth::user()->name;
+    {
+        $user = Auth::user()->name;
         $instructor = Instructor::where('instructor_code', $user)->first();
-        $classes = Classes::with('instructor')->get()->where('instructor_id', $instructor->instructor_id);
+        $classes = Classes::whereHas('instructor', function($query) use ($instructor) {
+            $query->where('instructor_id', $instructor->id);
+        })->get();
 
         return $form
             ->columns(2)
@@ -51,7 +60,7 @@ class ClassAssignments extends Page implements HasTable
                     ->label('')
                     ->placeholder('Academic Year')
                     ->options(function ($get) use ($classes) {
-                        if ($get('aysem')=== 'Current') {
+                        if ($get('aysem') === 'Current') {
                             return [$classes->max('aysem_id') => $classes->max('aysem_id')];
                         } else {
                             $otherClasses = $classes->where('aysem_id', '!=', $classes->max('aysem_id'));
@@ -64,31 +73,19 @@ class ClassAssignments extends Page implements HasTable
             ])->statePath('data');
     }
 
-    protected function getTableQuery()
-    {
-        $query = Aysem::query();
-
-        if ($this->academic_year_code === 'Current') {
-            // Apply filter for current schedule
-            // Assuming 'date' is the column used to determine current classes
-            $query->where('date_start', '>=', Carbon::now()->startOfYear());
-        } else if ($this->academic_year_code === 'Previous') {
-            // Apply filter for previous schedule
-            $query->where('date_end', '<', Carbon::now()->startOfYear());
-        }
-
-        return $query;
-    }
-
     public function table(Table $table): Table
     {
+        $user = Auth::user()->name;
+        $instructor = Instructor::where('instructor_code', $user)->first();
+
         return $table
-            ->query(fn () => $this->getTableQuery())
+            ->query(Classes::query()->whereHas('instructor', function($query) use ($instructor) {$query->where('instructor_id', $instructor->id);
+            })->where('aysem_id', $this->data['academic_year_code']))
             ->columns([
                 TextColumn::make('course.subject_code')
                     ->label('Subject Code')
                     ->formatStateUsing(function ($state, $record) {
-                        return $state . '-' . $record->section;
+                        return $state ;
                     }),
                 TextColumn::make('section')
                     ->label('Section')

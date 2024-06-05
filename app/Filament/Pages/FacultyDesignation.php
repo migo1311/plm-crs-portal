@@ -5,6 +5,7 @@ namespace App\Filament\Pages;
 use App\Models\InstructorProfile;
 use App\Models\Designation;
 use App\Models\FacultyDesignation as FacultyDesignationModel;
+use App\Models\Instructor;
 use Filament\Forms;
 use Filament\Forms\Components;
 use Filament\Pages\Page;
@@ -35,12 +36,12 @@ class FacultyDesignation extends Page implements Forms\Contracts\HasForms
             Components\Select::make('instructor_id')
                 ->label('Select Faculty Name')
                 ->placeholder('Select Option')
-                ->options(InstructorProfile::pluck('faculty_name', 'instructor_id')->toArray())
+                ->options(Instructor::pluck('faculty_name', 'id')->toArray())
                 ->required(),
             Components\Select::make('designation_id')
                 ->label('Select New Designation')
                 ->placeholder('Select Option')
-                ->options(Designation::pluck('title', 'designation_id')->toArray())
+                ->options(Designation::pluck('title', 'id')->toArray())
                 ->searchable()
                 ->required(),
             Components\TextInput::make('schedule')

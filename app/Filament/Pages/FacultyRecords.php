@@ -2,6 +2,9 @@
 
 namespace App\Filament\Pages;
 
+use App\Models\BiologicalSex;
+use App\Models\Citizenship;
+use App\Models\CivilStatus;
 use App\Models\Instructor;
 use Filament\Forms\Components;
 use Filament\Forms\Form;
@@ -35,84 +38,32 @@ class FacultyRecords extends Page implements HasForms
                     ->schema([
                         Components\Select::make('instructor_id')
                             ->label('Employee Number')
-                            ->options(Instructor::all()->pluck('instructor_id', 'instructor_id')->toArray())
+                            ->options(Instructor::all()->pluck('id', 'id')->toArray())
                             ->searchable()
-                            ->required(),
-                        Components\TextInput::make('last_name')
-                            ->label('Last Name')
-                            ->required(),
-                        Components\TextInput::make('first_name')
-                            ->label('First Name')
-                            ->required(),
-                        Components\TextInput::make('middle_name')
-                            ->label('Middle Name'),
-                        Components\TextInput::make('maiden_name')
-                            ->label('Maiden Name')
-                            ->columnSpan(2),
-                        Components\TextInput::make('birth_place')
-                            ->label('Birth Place (Province-City)')
                             ->required()
-                            ->columnSpan(2),
-                        Components\DatePicker::make('birth_date')
-                            ->required(),
-                        Components\Select::make('suffix')
-                            ->options([
-                                'Atty.' => 'Atty.',
-                                'N/A' => 'N/A',
-                            ])
-                            ->required(),
-                        Components\Select::make('gender')
-                            ->options([
-                                'male' => 'Male',
-                                'female' => 'Female',
-                                'other' => 'Other',
-                            ])
-                            ->required(),
-                        Components\Select::make('civil_status')
-                            ->options([
-                                'single' => 'Single',
-                                'married' => 'Married',
-                                'widowed' => 'Widowed',
-                                'divorced' => 'Divorced',
-                                'separated' => 'Separated',
-                            ])
-                            ->required(),
-                        Components\Select::make('citizenship')
-                            ->options([
-                                'Philippines' => 'Philippines',
-                                'United States' => 'United States',
-                                'Canada' => 'Canada',
-                                'Australia' => 'Australia',
-                                'United Kingdom' => 'United Kingdom',
-                                'Germany' => 'Germany',
-                                'France' => 'France',
-                                'Japan' => 'Japan',
-                                'China' => 'China',
-                                'India' => 'India',
-                                'Other' => 'Other',
-                            ])
-                            ->required(),
-                        Components\TextInput::make('mobile_phone')
-                            ->required()
-                            ->columnSpan(2),
-                        Components\TextInput::make('email_address')
-                            ->required()
-                            ->columnSpan(2)
+                            ->reactive()
+                            ->afterStateUpdated(fn ($state) => $this->loadInstructorData($state)),
+                        Components\TextInput::make('last_name')->label('Last Name')->required(),
+                        Components\TextInput::make('first_name')->label('First Name')->required(),
+                        Components\TextInput::make('middle_name')->label('Middle Name'),
+                        Components\TextInput::make('maiden_name')->label('Maiden Name')->columnSpan(2),
+                        Components\TextInput::make('birth_place_id')->label('Birth Place (Province-City)')->required()->columnSpan(2),
+                        Components\DatePicker::make('birth_date')->required(),
+                        Components\Select::make('pedigree')->options(['Atty.' => 'Atty.', 'N/A' => 'N/A'])->required(),
+                        Components\Select::make('biological_sex')->options(BiologicalSex::all()->pluck('sex', 'sex')->toArray())->searchable()->required(),
+                        Components\Select::make('civil_status')->options(CivilStatus::all()->pluck('civil_status', 'civil_status')->toArray())->searchable()->required(),
+                        Components\Select::make('citizenship')->options(Citizenship::all()->pluck('citizenship', 'citizenship')->toArray())->searchable()->required(),
+                        Components\TextInput::make('mobile_phone')->required()->columnSpan(2),
+                        Components\TextInput::make('email_address')->required()->columnSpan(2)
                     ]),
                 Components\Section::make('Employment Details')
                     ->schema([
-                        Components\Grid::make(2) 
+                        Components\Grid::make(2)
                             ->schema([
-                                Components\TextInput::make('tin_number')
-                                    ->required()
-                                    ->columnSpan(1), 
-                                Components\TextInput::make('gsis_number')
-                                    ->required()
-                                    ->columnSpan(1),
+                                Components\TextInput::make('tin_number')->required()->columnSpan(1),
+                                Components\TextInput::make('gsis_number')->required()->columnSpan(1),
                             ]),
-                        Components\TextInput::make('instructor_code')
-                            ->required()
-                            ->columnSpanFull()
+                        Components\Select::make('instructor_code')->options(Instructor::all()->pluck('instructor_code', 'instructor_code')->toArray())->searchable()->required()->columnSpanFull()
                     ]),
                 Components\Section::make('Current Address')
                     ->schema([
@@ -130,40 +81,52 @@ class FacultyRecords extends Page implements HasForms
                                 'R. Hidalgo Street' => 'R. Hidalgo Street',
                             ])
                             ->required(),
-                        Components\Grid::make(2) 
+                        Components\Grid::make(2)
                             ->schema([
-                                Components\TextInput::make('zip_code')
-                                    ->required()
-                                    ->columnSpan(1), 
-                                Components\TextInput::make('phone_number')
-                                    ->required()
-                                    ->columnSpan(1), 
+                                Components\TextInput::make('zip_code')->required()->columnSpan(1),
+                                Components\TextInput::make('phone_number')->required()->columnSpan(1),
                             ]),
-                        Components\TextInput::make('province_city')
-                            ->required()
-                            ->columnSpanFull(),
+                        Components\TextInput::make('province_city')->required()->columnSpanFull(),
                     ])
             ])
             ->statePath('data');
     }
 
+    public function loadInstructorData($instructorId)
+    {
+        $instructor = Instructor::find($instructorId);
+        if ($instructor) {
+            $formState = $instructor->toArray();
+            $formState['instructor_id'] = $instructorId;  // Ensure instructor_id is included
+            $this->form->fill($formState);
+        }
+    }
+
     public function create()
     {
+        $formData = $this->form->getState();
         $this->validate();
 
-        $formData = $this->form->getState();
+        $instructorProfile = Instructor::find($formData['instructor_id']);
 
-        // Retrieve the InstructorProfile record based on the instructor_id
-        $instructorProfile = Instructor::findOrFail($formData['instructor_id']);
+        if ($instructorProfile) {
+            $instructorProfile->update($formData);
 
-        // Update the fields of the retrieved InstructorProfile with the form data
-        $instructorProfile->update($formData);
+            Notification::make()
+                ->title('Data updated successfully!')
+                ->success()
+                ->send();
+        } else {
+            Notification::make()
+                ->title('Instructor not found!')
+                ->danger()
+                ->send();
+        }
+    }
 
-        // Display a success notification
-        Notification::make()
-            ->title('Data updated successfully!')
-            ->success()
-            ->send();
+    public function resetForm()
+    {
+        $this->form->fill([]);
     }
 
 }

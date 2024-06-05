@@ -3,8 +3,7 @@
 namespace App\Filament\Pages;
 
 use App\Models\Aysem;
-use App\Models\TaClass;
-use App\Models\Student;
+use App\Models\Classes;
 use Filament\Pages\Page;
 use Filament\Forms\Components;
 use Filament\Forms\Form;
@@ -44,7 +43,7 @@ class FacultyLoading extends Page implements HasForms, HasTable
     public static function table(Table $table): Table
     {
         return $table
-            ->query(TaClass::query())
+            ->query(Classes::query())
             ->columns([
                 TextColumn::make('course.subject_code')
                     ->label('Subject Code')

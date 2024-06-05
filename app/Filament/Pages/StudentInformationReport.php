@@ -4,8 +4,7 @@ namespace App\Filament\Pages;
 
 use App\Models\Student;
 use App\Models\Aysem;
-use App\Models\StudentFamily;
-use App\Models\TaClass;
+use App\Models\Classes;
 use App\Models\Block;
 use App\Models\College;
 use Filament\Pages\Page;
@@ -31,7 +30,7 @@ class StudentInformationReport extends Page implements HasForms, HasTable
 
     public $showTable = false;
 
-    public $selectedStudent, $studentFamily, $blockStats, $college;
+    public $selectedStudent;
     public $studentId;
     public $SelectedStudentId = false; // New property to hold the selected student's data
 
@@ -46,13 +45,13 @@ class StudentInformationReport extends Page implements HasForms, HasTable
     $students = Student::all();
     $studentOptions = [];
     foreach ($students as $student) {
-        $studentOptions[$student->student_id] = $student->student_id . ' (' . $student->lastname . ', ' . $student->firstname .')';
+        $studentOptions[$student->student_no] = $student->student_no . ' (' . $student->last_name . ', ' . $student->first_name .')';
     }
 
     return $form
         ->columns(2)
         ->schema([
-            Components\Select::make('student_id')
+            Components\Select::make('student_no')
                 ->label('Student ID and Name') // Change the label to indicate both Student ID and Last Name
                 ->placeholder('Select Student') // Change the placeholder accordingly
                 ->options($studentOptions) // Use fetched student options
@@ -62,7 +61,7 @@ class StudentInformationReport extends Page implements HasForms, HasTable
             Components\Select::make('aysem_id')
                 ->label('Ay-Sem')
                 ->placeholder('Ay-Sem')
-                ->options(Aysem::all()->pluck('aysem_id', 'aysem_id')->toArray())
+                ->options(Aysem::all()->pluck('id', 'id')->toArray())
                 ->required(),
         ])->statePath('data');
     }
@@ -70,9 +69,7 @@ class StudentInformationReport extends Page implements HasForms, HasTable
     public function table(Table $table): Table
     {
         return $table
-            ->query(TaClass::query()->whereHas('students', function($query) {
-                $query->where('students.student_id', '=', $this->data['student_id']);
-            })->where('aysem_id', '=', $this->data['aysem_id']))
+            ->query(Classes::query())
             ->columns([
                 TextColumn::make('course.subject_code')
                     ->label('Subject Code')
@@ -80,17 +77,17 @@ class StudentInformationReport extends Page implements HasForms, HasTable
                         return $state . '-' . $record->section;
                     })
                     ->sortable(),
-                TextColumn::make('section')
+                TextColumn::make('block.section')
                     ->label('Section')
                     ->sortable(),
                 TextColumn::make('course.subject_title')
                     ->label('Subject Title'),
-                TextColumn::make('course.units')
+                TextColumn::make('actual_units')
                     ->label('Units'),
                 TextColumn::make('classSchedules.schedule_name')
                     ->wrap()
                     ->label('Schedule'),
-                TextColumn::make('instructor.faculty_name')
+                TextColumn::make('instructors.faculty_name')
                     ->label('Faculty')
             ]);
     }
@@ -100,9 +97,19 @@ class StudentInformationReport extends Page implements HasForms, HasTable
         // Set flag to true to show the table
         $this->showTable = true;
         $this->SelectedStudentId = true;
-        $this->selectedStudent = Student::find($this->data['student_id']);
-        $this->blockStats = Block::where('block_id', $this->selectedStudent->block_id)->first();
-        $this->college = College::where('college_id', $this->selectedStudent->college_id)->first();
-        $this->studentFamily = StudentFamily::where('student_family_id', $this->selectedStudent->student_family_id)->first();
+        $this->selectedStudent = Student::find($this->data['student_no']);
+    }
+
+    public function resetForm()
+    {
+        $this->form->fill([]);
+        $this->data = [];
+        $this->SelectedStudentId = false; // Reset selected student ID
+        $this->selectedStudent = null; // Reset selected student data
+
+        // Reset table data by setting an empty query
+        $this->getTable()->query(function () {
+        return Classes::where('id', '=', null);
+    });
     }
 }

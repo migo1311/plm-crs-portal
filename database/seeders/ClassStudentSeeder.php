@@ -16,11 +16,11 @@ class ClassStudentSeeder extends Seeder
      */
     public function run(): void
     {
-        $classes = Classes::all()->random(1);
-        $students = Student::all()->random(1);
+        $classes = Classes::all();
+        $students = Student::all();
 
         foreach ($students as $student) {
-            $classIds = $classes->pluck('id');
+            $classIds = $classes->random(rand(1, 3))->pluck('id');
             $student->classes()->attach($classIds);
 
             foreach ($classIds as $classId) {
