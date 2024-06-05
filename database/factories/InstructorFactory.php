@@ -19,7 +19,7 @@ class InstructorFactory extends Factory
     public function definition(): array
     {
         $aysem = \App\Models\Aysem::all()->random();
-        $aysemyear = $aysem->year;
+        $aysemyear = $aysem->academic_year;
         $firstname = $this->faker->firstName;
         $lastname = $this->faker->lastName;
         $middlename = $this->faker->lastName;

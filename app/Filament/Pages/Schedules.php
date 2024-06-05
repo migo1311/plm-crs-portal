@@ -14,9 +14,12 @@ use App\Models\InstructorProfile;
 use App\Models\Mode;
 use App\Models\Program;
 use App\Models\Room;
-use App\Models\TaClass;
+use App\Models\Classes;
+use App\Models\ClassMode;
+use App\Models\Instructor;
 use Filament\Tables\Actions\CreateAction;
 use Filament\Forms\Components;
+use Filament\Tables\Actions\Action;
 use Filament\Forms\Components\Component;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
@@ -26,6 +29,7 @@ use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
 use Filament\Forms\Components\Wizard\Step;
+use Filament\Tables\Actions\Action as ActionsAction;
 use Filament\Tables\Actions\EditAction as ActionsEditAction;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Database\Eloquent\Model;
@@ -39,12 +43,14 @@ class Schedules extends Page implements HasForms, HasTable
 
     protected static string $view = 'filament.pages.schedules';
 
+    protected static bool $isDiscovered = false;
+
     protected static ?int $navigationsort = 1;
 
     public function table(Table $table): table
     {
         return $table
-            ->query(TaClass::query())
+            ->query(Classes::query())
             ->columns([
                 TextColumn::make('course.subject_code'),
                 TextColumn::make('section'),
@@ -64,7 +70,7 @@ class Schedules extends Page implements HasForms, HasTable
                     ->modalHeading('Edit Class')
                     ->steps([
                         Step::make('Class Information')
-                            ->model(TaClass::class)
+                            ->model(Classes::class)
                             ->columns(4)
                             ->schema([
                                 Components\TextInput::make('class_id')
@@ -195,17 +201,17 @@ class Schedules extends Page implements HasForms, HasTable
                                     ->columns(3)
                                     ->schema([
                                         Components\Select::make('scope')
-                                        ->options([
-                                            'block' => ClassRestrictionScopeEnum::block->value,
-                                            'college' => ClassRestrictionScopeEnum::college->value,
-                                            'program' => ClassRestrictionScopeEnum::program->value,
-                                            'program & year-level' => ClassRestrictionScopeEnum::program_and_year->value,
-                                            'user' => ClassRestrictionScopeEnum::user->value,
-                                            'gender' => ClassRestrictionScopeEnum::gender->value,
-                                        ])
-                                        ->live()
-                                        ->preload()
-                                        ->required(),
+                                            ->options([
+                                                'block' => ClassRestrictionScopeEnum::block->value,
+                                                'college' => ClassRestrictionScopeEnum::college->value,
+                                                'program' => ClassRestrictionScopeEnum::program->value,
+                                                'program & year-level' => ClassRestrictionScopeEnum::program_and_year->value,
+                                                'user' => ClassRestrictionScopeEnum::user->value,
+                                                'gender' => ClassRestrictionScopeEnum::gender->value,
+                                            ])
+                                            ->live()
+                                            ->preload()
+                                            ->required(),
                                         Components\Select::make('restriction')
                                             ->options(function ($get):
                                                 array {
@@ -214,7 +220,7 @@ class Schedules extends Page implements HasForms, HasTable
 
                                                     switch ($scope) {
                                                         case 'block':
-                                                            $restrictions = Block::all()->pluck('block_name', 'block_name')->toArray();
+                                                            $restrictions = Block::all()->pluck('block_name', 'name')->toArray();
                                                             break;
                                                         case 'college':
                                                             $restrictions = College::all()->pluck('college_name', 'college_name')->toArray();
@@ -241,7 +247,7 @@ class Schedules extends Page implements HasForms, HasTable
                                                             }
                                                             break;
                                                         case 'user':
-                                                            $restrictions = InstructorProfile::all()->pluck('faculty_name', 'faculty_name')->toArray();
+                                                            $restrictions = Instructor::all()->pluck('faculty_name', 'faculty_name')->toArray();
                                                             break;
                                                         default:
                                                             // Handle unknown scope or other cases
@@ -265,12 +271,16 @@ class Schedules extends Page implements HasForms, HasTable
                     })
                 ])
             ->headerActions([
+                Action::make('Create Class')
+                    ->label('Go to Custom Page')
+                    ->url(route('filament.pages.create-schedule'))
+                    ->openUrlInNewTab(false),
                 CreateAction::make('Create Class')
                     ->modelLabel('Class')
                     ->label('Add Class')
                     ->steps([
                         Step::make('Class Information')
-                            ->model(TaClass::class)
+                            ->model(Classes::class)
                             ->columns(4)
                             ->schema([
                                 Components\TextInput::make('class_id')
@@ -356,7 +366,7 @@ class Schedules extends Page implements HasForms, HasTable
                                 ])
                                 ->afterValidation(function ($get, $set) {
                                     
-                                    $exists = TaClass::query()
+                                    $exists = Classes::query()
                                     ->where('id', '=', $get('id'))
                                     ->where('instructor_id', '=', $get('instructor_id'))
                                     ->where('section', '=', $get('section'))
@@ -378,7 +388,7 @@ class Schedules extends Page implements HasForms, HasTable
                                     }
 
                                     if (!$exists){
-                                        $fields = TaClass::create([
+                                        $fields = Classes::create([
                                             'id' => $get('id'),
                                             'instructor_id' => $get('instructor_id'),
                                             'section' => $get('section'),
@@ -455,7 +465,7 @@ class Schedules extends Page implements HasForms, HasTable
                                     $day = $schedule['day'];
                                     $start = $schedule['start_time'];
                                     $end = $schedule['end_time'];
-                                    $mode = Mode::query()->where('mode_id', '=', $schedule['mode_id'])->value('mode_code');
+                                    $mode = ClassMode::query()->where('mode_id', '=', $schedule['mode_id'])->value('mode_code');
                                     $room = Room::query()->where('room_id', '=', $schedule['room_id'])->value('room_name');
                                     $name = $day[0] . ' ' . $start . ' - ' . $end . ' ' . $mode . ' ' . $room;
 
@@ -534,7 +544,7 @@ class Schedules extends Page implements HasForms, HasTable
                                                             }
                                                             break;
                                                         case 'user':
-                                                            $restrictions = InstructorProfile::all()->pluck('faculty_name', 'faculty_name')->toArray();
+                                                            $restrictions = Instructor::all()->pluck('faculty_name', 'faculty_name')->toArray();
                                                             break;
                                                         default:
                                                             // Handle unknown scope or other cases
@@ -597,9 +607,13 @@ class Schedules extends Page implements HasForms, HasTable
     public function print()
     {
         // Example: Fetch assignments data
-        $assignments = TAclass::all();
+        $assignments = Classes::all();
         return view('filament.document.teaching-assignment', compact('assignments'));
     }
 
+    public function create()
+    {
+        return view('filament.pages.schedules.create');
+    }
     
 }

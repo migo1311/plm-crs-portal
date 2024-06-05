@@ -17,7 +17,7 @@ class StudentFactory extends Factory
     public function definition(): array
     {
         $aysem = \App\Models\Aysem::all()->random();
-        $aysemyear = $aysem->year;
+        $aysemyear = $aysem->academic_year;
 
         $middlename = $this->faker->lastName;
 

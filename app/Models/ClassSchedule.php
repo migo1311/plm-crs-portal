@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class ClassSchedule extends Model
 {
     use HasFactory;
-
+// 
     protected $fillable = [
         'class_id',
         'day_id',
@@ -32,5 +32,10 @@ class ClassSchedule extends Model
     public function room()
     {
         return $this->belongsTo(Room::class);
+    }
+
+    public function day()
+    {
+        return $this->belongsTo(Days::class);
     }
 }

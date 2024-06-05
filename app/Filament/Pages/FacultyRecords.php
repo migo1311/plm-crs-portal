@@ -2,7 +2,7 @@
 
 namespace App\Filament\Pages;
 
-use App\Models\InstructorProfile;
+use App\Models\Instructor;
 use Filament\Forms\Components;
 use Filament\Forms\Form;
 use Filament\Pages\Page;
@@ -18,7 +18,7 @@ class FacultyRecords extends Page implements HasForms
     protected static ?string $navigationGroup = 'Utilities';
 
     public ?array $data = [];
-    public InstructorProfile $instructorProfile;
+    public Instructor $instructorProfile;
 
     public function mount(): void
     {
@@ -29,13 +29,13 @@ class FacultyRecords extends Page implements HasForms
     {
         return $form
             ->columns(4)
-            ->model(InstructorProfile::class)
+            ->model(Instructor::class)
             ->schema([
                 Components\Section::make('Personal Details')
                     ->schema([
                         Components\Select::make('instructor_id')
                             ->label('Employee Number')
-                            ->options(InstructorProfile::all()->pluck('instructor_id', 'instructor_id')->toArray())
+                            ->options(Instructor::all()->pluck('instructor_id', 'instructor_id')->toArray())
                             ->searchable()
                             ->required(),
                         Components\TextInput::make('last_name')
@@ -55,7 +55,7 @@ class FacultyRecords extends Page implements HasForms
                             ->columnSpan(2),
                         Components\DatePicker::make('birth_date')
                             ->required(),
-                        Components\Select::make('pedigree')
+                        Components\Select::make('suffix')
                             ->options([
                                 'Atty.' => 'Atty.',
                                 'N/A' => 'N/A',
@@ -154,7 +154,7 @@ class FacultyRecords extends Page implements HasForms
         $formData = $this->form->getState();
 
         // Retrieve the InstructorProfile record based on the instructor_id
-        $instructorProfile = InstructorProfile::findOrFail($formData['instructor_id']);
+        $instructorProfile = Instructor::findOrFail($formData['instructor_id']);
 
         // Update the fields of the retrieved InstructorProfile with the form data
         $instructorProfile->update($formData);

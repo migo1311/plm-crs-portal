@@ -21,7 +21,7 @@ class BlockFactory extends Factory
     public function definition(): array
     {
         $programid = Program::all()->random()->id;
-        $aysemid = Aysem::all()->random()->id;
+        $aysemid = Aysem::all()->last()->id;
         $blockid = intval($aysemid . $this->faker->unique(true)->randomNumber(6, true));
         
         $yearLevel = $this->faker->unique(true)->numberBetween(1, 5);
