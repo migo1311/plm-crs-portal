@@ -19,6 +19,7 @@ class Grade extends Model
         'finalization_date',
         'completion_grade',
         'remark_id',
+        'class_id',
     ];
 
     public function classStudent(): BelongsTo
@@ -29,5 +30,15 @@ class Grade extends Model
     public function remark(): BelongsTo
     {
         return $this->belongsTo(Remark::class, 'remark_id', 'remark_id');
+    }
+
+    public function class()
+    {
+        return $this->belongsTo(TaClass::class, 'class_id');
+    }
+
+    public function course()
+    {
+        return $this->belongsTo(Course::class, 'course_id');
     }
 }

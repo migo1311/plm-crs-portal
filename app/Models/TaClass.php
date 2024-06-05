@@ -77,4 +77,6 @@ class TaClass extends Model
     {
         return $this->hasMany(ClassRestriction::class, 'class_id', 'class_id');
     }
+
+
 }

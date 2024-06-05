@@ -149,9 +149,7 @@
                 @endif
 
                 @if ($selectedStudentId && $hasChecklist)
-                    <div>
-                        @livewire('b-s-c-sgrades', ['studentId' => $selectedStudentId], key('bscs-grades-' . $selectedStudentId))
-                    </div>
+                <livewire:grades :student_id="$selectedStudentId" />
                 @endif
 
             </div>

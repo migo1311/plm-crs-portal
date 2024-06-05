@@ -21,6 +21,7 @@ class StudyPlan extends Component
     public $totalUnits72 = 0;
     public $totalUnits62 = 0;
     public $totalUnits22 = 0;
+    public $totalUnits21 = 0;
     public $units;
     public $studentName;
     public $yearlvl;
@@ -43,6 +44,7 @@ class StudyPlan extends Component
         $this->updateTotalUnits72();
         $this->updateTotalUnits62();
         $this->updateTotalUnits22();
+        $this->updateTotalUnits21();
     }
 
     public function updateStudentId($student_id)
@@ -75,8 +77,8 @@ class StudyPlan extends Component
     public function getDisplayedCourseCodes()
     {
         $courseCodes = $this->courses->filter(function ($course) {
-            return in_array(trim($course->class_code), $this->allowedCourseCodes);
-        })->pluck('class_code');
+            return in_array(trim($course->course_id), $this->allowedCourseCodes);
+        })->pluck('course_id');
 
         return $courseCodes;
     }
@@ -136,6 +138,7 @@ class StudyPlan extends Component
             'hasYear3' => $hasYear3,
             'hasYear4' => $hasYear4,
             'totalUnits32' => $this->totalUnits32,
+            'totalUnits21' => $this->totalUnits21,
             'totalUnits42' => $this->totalUnits42,
             'totalUnits72' => $this->totalUnits72,
             'totalUnits62' => $this->totalUnits62,
@@ -151,45 +154,61 @@ class StudyPlan extends Component
     private function updateTotalUnits32()
     {
         $this->totalUnits32 = $this->courses
-            ->whereIn('class_code', $this->allowedCourseCodes)
-            ->where('year_lvl', 3)
-            ->where('sem', 1)
+            ->filter(function ($course) {
+                return $course->aysem && $course->aysem->academic_year_id === 3 && $course->aysem->semester_index === 1;
+            })
+            ->whereIn('course_id', $this->allowedCourseCodes)
+            ->sum('units');
+    }
+
+    private function updateTotalUnits21()
+    {
+        $this->totalUnits21 = $this->courses
+            ->filter(function ($course) {
+                return $course->aysem && $course->aysem->academic_year_id === 2 && $course->aysem->semester_index === 1;
+            })
+            ->whereIn('course_id', $this->allowedCourseCodes)
             ->sum('units');
     }
 
     private function updateTotalUnits42()
     {
         $this->totalUnits42 = $this->courses
-            ->whereIn('class_code', $this->allowedCourseCodes)
-            ->where('year_lvl', 3)
-            ->where('sem', 2)
+            ->filter(function ($course) {
+                return $course->aysem && $course->aysem->academic_year_id === 3 && $course->aysem->semester_index === 2;
+            })
+            ->whereIn('course_id', $this->allowedCourseCodes)
             ->sum('units');
     }
 
     private function updateTotalUnits72()
     {
         $this->totalUnits72 = $this->courses
-            ->whereIn('class_code', $this->allowedCourseCodes)
-            ->where('year_lvl', 4)
-            ->where('sem', 1)
+            ->filter(function ($course) {
+                return $course->aysem && $course->aysem->academic_year_id === 4 && $course->aysem->semester_index === 1;
+            })
+            ->whereIn('course_id', $this->allowedCourseCodes)
             ->sum('units');
     }
+
 
     private function updateTotalUnits62()
     {
         $this->totalUnits62 = $this->courses
-            ->whereIn('class_code', $this->allowedCourseCodes)
-            ->where('year_lvl', 4)
-            ->where('sem', 2)
+            ->filter(function ($course) {
+                return $course->aysem && $course->aysem->academic_year_id === 4 && $course->aysem->semester_index === 2;
+            })
+            ->whereIn('course_id', $this->allowedCourseCodes)
             ->sum('units');
     }
 
     private function updateTotalUnits22()
     {
         $this->totalUnits22 = $this->courses
-            ->whereIn('class_code', $this->allowedCourseCodes)
-            ->where('year_lvl', 2)
-            ->where('sem', 2)
+            ->filter(function ($course) {
+                return $course->aysem && $course->aysem->academic_year_id === 2 && $course->aysem->semester_index === 2;
+            })
+            ->whereIn('course_id', $this->allowedCourseCodes)
             ->sum('units');
     }
 }

@@ -29,6 +29,8 @@ return new class extends Migration
             $table->foreignId('remark_id')
                     ->nullable()
                     ->constrained('remarks', 'remark_id');
+            $table->foreignId('class_id')->constrained('ta_classes', 'class_id')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('student_id')->constrained('students', 'student_id')->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();
         });
     }
@@ -38,6 +40,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('grades');
+        Schema::table('grades', function (Blueprint $table) {
+                $table->dropForeign(['class_id']);
+                $table->dropForeign(['student_id']);
+            });
     }
 };

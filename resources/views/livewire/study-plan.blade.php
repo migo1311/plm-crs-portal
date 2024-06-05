@@ -10,17 +10,42 @@
                 <thead style="background-color: #f8f8f8">
                     <tr>
                     <th>Course Code</th>
-                    <th>Course Name</th>
+                     
                     <th>Units</th>
                     <th>Pre(Co)-Requisites</th>
                     </tr>
                 </thead>  
                 <tbody id="tableBody">
+                @foreach ($courses as $course)
+                    @if (in_array(trim($course->course_id), $allowedCourseCodes))
+                        @php
+                            // Fetch the corresponding aysem record
+                            $aysem = \App\Models\Aysem::find($course->aysem_id);
+                        @endphp
+
+                        @if ($aysem->academic_year_id === 2 && $aysem->semester_index === 1)
+                            <tr id="row_{{ $course->id }}">
+                                <td>{{ $course->course_number }}</td>
+                                <td>{{ $course->units }}</td>
+                                <td>{{ $course->pre_requisites }}</td>
+                            </tr>
+                        @endif
+                    @endif
+                @endforeach
                 </tbody>
                 </table>
             </div>
             </div>
-            <span id="totalUnits"></span>
+            <span id="totalUnits21">
+                {{ $totalUnits21 }}
+                @if ($totalUnits21 < 10)
+                    <span class="badge badge-success">Underload</span>
+                @elseif ($totalUnits21 >= 10 && $totalUnits21 <= 13)
+                    <span class="badge badge-primary">Normal Load</span>
+                @else
+                    <span class="badge badge-danger">Overload</span>
+                @endif
+            </span>
         
             <h1>2nd Year 2nd Semester</h1>
         
@@ -31,21 +56,29 @@
         
                 <thead style="background-color: #f8f8f8">
                     <th>Course Code</th>
-                    <th>Course Name</th>
                     <th>Units</th>
                     <th>Pre(Co)-Requisites</th>
                     </tr>
                 </thead>  
                 <tbody id="tableBody22">
                 @foreach ($courses as $course)
-                    @if (in_array(trim($course->class_code), $allowedCourseCodes))
-                        <tr id="row_{{ $course->id }}">
-                            <td>{{ $course->class_code }}</td>
-                            <td>{{ $course->subject_title }}</td>
-                            <td>{{ $course->units }}</td>
-                        </tr>
+                    @if (in_array(trim($course->course_id), $allowedCourseCodes))
+                        @php
+                            // Fetch the corresponding aysem record
+                            $aysem = \App\Models\Aysem::find($course->aysem_id);
+                        @endphp
+
+                        @if ($aysem->academic_year_id === 2 && $aysem->semester_index === 2)
+                            <tr id="row_{{ $course->id }}">
+                                <td>{{ $course->course_number }}</td>
+                                <td>{{ $course->units }}</td>
+                                <td>{{ $course->pre_requisites }}</td>
+                                <td>{{ $aysem->semester_index }}</td>
+                            </tr>
+                        @endif
                     @endif
                 @endforeach
+
                 </tbody>
                 </table>
             </div>
@@ -73,19 +106,27 @@
         
                 <thead style="background-color: #f8f8f8">
                     <th>Course Code</th>
-                    <th>Course Name</th>
+                     
                     <th>Units</th>
                     <th>Pre(Co)-Requisites</th>
                     </tr>
                 </thead> 
-                @foreach ($courses->where('year_lvl', 3)->where('sem', 1)->whereIn('course_number', $allowedCourseCodes) as $course)
-                        <tr id="row_{{ $course->id }}">
-                            <td>{{ $course->course_number }}</td>
-                            <td>{{ $course->subject_title }}</td>
-                            <td>{{ $course->units }}</td>
-                              
-                        </tr>
-                    @endforeach
+                @foreach ($courses as $course)
+                    @if (in_array(trim($course->course_id), $allowedCourseCodes))
+                        @php
+                            // Fetch the corresponding aysem record
+                            $aysem = \App\Models\Aysem::find($course->aysem_id);
+                        @endphp
+
+                        @if ($aysem->academic_year_id === 3 && $aysem->semester_index === 1)
+                            <tr id="row_{{ $course->id }}">
+                                <td>{{ $course->course_number }}</td>
+                                <td>{{ $course->units }}</td>
+                                <td>{{ $course->pre_requisites }}</td>
+                            </tr>
+                        @endif
+                    @endif
+                @endforeach
                 </tbody>
                 </table>
             </div>
@@ -110,20 +151,28 @@
                 <thead style="background-color: #f8f8f8">
                     <tr>
                     <th>Course Code</th>
-                    <th>Course Name</th>
+                     
                     <th>Units</th>
                     <th>Pre(Co)-Requisites</th>
                     </tr>
                 </thead>  
                 <tbody id="tableBody42">
-                @foreach ($courses->where('year_lvl', 3)->where('sem', 2)->whereIn('course_number', $allowedCourseCodes) as $course)
-                        <tr id="row_{{ $course->id }}">
-                            <td>{{ $course->course_number }}</td>
-                            <td>{{ $course->subject_title }}</td>
-                            <td>{{ $course->units }}</td>
-                              
-                        </tr>
-                    @endforeach
+                @foreach ($courses as $course)
+                    @if (in_array(trim($course->course_id), $allowedCourseCodes))
+                        @php
+                            // Fetch the corresponding aysem record
+                            $aysem = \App\Models\Aysem::find($course->aysem_id);
+                        @endphp
+
+                        @if ($aysem->academic_year_id === 3 && $aysem->semester_index === 2)
+                            <tr id="row_{{ $course->id }}">
+                                <td>{{ $course->course_number }}</td>
+                                <td>{{ $course->units }}</td>
+                                <td>{{ $course->pre_requisites }}</td>
+                            </tr>
+                        @endif
+                    @endif
+                @endforeach
                 </tbody>
                 </table>
             </div>
@@ -152,19 +201,27 @@
                         <thead style="background-color: #f8f8f8">
                             <tr>
                                 <th>Course Code</th>
-                                <th>Course Name</th>
+                                 
                                 <th>Units</th>
                                 <th>Pre(Co)-Requisites</th>
                             </tr>
                         </thead>  
                         <tbody id="tableBody72">
-                        @foreach ($courses->where('year_lvl', 4)->where('sem', 1)->whereIn('course_number', $allowedCourseCodes) as $course)
-                        <tr id="row_{{ $course->id }}">
-                            <td>{{ $course->course_number }}</td>
-                            <td>{{ $course->subject_title }}</td>
-                            <td>{{ $course->units }}</td>
-                              
-                        </tr>
+                        @foreach ($courses as $course)
+                            @if (in_array(trim($course->course_id), $allowedCourseCodes))
+                                @php
+                                    // Fetch the corresponding aysem record
+                                    $aysem = \App\Models\Aysem::find($course->aysem_id);
+                                @endphp
+
+                                @if ($aysem->academic_year_id === 4 && $aysem->semester_index === 1)
+                                    <tr id="row_{{ $course->id }}">
+                                        <td>{{ $course->course_number }}</td>
+                                        <td>{{ $course->units }}</td>
+                                        <td>{{ $course->pre_requisites }}</td>
+                                    </tr>
+                                @endif
+                            @endif
                         @endforeach
                         </tbody>
                     </table>
@@ -191,19 +248,27 @@
                         <thead style="background-color: #f8f8f8">
                             <tr>
                                 <th>Course Code</th>
-                                <th>Course Name</th>
+                                 
                                 <th>Units</th>
                                 <th>Pre(Co)-Requisites</th>
                             </tr>
                         </thead>  
                         <tbody id="tableBody62">
-                        @foreach ($courses->where('year_lvl', 4)->where('sem', 2)->whereIn('course_number', $allowedCourseCodes) as $course)
-                        <tr id="row_{{ $course->id }}">
-                            <td>{{ $course->course_number }}</td>
-                            <td>{{ $course->subject_title }}</td>
-                            <td>{{ $course->units }}</td>
-                              
-                        </tr>
+                        @foreach ($courses as $course)
+                            @if (in_array(trim($course->course_id), $allowedCourseCodes))
+                                @php
+                                    // Fetch the corresponding aysem record
+                                    $aysem = \App\Models\Aysem::find($course->aysem_id);
+                                @endphp
+
+                                @if ($aysem->academic_year_id === 4 && $aysem->semester_index === 2)
+                                    <tr id="row_{{ $course->id }}">
+                                        <td>{{ $course->course_number }}</td>
+                                        <td>{{ $course->units }}</td>
+                                        <td>{{ $course->pre_requisites }}</td>
+                                    </tr>
+                                @endif
+                            @endif
                         @endforeach
                         </tbody>
                     </table>
