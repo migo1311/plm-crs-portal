@@ -3,7 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Classes;
-use App\Models\TaClass;
+use App\Models\Grade;
 
 class ClassStudentObserver
 {
@@ -17,6 +17,18 @@ class ClassStudentObserver
             if ($class) {
                 $class->updateStudentsQuantity();
             }
+
+            // Create a new Grade record
+            Grade::create([
+                'student_no' => $model->student_no,
+                'class_id' => $model->class_id,
+                'grade' => null,
+                'remarks' => "No grade yet",
+                'completion_grade' => null, 
+                'submitted_date' => null,
+                'finalization_date' => null,
+                'updated_by' => null,
+            ]);
         }
     }
 

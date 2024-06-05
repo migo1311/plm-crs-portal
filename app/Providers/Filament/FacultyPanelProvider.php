@@ -2,6 +2,8 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Pages\Auth\Login;
+use App\Http\Middleware\VerifyIsFaculty;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -23,9 +25,10 @@ class FacultyPanelProvider extends PanelProvider
     public function panel(Panel $panel): Panel
     {
         return $panel
+            ->default()
             ->id('faculty')
-            ->path('faculty')
-            ->login(Pages\Auth\Login::class)
+            ->path('/')
+            ->login(Login::class)
             ->colors([
                 'primary' => Color::Blue,
             ])
@@ -48,6 +51,7 @@ class FacultyPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+                // VerifyIsFaculty::class,
             ])
             ->authMiddleware([
                 Authenticate::class,

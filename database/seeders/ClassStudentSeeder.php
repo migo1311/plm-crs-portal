@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Student;
 use App\Models\Classes;
+use App\Models\Grade;
 use Filament\Forms\Components\Tabs\Tab;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -15,11 +16,11 @@ class ClassStudentSeeder extends Seeder
      */
     public function run(): void
     {
-        $classes = Classes::all();
-        $students = Student::all();
+        $classes = Classes::all()->random(1);
+        $students = Student::all()->random(1);
 
         foreach ($students as $student) {
-            $classIds = $classes->random(rand(1, 3))->pluck('id');
+            $classIds = $classes->pluck('id');
             $student->classes()->attach($classIds);
 
             foreach ($classIds as $classId) {
@@ -27,6 +28,8 @@ class ClassStudentSeeder extends Seeder
                 if ($class) {
                     $class->updateStudentsQuantity();
                 }
+
+                
             }
         }
         
