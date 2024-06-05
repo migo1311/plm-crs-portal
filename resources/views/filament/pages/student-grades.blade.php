@@ -10,7 +10,7 @@
                     Reset
                 </button>
             </div>
-        </form>
+        </form> 
     </div>
 
     <div class="mt-4 text-center font-bold text-2xl">

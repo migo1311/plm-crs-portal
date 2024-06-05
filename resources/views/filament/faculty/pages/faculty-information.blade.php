@@ -1,9 +1,4 @@
 <x-filament-panels::page>
-    <div class="mt-1 justify-end flex items-end h-full">
-        <button type="submit" class="inline-flex items-center px-4 py-2 mt-1 text-sm font-medium text-white border border-transparent rounded-md shadow-sm hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500" style="background-color: gold;">
-            Edit
-        </button>
-    </div>
 
     <div class="container mx-auto">
         <div class="bg-white shadow overflow-hidden sm:rounded-lg">
@@ -22,7 +17,7 @@
                             Faculty No.
                         </dt>
                         <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                            {{ $faculty->faculty_no }}
+                            {{ $instructor->id }}
                         </dd>
                     </div>
                     <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -62,7 +57,7 @@
                             College
                         </dt>
                         <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                            {{ $faculty->college }}
+                            {{ $college }}
                         </dd>
                     </div>
                     <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -70,7 +65,7 @@
                             Mobile Number
                         </dt>
                         <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                            {{ $faculty->mobile_number }}
+                            {{ $instructor->mobile_phone }}
                         </dd>
                     </div>
                     <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
