@@ -29,11 +29,11 @@ class StudentTermFactory extends Factory
         return [
             'student_id' => $student,
             'college_id' => \App\Models\College::all()->random()->college_id,
-            'program_id' => $this->faker->randomElement([2, 3, 4]),
+            'program_id' => 2,
             'academic_year' => $aysem->academicYear->academic_year_code,
             'semester' => $aysem->semester_code,
             'aysem_id' => $aysemid,
-            'block_id' => \App\Models\Block::all()->random()->block_id,
+            // 'block_id' => \App\Models\Block::all()->random()->block_id,
             'year_level' => $this->faker->numberBetween(1, 5),
             'registration_status' => $this->faker->randomElement(['Regular', 'Irregular']),
             'student_type' => $this->faker->randomElement(['New', 'Old', 'Transferee', 'Shifter']),
