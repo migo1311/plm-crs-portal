@@ -37,7 +37,11 @@ class AdminPanelProvider extends PanelProvider
                 NavigationGroup::make()
                      ->label('Print Forms'),
                 NavigationGroup::make()
-                    ->label('Utilities')
+                    ->label('Utilities'),
+                NavigationGroup::make()
+                    ->label('Enrollment'),
+                NavigationGroup::make()
+                    ->label('Transactions'),
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')

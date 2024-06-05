@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Remark;
 use App\Models\User;
+use App\Models\Student;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -34,5 +35,9 @@ class DatabaseSeeder extends Seeder
         // $this->call([BlockClassSeeder::class]);
         // $this->call([ScheduleSeeder::class]);
         // $this->call([StudentTermSeeder::class]);
+
+        
+
+        \App\Models\StudyPlanValidations::factory(10)->create();
     }
 }
