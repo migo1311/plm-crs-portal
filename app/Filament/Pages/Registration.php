@@ -3,7 +3,7 @@
 namespace App\Filament\Pages;
 
 use App\Models\Block;
-use App\Models\TaClass;
+use App\Models\Classes;
 use App\Models\Student;
 use Filament\Pages\Page;
 use Filament\Forms\Components;
@@ -62,7 +62,7 @@ class Registration extends Page implements HasForms, HasTable
     public static function table(Table $table): Table
     {
         return $table
-            ->query(TaClass::query())
+            ->query(Classes::query())
             ->columns([
                 CheckboxColumn::make('selected')
                     ->label('Select')
@@ -76,7 +76,7 @@ class Registration extends Page implements HasForms, HasTable
                 TextColumn::make('classSchedules.schedule_name')
                     ->label('Schedule')
                     ->sortable(),
-                TextColumn::make('taClass.credited_units')
+                TextColumn::make('classSchedules.credited_units')
                     ->label('Credits'),
             ]);
     }

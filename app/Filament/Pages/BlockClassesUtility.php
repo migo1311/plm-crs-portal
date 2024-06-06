@@ -3,7 +3,8 @@
 namespace App\Filament\Pages;
 
 use App\Models\Block;
-use App\Models\TaClass;
+use App\Models\Classes;
+use App\Models\Program;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
@@ -35,7 +36,7 @@ class BlockClassesUtility extends Page implements HasForms, HasTable
     public function form(Form $form): Form
     {
         return $form
-            ->model(TaClass::class)
+            ->model(Classes::class)
             ->schema([
                 Components\Select::make('block_id')
                 ->relationship('block', 'block_name')
@@ -50,12 +51,16 @@ class BlockClassesUtility extends Page implements HasForms, HasTable
 
     public function table(Table $table): Table
     {
+        // $block = Block::with('program')->where('block_id', '=', $this->data);
+        // $programCode = $block->program->program_code;
+        // $yearLevel = $block->year_level;
+        // $section = $block->section;
+        // $blockId = $block->id;
+        // $formattedString = "{$programCode} {$yearLevel}-{$section} ({$blockId})";
 
         return $table
-            ->query(TaClass::query()->whereHas('blocks', function ($query) {
-                $query->where('blocks.block_id', '=', $this->data);
-            }))
-            ->heading(Block::query()->where('block_id', '=', $this->data)->get('block_name')->value('block_name'))
+            ->query(Classes::query()->where('block_id', '=', $this->data))
+            // ->heading($formattedString)
             ->columns([
                 TextColumn::make('class_id')
                     ->label('Class ID')

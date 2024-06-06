@@ -38,6 +38,7 @@ class StudentRecords extends Page implements HasForms
             ->columns(4)
             ->schema([
                 Components\Section::make('Select')
+                    ->columns(2)
                     ->schema([
                         Components\Select::make('student_no')
                             ->label('Student Number')
@@ -60,10 +61,10 @@ class StudentRecords extends Page implements HasForms
                             ->label('Ay-Sem')
                             ->required()
                             ->disabled(true),
-                        Components\TextInput::make('program_id')
+                        Components\TextInput::make('studentTerms.program.program_code')
                             ->label('Program')
                             ->required(),
-                        Components\Select::make('block_id')
+                        Components\Select::make('studentTerms.block_id')
                             ->label('Block')
                             ->options([
                                 '1' => '1',
@@ -72,13 +73,13 @@ class StudentRecords extends Page implements HasForms
                                 '4' => '4',
                             ])
                             ->required(),
-                        Components\TextInput::make('college_id')
+                        Components\TextInput::make('studentTerms.college_id')
                             ->label('College')
                             ->required(),
-                        Components\TextInput::make('registration_status')
+                        Components\TextInput::make('studentTerms.registration_status')
                             ->label('Registration Status')
                             ->disabled(true),
-                        Components\Select::make('student_type')
+                        Components\Select::make('studentTerms.student_type')
                             ->options([
                                 'old' => 'Old',
                                 'new' => 'New',
@@ -86,10 +87,10 @@ class StudentRecords extends Page implements HasForms
                                 'shifter' => 'Shifter',
                             ])
                             ->required(),
-                        Components\TextInput::make('graduating')
+                        Components\TextInput::make('studentTerms.graduating')
                             ->label('Graduating') // Set default value to 'no'
                             ->disabled(true),
-                        Components\Select::make('year level')
+                        Components\Select::make('studentTerms.year_level')
                             ->options([
                                 '1' => '1',
                                 '2' => '2',
@@ -129,12 +130,10 @@ class StudentRecords extends Page implements HasForms
                             ->required()
                             ->disabled(true),
                         Components\TextInput::make('mobile_no')
-                            ->label('Mobile Number')
-                            ->disabled(true),
+                            ->label('Mobile Number'),
                         Components\TextInput::make('personal_email')
                             ->label('Email Address')
-                            ->columnSpan(2)
-                            ->disabled(true),
+                            ->columnSpan(2),
                     ]),
             ])
             ->statePath('data');
@@ -151,6 +150,8 @@ class StudentRecords extends Page implements HasForms
     public function create()
     {
         $this->validate();
+
+        dd($this->data);
 
         $formData = $this->form->getState();
 
