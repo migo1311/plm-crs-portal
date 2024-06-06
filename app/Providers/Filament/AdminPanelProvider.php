@@ -32,7 +32,7 @@ class AdminPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::Blue,
             ])
-            ->favicon('images/image_plm.png')
+            ->favicon('img/image_plm.png')
             ->navigationGroups([
                 NavigationGroup::make()
                      ->label('Print Forms'),

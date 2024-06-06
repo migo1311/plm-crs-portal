@@ -35,7 +35,7 @@ class FacultyLoading extends Page implements HasForms, HasTable
                 Components\Select::make('aysem_id')
                     ->label('Select')
                     ->placeholder('AYSEM')
-                    ->options(Aysem::all()->pluck('aysem_id', 'aysem_id')->toArray())
+                    ->options(Aysem::all()->pluck('id', 'id')->toArray())
                     ->required(),
             ]);
     }

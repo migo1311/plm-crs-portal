@@ -1,1 +1,1 @@
-<img src="{{ asset('images/plm-with-header.png') }}" alt="Log" class="h-15">
+<img src="{{ asset('img' . '/' . 'plm-with-header.png') }}" alt="Logo" class="h-15">        
