@@ -151,11 +151,10 @@ class StudentRecords extends Page implements HasForms
     {
         $this->validate();
 
-        dd($this->data);
-
         $formData = $this->form->getState();
 
         $studentProfile = null;
+        
         if (isset($formData['student_no'])) {
             $studentProfile = Student::findOrFail($formData['student_no']);
         } else {

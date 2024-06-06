@@ -4,6 +4,7 @@ namespace App\Filament\Pages;
 
 use App\Models\BiologicalSex;
 use App\Models\Citizenship;
+use App\Models\City;
 use App\Models\CivilStatus;
 use App\Models\Instructor;
 use Filament\Forms\Components;
@@ -47,9 +48,9 @@ class FacultyRecords extends Page implements HasForms
                         Components\TextInput::make('first_name')->label('First Name')->required(),
                         Components\TextInput::make('middle_name')->label('Middle Name'),
                         Components\TextInput::make('maiden_name')->label('Maiden Name')->columnSpan(2),
-                        Components\TextInput::make('birth_place_id')->label('Birth Place (Province-City)')->required()->columnSpan(2),
                         Components\DatePicker::make('birth_date')->required(),
-                        Components\Select::make('pedigree')->options(['Atty.' => 'Atty.', 'N/A' => 'N/A'])->required(),
+                        Components\Select::make('pedigree')
+                            ->options(['Jr.' => 'Jr.', 'N/A' => 'N/A', 'I' => 'I', 'II' => 'II', 'III'])->required(),
                         Components\Select::make('biological_sex')->options(BiologicalSex::all()->pluck('sex', 'sex')->toArray())->searchable()->required(),
                         Components\Select::make('civil_status')->options(CivilStatus::all()->pluck('civil_status', 'civil_status')->toArray())->searchable()->required(),
                         Components\Select::make('citizenship')->options(Citizenship::all()->pluck('citizenship', 'citizenship')->toArray())->searchable()->required(),
@@ -86,7 +87,9 @@ class FacultyRecords extends Page implements HasForms
                                 Components\TextInput::make('zip_code')->required()->columnSpan(1),
                                 Components\TextInput::make('phone_number')->required()->columnSpan(1),
                             ]),
-                        Components\TextInput::make('province_city')->required()->columnSpanFull(),
+                        Components\Select::make('city_id')
+                            ->options(City::all()->pluck('city_name', 'id'))
+                            ->columnSpanFull(),
                     ])
             ])
             ->statePath('data');
