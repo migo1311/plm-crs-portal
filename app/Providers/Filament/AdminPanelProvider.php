@@ -26,9 +26,8 @@ class AdminPanelProvider extends PanelProvider
     public function panel(Panel $panel): Panel
     {
         return $panel
-            ->id('college')
-            ->path('/crs')
-            ->login(Login::class)
+            ->id('admin')
+            ->path('/')
             ->colors([
                 'primary' => Color::Blue,
             ])
@@ -46,7 +45,6 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
-                Widgets\AccountWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
@@ -59,9 +57,6 @@ class AdminPanelProvider extends PanelProvider
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
                 // VerifyIsCollege::class,
-            ])
-            ->authMiddleware([
-                Authenticate::class,
             ]);
     }
 }

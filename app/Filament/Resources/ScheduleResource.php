@@ -143,13 +143,13 @@ class ScheduleResource extends Resource
                     ->label('')
                     ->schema([
                         Components\Repeater::make('faculty')
-                        ->columnSpanFull()
-                        ->schema([
-                            Components\Select::make('instructor_id')
-                                ->label('')
-                                ->relationship('instructor', 'faculty_name')
-                                ->required(),                            
-                        ])
+                            ->columnSpanFull()
+                            ->schema([
+                                Components\Select::make('instructor_id')
+                                    ->label('')
+                                    ->relationship('instructor', 'faculty_name')
+                                    ->required(),                            
+                            ])
                     ]),
                 Section::make('Schedule')
                     ->model(ClassSchedule::class)
@@ -281,7 +281,7 @@ class ScheduleResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                // Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

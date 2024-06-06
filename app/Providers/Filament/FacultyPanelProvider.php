@@ -27,8 +27,7 @@ class FacultyPanelProvider extends PanelProvider
         return $panel
             ->default()
             ->id('faculty')
-            ->path('/')
-            ->login(Login::class)
+            ->path('/faculty')
             ->colors([
                 'primary' => Color::Blue,
             ])
@@ -39,7 +38,7 @@ class FacultyPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Faculty/Widgets'), for: 'App\\Filament\\Faculty\\Widgets')
             ->widgets([
-                Widgets\AccountWidget::class,
+                // Widgets\AccountWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,

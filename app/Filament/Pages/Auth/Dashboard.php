@@ -6,5 +6,5 @@ use Filament\Facades\Filament;
 
 class Dashboard extends \Filament\Pages\Dashboard
 {
-    
+       
 }
