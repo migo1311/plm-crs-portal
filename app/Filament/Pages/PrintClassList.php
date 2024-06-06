@@ -2,9 +2,9 @@
 
 namespace App\Filament\Pages;
 
-use App\Models\InstructorProfile;
+use App\Models\Instructor;
 use App\Models\Aysem;
-use App\Models\TaClass;
+use App\Models\Classes;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Forms\Form;
@@ -41,13 +41,12 @@ class PrintClassList extends Page implements HasForms, HasTable
                 Components\Select::make('aysem_id')
                     ->label('Aysem')
                     ->placeholder('Select year-sem (e.g., 20211)')
-                    ->options(Aysem::all()->pluck('aysem_id', 'aysem_id')->toArray())
+                    ->options(Aysem::all()->pluck('id', 'id')->toArray())
                     ->searchable()
                     ->required(),
                 Components\Select::make('last_name')
                     ->label('Surname')
-                    ->placeholder('Select Last Name')
-                    ->options(InstructorProfile::all()->pluck('last_name', 'last_name')->toArray())
+                    ->options(Instructor::all()->pluck('last_name', 'last_name')->toArray())
                     ->searchable()
                     ->required(),
             ])->statePath('array');
@@ -56,7 +55,7 @@ class PrintClassList extends Page implements HasForms, HasTable
     public function table(Table $table): Table
     {
     return $table
-        ->query(TaClass::query()->where('aysem_id', '=', $this->array['aysem_id']))
+        ->query(Classes::query()->where('aysem_id', '=', $this->array['aysem_id']))
         ->columns([
             TextColumn::make('course.subject_code')
                 ->label('Subject Code'),

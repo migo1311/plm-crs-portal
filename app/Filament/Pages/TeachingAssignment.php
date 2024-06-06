@@ -109,7 +109,7 @@ class TeachingAssignment extends Page implements HasForms, HasTable
             ])
             ->using(function (array $data, Model $record) {
 
-                dd($data);
+                // dd($data);
                 $record->update($data);
             })
         ]);

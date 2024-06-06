@@ -93,7 +93,7 @@ class GradeSheet extends Page implements HasForms, HasTable
                     ->action(function (Classes $record) 
                     {
                         $attributes = $record->getAttributes();
-                        $this->selectedClassId = $attributes['class_id']; // Check if the selected class is correct
+                        $this->selectedClassId = $attributes['id']; // Check if the selected class is correct
                         $this->showTable = false;
                         $this->showStudentGradesTable = true;
                         $this->students = $this->loadStudents();
@@ -110,8 +110,6 @@ class GradeSheet extends Page implements HasForms, HasTable
         $classStudents = Classes::whereHas('student', function($query)  {
             $query->where('class_id', $this->selectedClassId);
         })->with('student')->get();
-
-        dd($classStudents); 
         
         foreach ($classStudents as $classStudent) {
             $student = $classStudent->getAttributes();
@@ -144,8 +142,8 @@ class GradeSheet extends Page implements HasForms, HasTable
         foreach ($this->students as $classStudentIdx => $value) { // as index => array value
             
             // $classStudent = Classes::all()->find($classStudentIdx['class_id']);
-            $studentId = $value['student_id'];
-            $student = Student::query()->where('student_id', $studentId)->first()->getAttributes();
+            $studentId = $value['id'];
+            $student = Student::query()->where('student_no', $studentId)->first()->getAttributes();
             $name = $student['firstname'] . ' ' . $student['middleinitial'] . '. ' . $student['lastname'];
 
             $schema[$classStudentIdx] = (object) [

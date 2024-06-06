@@ -60,12 +60,19 @@ class ClassAssignments extends Page implements HasTable
                     ->label('')
                     ->placeholder('Academic Year')
                     ->options(function ($get) use ($classes) {
+                        $aysemOption = [];
+    
                         if ($get('aysem') === 'Current') {
-                            return [$classes->max('aysem_id') => $classes->max('aysem_id')];
+                            $maxAysemId = $classes->max('aysem_id');
+                            if ($maxAysemId) {
+                                $aysemOption[$maxAysemId] = $maxAysemId;
+                            }
                         } else {
                             $otherClasses = $classes->where('aysem_id', '!=', $classes->max('aysem_id'));
-                            return $otherClasses->pluck('aysem_id', 'aysem_id')->toArray();
+                            $aysemOption = $otherClasses->pluck('aysem_id', 'aysem_id')->toArray();
                         }
+    
+                        return $aysemOption ?: ['' => 'No Academic Year Available'];
                     })
                     ->default('Current')
                     ->live()

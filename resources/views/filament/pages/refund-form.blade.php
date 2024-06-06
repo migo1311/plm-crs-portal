@@ -1,5 +1,5 @@
 <x-filament-panels::page>
-<div class="p-6 rounded-md shadow-sm">
+    <div class="p-6 rounded-md shadow-sm">
         <form wire:submit.prevent="submitForm" method="post">
             {{ $this->form }}
             <div class="p-3 rounded-md shadow-sm">
@@ -12,9 +12,8 @@
 
     @if($submitted)
         <div class="mt-6">
-            <!-- You can customize this section with a new form or any other content to display after the form is submitted -->
-            <h2>Form Submitted Successfully</h2>
-            <p>Here you can render a new form or display a success message.</p>
+            <!-- Render the table here -->
+            {{ $this->table }}
         </div>
     @endif
 </x-filament-panels::page>
