@@ -29,15 +29,16 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('/')
             ->colors([
-                'primary' => Color::Blue,
+                'primary' => Color::Yellow,
             ])
             ->favicon('img/image_plm.png')
-            ->viteTheme('resources/css/filament/admin/theme.css')
+          	->brandLogo('img/plm-with-header.png')
+          	->brandLogoHeight('4rem')
             ->navigationGroups([
                 NavigationGroup::make()
-                     ->label('Forms'),
+                     ->label('Faculty Affairs'),
                 NavigationGroup::make()
-                    ->label('Utilities')
+                    ->label('Student Affairs')
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')

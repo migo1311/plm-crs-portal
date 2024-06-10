@@ -2,19 +2,59 @@
     <div class="text-center">
     </div>
 
-    {{-- Flex container for form and button --}}
-    <div class="flex justify-center items-center h-full">
-        {{-- Form --}}
-        <div>
+    <div class="p-6 rounded-md shadow-sm">
+        <form wire:submit.prevent="submitReport">
             {{ $this->form }}
-        </div>
-        {{-- Submit Button --}}
-        <div>
-            <button type="button" wire:click="submitForm" class="px-4 py-2 text-sm font-medium text-white border border-transparent rounded-md shadow-sm hover:bg-yellow-600 focus:ring-yellow-500" style="background-color: gold; margin-top: 30px">
-                Submit
-            </button>
+            <div class="p-3 rounded-md shadow-sm">
+                <button type="submit" class="inline-flex items-center px-4 py-2 mt-1 text-sm font-medium text-white border border-transparent rounded-md shadow-sm hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500" style="background-color: gold;">
+                    Submit
+                </button>
+                <button type="button" wire:click="resetForm" class="inline-flex items-center px-4 py-2 mt-1 text-sm font-medium text-white border border-transparent rounded-md shadow-sm hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500" style="background-color: gold;">
+                    Reset
+                </button>
+
+            </div>
+        </form>
+    </div>
+            
+    @if ($SelectedStudentId)
+    <div class="p-6 mt-6 flex justify-center">
+        <div class="w-full max-w-screen-lg">
+            <table class="w-full border-collapse border bg-white">
+                <tbody>
+                    <tr>
+                        <th class="px-4 text-left text-sm border bg-white">Student Number:</th>
+                        <td class="px-4 border bg-white">{{ $selectedStudent->student_no ?? '' }}</td>
+                    </tr>
+                    <tr>
+                        <th class="px-4 text-left text-sm border bg-white">Student Last Name:</th>
+                        <td class="px-4 border bg-white">{{ $selectedStudent->last_name ?? '' }}</td>
+                    </tr>
+                    <tr>
+                        <th class="px-4 text-left text-sm border bg-white">Student First Name:</th>
+                        <td class="px-4 border bg-white">{{ $selectedStudent->first_name ?? '' }}</td>
+                    </tr>
+                    <tr>
+                        <th class="px-4 text-left text-sm border bg-white">Student Middle Name:</th>
+                        <td class="px-4 border bg-white">{{ $selectedStudent->middle_name ?? '' }}</td>
+                    </tr>
+                    <tr>
+                        <th class="px-4 text-left text-sm border bg-white">PLM Email Address:</th>
+                        <td class="px-4 border bg-white">{{ $selectedStudent->plm_email ?? '' }}</td>
+                    </tr>
+                    <tr>
+                        <th class="px-4 text-left text-sm border bg-white">Mobile No:</th>
+                        <td class="px-4 border bg-white">{{ $selectedStudent->mobile_no ?? '' }}</td>
+                    </tr>
+                    <tr>
+                        <th class="px-4 text-left text-sm border bg-white">Date of Birth:</th>
+                        <td class="px-4 border bg-white">{{ $selectedStudent->birthdate ?? '' }}</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
+    @endif
 
     {{-- Display assessment details --}}
     @if ($showDetails)
