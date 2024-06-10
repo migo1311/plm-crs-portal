@@ -13,6 +13,7 @@ use Filament\Forms\Components;
 use Filament\Pages\Page;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 
 class FacultyDesignation extends Page implements HasForms
@@ -21,16 +22,20 @@ class FacultyDesignation extends Page implements HasForms
     
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
     protected static string $view = 'filament.pages.faculty-designation';
-    protected static ?string $navigationGroup = 'Utilities';
+    protected static ?string $navigationGroup = 'Faculty Affairs';
 
     public $instructor_id;
     public $designation_id;
     public $schedule;
+  	public $role_id;
+    public $user_id;
     public ?array $data = [];
 
     public function mount()
     {
         $this->form->fill();
+      	$this->role_id = Session::get("role_id");
+        $this->user_id = Session::get("user_id");
     }
 
     public function form(Form $form): Form
@@ -58,7 +63,7 @@ class FacultyDesignation extends Page implements HasForms
     public function save()
     {
         
-        $userId = Auth::id(); // Get the ID of the authenticated user
+        $userId = $this->user_id; // Get the ID of the authenticated user
     
         FacultyDesignationModel::create([
             'instructor_id' => $this->data['instructor_id'],

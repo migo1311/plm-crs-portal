@@ -19,7 +19,7 @@ class FacultyRecords extends Page implements HasForms
     use InteractsWithForms;
     protected static ?string $navigationIcon = 'heroicon-o-folder';
     protected static string $view = 'filament.pages.faculty-records';
-    protected static ?string $navigationGroup = 'Utilities';
+    protected static ?string $navigationGroup = 'Faculty Affairs';
 
     public ?array $data = [];
     public Instructor $instructorProfile;

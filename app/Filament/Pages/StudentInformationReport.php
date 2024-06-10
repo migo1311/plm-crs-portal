@@ -24,7 +24,7 @@ class StudentInformationReport extends Page implements HasForms, HasTable
 
     protected static ?string $navigationIcon = 'heroicon-o-clipboard-document';
     protected static string $view = 'filament.pages.student-information-report';
-    protected static ?string $navigationGroup = 'Print Forms';
+    protected static ?string $navigationGroup = 'Student Affairs';
 
     public ?array $data = [];
 
@@ -61,7 +61,8 @@ class StudentInformationReport extends Page implements HasForms, HasTable
             Components\Select::make('aysem_id')
                 ->label('Ay-Sem')
                 ->placeholder('Ay-Sem')
-                ->options(Aysem::all()->pluck('id', 'id')->toArray())
+                ->options(Aysem::all()->pluck('academic_year_sem', 'id')->toArray())
+          		->searchable()
                 ->required(),
         ])->statePath('data');
     }

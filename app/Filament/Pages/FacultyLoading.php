@@ -23,7 +23,7 @@ class FacultyLoading extends Page implements HasForms, HasTable
 
     protected static string $view = 'filament.pages.faculty-loading';
 
-    protected static ?string $navigationGroup = 'Print Forms';
+    protected static ?string $navigationGroup = 'Faculty Affairs';
 
     public $showTable = true;
 
@@ -57,11 +57,11 @@ class FacultyLoading extends Page implements HasForms, HasTable
                 TextColumn::make('course.subject_code')
                     ->label('Subject Code')
                     ->formatStateUsing(function ($state, $record) {
-                        return $state . '-' . $record->section;
+                        return $state ;
                     }),
-                TextColumn::make('section')
-                    ->label('Section')
-                    ->sortable(),
+                //TextColumn::make('section')
+                  //  ->label('Section')
+                    //->sortable(),
                 TextColumn::make('course.subject_title')
                     ->label('Subject Title'),
                 TextColumn::make('course.units')
@@ -79,8 +79,8 @@ class FacultyLoading extends Page implements HasForms, HasTable
             ])
             ->filters([
                 SelectFilter::make('aysem')
-                    ->relationship('aysem', 'id')
-                    ->searchable()
+                    ->relationship('aysem', 'academic_year_sem')
+              		->searchable()
             ]);
     }
 

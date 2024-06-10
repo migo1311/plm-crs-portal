@@ -10,6 +10,7 @@ class Block extends Model
     use HasFactory;
 
     protected $fillable = [
+        'block_id',
         'program_id',
         'aysem_id',
         'year_level',

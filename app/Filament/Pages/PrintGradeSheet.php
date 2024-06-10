@@ -3,25 +3,22 @@
 namespace App\Filament\Pages;
 
 use Filament\Tables;
-use App\Models\Instructor;
-use App\Models\Aysem;
 use App\Models\Classes;
+use App\Models\Student;
 use Filament\Tables\Contracts\HasTable;
-use Filament\Forms\Components;
 use Filament\Pages\Page;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Filters\SelectFilter;
-use Livewire\WithPagination;
+use Illuminate\Database\Eloquent\Model;
 
-class PrintClassList extends Page implements HasTable
+class PrintGradeSheet extends Page implements HasTable
 {
     use InteractsWithTable;
+    protected static ?string $navigationIcon = 'heroicon-o-folder-arrow-down';
 
-    protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-list';
-
-    protected static string $view = 'filament.pages.print-class-list';
+    protected static string $view = 'filament.pages.print-grade-sheet';
 
     protected static ?string $navigationGroup = 'Student Affairs';
 
@@ -33,31 +30,31 @@ class PrintClassList extends Page implements HasTable
         return $table
             ->query($this->getFilteredQuery())
             ->columns([
-                TextColumn::make('course.subject_code')
-                    ->label('Subject Code')
+                TextColumn::make('full_name')
+                    ->label('Student Name'),
+                TextColumn::make('student_no')
+                    ->label('Student No.')
                     ->formatStateUsing(function ($state, $record) {
                         return $state;
                     }),
-                
-                TextColumn::make('course.subject_title')
-                    ->label('Subject Title'),
-                TextColumn::make('course.units')
-                    ->label('Units')
+                TextColumn::make('classes.course.subject_code')
+                    ->label('Course'),
+                TextColumn::make('studentTerms.year_level')
+                    ->label('Year')
                     ->sortable(),
-                
-                TextColumn::make('students_qty')
-                    ->label('No. of Students')
+                TextColumn::make('grades.grade')
+                    ->label('Grade')
                     ->sortable(),
-                TextColumn::make('instructor.faculty_name')
-                    ->label('Faculty')
+                TextColumn::make('grades.remarks')
+                    ->label('Remarks')
                     ->sortable(),
             ])
             ->filters([
-				SelectFilter::make('aysem')
-                    ->relationship('aysem', 'academic_year_sem')
+				SelectFilter::make('student_no')
+                    ->relationship('student', 'student_no')
                     ->searchable(),
               	SelectFilter::make('last name')
-                    ->relationship('instructor', 'last_name')
+                    ->relationship('student', 'last_name')
                     ->searchable()
             ])
           	->bulkActions([
@@ -69,14 +66,14 @@ class PrintClassList extends Page implements HasTable
 
     protected function getFilteredQuery()
     {
-        $query = Classes::query();
+        $query = Student::query();
 
-        if (isset($this->array['aysem_id'])) {
-            $query->where('aysem_id', $this->array['aysem_id']);
+        if (isset($this->array['student_no'])) {
+            $query->where('student_no', $this->array['student_no']);
         }
 
         if (isset($this->array['last_name'])) {
-            $query->whereHas('instructor', function ($q) {
+            $query->whereHas('student', function ($q) {
                 $q->where('last_name', $this->array['last_name']);
             });
         }

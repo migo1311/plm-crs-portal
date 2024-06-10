@@ -17,14 +17,12 @@ class StudentRecords extends Page implements HasForms
 
     protected static ?string $navigationIcon = 'heroicon-o-identification';
     protected static string $view = 'filament.pages.student-records';
-    protected static ?string $navigationGroup = 'Utilities';
+    protected static ?string $navigationGroup = 'Student Affairs';
 
     public ?array $data = [];
 
-    public bool $showForms = false;
-    public $student_no;
     public $aysem_id;
-    public Student $studentProfile;
+    public Student $Student;
 
     public function mount(): void
     {
@@ -52,7 +50,9 @@ class StudentRecords extends Page implements HasForms
                             ->label('Ay-Sem')
                             ->placeholder('Ay-Sem')
                             ->options(Aysem::all()->pluck('id', 'id')->toArray())
-                            ->required(),
+                            ->required()
+                            ->reactive()
+                            ->afterStateUpdated(fn($state) => $this->updateAysem($state)),
                     ]),
                 Components\Section::make('Student Terms')
                     ->columns(4)
@@ -143,36 +143,42 @@ class StudentRecords extends Page implements HasForms
     {
         $student = Student::find($studentId);
         if ($student) {
-            $this->form->fill($student->toArray());
+            $formState = $student->toArray();
+            $formState['student_no'] = $studentId;
+            $this->data['student_no'] = $studentId;
+            $this->form->fill($formState);
         }
     }
-
-    public function create()
+    
+    public function updateAysem($aysemId)
     {
-        $this->validate();
+        $this->form->fill(['aysem_id' => $aysemId]);
+    }
+    public function create()
+{
+    $formData = $this->form->getState();
+    $this->validate(); 
 
-        $formData = $this->form->getState();
 
-        $studentProfile = null;
-        
-        if (isset($formData['student_no'])) {
-            $studentProfile = Student::findOrFail($formData['student_no']);
-        } else {
-            // Handle the case where student_no is missing
-        }
-
+    $student = Student::find($this->data['student_no']);
+    if ($student) {
+        $student->update($formData);
         Notification::make()
             ->title('Data updated successfully!')
             ->success()
             ->send();
-
-        $this->loadData();
+    } else {
+        Notification::make()
+            ->title('Student not found!')
+            ->danger()
+            ->send();
     }
+}
 
-    public function search()
+    /*public function search()
     {
         $this->showForms = true;
-    }
+    }*/
 
     public function resetForm()
     {

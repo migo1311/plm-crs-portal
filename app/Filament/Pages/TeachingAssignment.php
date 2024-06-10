@@ -23,11 +23,11 @@ class TeachingAssignment extends Page implements HasForms, HasTable
 {
     use InteractsWithForms, InteractsWithTable;
 
-    protected static ?string $navigationIcon = 'heroicon-o-document-text';
+    protected static ?string $navigationIcon = 'heroicon-o-document-check';
 
     protected static string $view = 'filament.pages.teaching-assignment';
 
-    protected static ?string $navigationGroup = 'Print Forms';
+    protected static ?string $navigationGroup = 'Faculty Affairs';
 
     public $showTable = false;
 
@@ -53,7 +53,7 @@ class TeachingAssignment extends Page implements HasForms, HasTable
             TextColumn::make('course.subject_code')
                 ->label('Subject Code')
                 ->formatStateUsing(function ($state, $record) {
-                    return $state . '-' . $record->section;
+                    return $state;
                 }),
             TextColumn::make('course.subject_title')
                 ->label('Subject Title'),

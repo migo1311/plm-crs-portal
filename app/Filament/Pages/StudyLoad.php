@@ -22,7 +22,7 @@ class StudyLoad extends Page implements HasForms
 
     protected static string $view = 'filament.pages.study-load';
 
-    protected static ?string $navigationGroup = 'Utilities';
+    protected static ?string $navigationGroup = 'Faculty Affairs';
 
     public $instructor_id;
     public $study_units;
