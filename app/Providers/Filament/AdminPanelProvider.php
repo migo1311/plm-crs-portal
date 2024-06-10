@@ -32,9 +32,10 @@ class AdminPanelProvider extends PanelProvider
                 'primary' => Color::Blue,
             ])
             ->favicon('img/image_plm.png')
+            ->viteTheme('resources/css/filament/admin/theme.css')
             ->navigationGroups([
                 NavigationGroup::make()
-                     ->label('Print Forms'),
+                     ->label('Forms'),
                 NavigationGroup::make()
                     ->label('Utilities')
             ])

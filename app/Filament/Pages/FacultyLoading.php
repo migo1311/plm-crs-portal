@@ -13,6 +13,7 @@ use Filament\Tables\Table;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
+use Filament\Tables\Filters\SelectFilter;
 
 class FacultyLoading extends Page implements HasForms, HasTable
 {
@@ -24,8 +25,16 @@ class FacultyLoading extends Page implements HasForms, HasTable
 
     protected static ?string $navigationGroup = 'Print Forms';
 
-    public $showTable = false;
+    public $showTable = true;
 
+    public ?array $data = [];
+
+    public ?int $selectedAysemId = null;
+
+    public function mount(): void {
+
+        $this->form->fill();
+    }
 
     public function form(Form $form): Form
     {
@@ -35,12 +44,12 @@ class FacultyLoading extends Page implements HasForms, HasTable
                 Components\Select::make('aysem_id')
                     ->label('Select')
                     ->placeholder('AYSEM')
-                    ->options(Aysem::all()->pluck('id', 'id')->toArray())
+                    ->options(Aysem::all()->pluck('academic_year_sem', 'id')->toArray())
                     ->required(),
-            ]);
+            ])->statePath('data');
     }
 
-    public static function table(Table $table): Table
+    public function table(Table $table): Table
     {
         return $table
             ->query(Classes::query())
@@ -67,12 +76,25 @@ class FacultyLoading extends Page implements HasForms, HasTable
                 TextColumn::make('instructor.faculty_name')
                     ->label('Faculty')
                     ->sortable(),
+            ])
+            ->filters([
+                SelectFilter::make('aysem')
+                    ->relationship('aysem', 'id')
+                    ->searchable()
             ]);
     }
 
     public function printReport()
     {
-        // Set flag to true to show the table
-        $this->showTable = true;
+        if (isset($this->data['aysem_id'])) {
+            $this->selectedAysemId = $this->data['aysem_id'];
+            $this->showTable = true; // Show table when aysem_id is selected
+        } else {
+            // Handle the case where aysem_id is not set
+            // You can set a default value or show an error message
+            $this->selectedAysemId = null;
+            $this->showTable = false;
+            // Optionally, add some error handling logic here
+        } 
     }
 }

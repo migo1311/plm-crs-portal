@@ -50,7 +50,7 @@ class Classes extends Model
 
     public function instructor()
     {
-        return $this->belongsToMany(instructor::class, 'class_faculty', 'class_id', 'instructor_id')->withTimestamps();
+        return $this->belongsToMany(Instructor::class, 'class_faculty', 'class_id', 'instructor_id')->withTimestamps();
     }
 
     public function classSchedules()

@@ -16,8 +16,6 @@ class ClassScheduleFactory extends Factory
      */
     public function definition(): array
     {
-        $classes = \App\Models\Classes::all()->random();
-        
         $mode = \App\Models\ClassMode::all()->random();
         $room = \App\Models\Room::all()->random();
         $day = \App\Models\Days::all()->random();
@@ -29,13 +27,27 @@ class ClassScheduleFactory extends Factory
         $letter = $day->day_code;
 
         return [
-            'class_id' => $classes->id,
-            'day_id' => $day,
+            'class_id' => \App\Models\Classes::factory(), // Default factory class_id
+            'day_id' => $day->id,
             'start_time' => $startTime,
             'end_time'=> $endTime,
             'class_mode_id' => $mode->id,
-            'room_id' => $room->room_id,
+            'room_id' => $room->id,
             'schedule_name' => $letter . ' ' . $start . ' - ' . $end . ' ' . $mode->mode_code . ' ' . $room->room_name,
         ];
+    }
+
+    /**
+     * Indicate that the class schedule is for a specific class.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    public function forClass($classId)
+    {
+        return $this->state(function (array $attributes) use ($classId) {
+            return [
+                'class_id' => $classId,
+            ];
+        });
     }
 }
